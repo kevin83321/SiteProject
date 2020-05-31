@@ -1,7 +1,5 @@
 from __future__ import print_function
-import os
-import io
-import time
+import os, io, time
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from httplib2 import Http
