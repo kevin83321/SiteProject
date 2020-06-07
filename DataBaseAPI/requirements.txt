@@ -1,0 +1,6 @@
+waitress
+flask
+gevent
+schedule
+flask_restful
+pymongo
