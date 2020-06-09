@@ -34,6 +34,13 @@ def get():
     for data in Data: del data['_id']
     return jsonify({'msg':f'成功取得資料 {params["Ticker"]} form {params["startDate"]} to {params["endDate"]}','GridData':Data})
 
+@app.route('/Api/Help', methods=['GET', 'POST'])
+def help():
+    msg = {
+        'Api/Quote/Daily/Stock':'',
+        'Api/Quote/Daily/Future':'',
+    }
+    return msg
 @app.route('/')
 def index():
     return 'this is index page'
@@ -41,4 +48,4 @@ def index():
 
 if __name__ == "__main__":
     app.config["DEBUG"] = True
-    serve(app, host='localhost', port=8000, threads=4)
+    serve(app, host='localhost', port=8080, threads=4)

@@ -11,3 +11,17 @@ def getConnectionConfig():
     ip = '192.168.2.191'
     port = 27071
     return [user, password, ip, port]
+
+class HelpMsg:
+
+    @staticmethod
+    @property
+    def ApiQuoteDailyStockHelp():
+        msg = ''
+        return msg
+
+    @staticmethod
+    @property
+    def ApiQuoteDailyFutureHelp():
+        msg = ''
+        return msg
