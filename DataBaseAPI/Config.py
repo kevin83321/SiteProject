@@ -8,8 +8,9 @@
 def getConnectionConfig():
     user = 'kevin'
     password = 'j7629864'
-    ip = '192.168.2.191'
-    port = 27071
+    #ip = '192.168.2.191'
+    ip = 'localhost'
+    port = 27017
     return [user, password, ip, port]
 
 class HelpMsg:

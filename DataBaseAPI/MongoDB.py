@@ -16,22 +16,29 @@ class MongoDB:
     _connection = MongoClient(f'mongodb://{user}:{password}@{ip}:{port}')
 
     @staticmethod
-    def reConnect(self, user, password, ip, port):
-        self._connection = MongoClient(f'mongodb://{user}:{password}@{ip}:{port}')    
+    def reConnect(user, password, ip, port):
+        MongoDB._connection = MongoClient(f'mongodb://{user}:{password}@{ip}:{port}')    
 
     def insert(self):
         pass
 
     @staticmethod
-    def get(self, db_name, table_name, Ticker, startDate=None, endDate=None, limited=100):
-        table = self._connection[db_name][table_name]
-        if startDate is not None and endDate is not None:
-            if isinstance(startDate, datetime): startDate = startDate.strftime("%Y-%m-%d")
-            if isinstance(endDate, datetime): endDate = endDate.strftime("%Y-%m-%d")
-            return list(table.find({'Ticker':{'$eq':Ticker}, 'Date':{'$gte':startDate, '$lte':endDate}}).limit(limited))
-        elif startDate is not None:
-            if isinstance(startDate, datetime): startDate = startDate.strftime("%Y-%m-%d")
-            return table.find({'Ticker':{'$eq':Ticker}, 'Date':{'$gte':startDate}}).limit(limited)
-        elif endDate is not None:
-            if isinstance(endDate, datetime): endDate = endDate.strftime("%Y-%m-%d")
-            return table.find({'Ticker':{'$eq':Ticker}, 'Date':{'$lte':endDate}}).limit(limited)
+    def get(db_name, table_name, Ticker, StartDate=None, EndDate=None): #, limited=100
+        table = MongoDB._connection['admin'][db_name][table_name]
+        if Ticker is None: return f'Ticker : {Ticker}, StartDate : {StartDate}, EndDate : {EndDate}'
+        if StartDate is not None and EndDate is not None:
+            if isinstance(StartDate, datetime): StartDate = StartDate.strftime("%Y-%m-%d")
+            if isinstance(EndDate, datetime): EndDate = EndDate.strftime("%Y-%m-%d")
+            return list(table.find({'Ticker':{'$eq':Ticker}, 'Date':{'$gte':StartDate, '$lte':EndDate}})) # .limit(limited))
+        if StartDate is not None:
+            if isinstance(StartDate, datetime): StartDate = StartDate.strftime("%Y-%m-%d")
+            return list(table.find({'Ticker':{'$eq':Ticker}, 'Date':{'$gte':StartDate}})) # .limit(limited)
+        if EndDate is not None:
+            if isinstance(EndDate, datetime): EndDate = EndDate.strftime("%Y-%m-%d")
+            return list(table.find({'Ticker':{'$eq':Ticker}, 'Date':{'$lte':EndDate}})) # .limit(limited)
+        return f'Ticker : {Ticker}, StartDate : {StartDate}, EndDate : {EndDate}'
+
+    @staticmethod
+    def getAction(db_name, Ticker, StartDate, EndDate):
+        table = MongoDB._connection['admin'][db_name]['Action']
+
