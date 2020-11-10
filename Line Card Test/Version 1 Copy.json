@@ -1,0 +1,177 @@
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "image",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                "size": "sm"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "space",
+                "size": "xxs",
+                "color": "#FFFFFF"
+              },
+              {
+                "type": "text",
+                "text": "Xi Qi Capital",
+                "size": "xxs",
+                "align": "center",
+                "decoration": "none"
+              },
+              {
+                "type": "text",
+                "text": "希奇資本股份有限公司",
+                "size": "xxs",
+                "weight": "bold"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": []
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "T : +886 2 23222370",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "M : +886 985247485",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "space",
+                    "size": "xxs",
+                    "color": "#FFFFFF"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Mail : kevin83321@gmail.com",
+                    "size": "xxs",
+                    "align": "start"
+                  },
+                  {
+                    "type": "text",
+                    "text": "space",
+                    "color": "#FFFFFF"
+                  }
+                ]
+              }
+            ],
+            "margin": "none",
+            "spacing": "none"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "量化工程師",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "鄭圳宏"
+                  },
+                  {
+                    "type": "text",
+                    "text": "hello, world",
+                    "color": "#FFFFFF",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Quant Engineer",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Kevin Cheng",
+                    "size": "xs"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "hello, world",
+                    "color": "#FFFFFF"
+                  },
+                  {
+                    "type": "text",
+                    "text": "104 台北市中山區中山北路三段22號7樓",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "104 英文地址",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "104 英文地址 續",
+                    "size": "xxs"
+                  },
+                  {
+                    "type": "text",
+                    "text": "統一編號(VAT) : 50785786",
+                    "size": "xxs"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
