@@ -333,6 +333,7 @@ def get_updated_quater(db):
             
 def update_db(db):
     last_y, last_q = get_updated_quater(db)
+    # last_y, last_q = 2020, 2
     td = datetime.today()
     cur_y = td.year
     
