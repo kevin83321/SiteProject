@@ -65,9 +65,9 @@ def crawl_data(rank=0):
 
 def main():
     datas = []
-    for rank in range(7):
+    for rank in range(6):
         datas.extend(crawl_data(rank))
     return datas
 
 if __name__ == '__main__':
-    main()
+    print(main())
