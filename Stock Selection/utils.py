@@ -25,12 +25,13 @@ from matplotlib.collections import LineCollection, PolyCollection
 from matplotlib.lines import TICKLEFT, TICKRIGHT, Line2D
 from matplotlib.patches import Rectangle
 from matplotlib.transforms import Affine2D
+from itertools import product
 
 from six.moves import xrange#, zip
 
 from matplotlib.pylab import date2num # 导入日期到数值一一对应的转换工具
 
-__updated__ = '2020-12-08 17:20:01'
+__updated__ = '2021-01-01 01:52:53'
 
 td = datetime.today()
 parent = os.path.dirname(os.path.abspath(__file__))
@@ -245,3 +246,25 @@ def parseRollingData(df, rolling):
         temp_df.Low = temp.Low.min()
         return temp_df
     return pd.concat([x for x in list(map(Aggregate, product([rolling], temp_data.index, [df]))) if x is not None], axis=1).T
+
+def crawlHotStocks():
+    import requests
+    from bs4 import BeautifulSoup
+    tickers = []
+    t = 'vol'
+    for e in ['tse', 'otc']:
+        url = f'https://tw.stock.yahoo.com/d/i/rank.php?t={t}&e={e}&n=100'
+
+        res = requests.get(url)
+        soup = BeautifulSoup(res.text, "lxml") # 把原始碼做整理
+        # 取得日期
+        date = soup.select('table')[2].select('table')[0].select('td')[0].text[5:18].strip().replace(' ','').replace('/','_')
+        # 取得排行名稱
+        name = soup.select('table')[2].select('table')[0].select('td')[1].text.strip()
+        soup_data = soup.select('table')[2].select('table')[1].select('td')
+        
+        # 取得表格內容
+        for i in range(100):
+            i *= 10
+            tickers.append(soup_data[1 + i].text.strip().split(' ')[0])
+    return tickers

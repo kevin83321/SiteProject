@@ -1,14 +1,15 @@
-__updated__ = '2021-01-01 00:59:23'
+__updated__ = '2021-01-01 01:58:27'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
     pd, np, getSchema, getDateBeforeTrade, 
     saveRecommand, timedelta, GetException,
     sendResultTable, VolumeFilter, PriceFilter,
-    changedType, createRecommandTable, Amplitude
+    changedType, createRecommandTable, Amplitude, os, 
+    crawlHotStocks,
 )
             
-def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
+def main(min_price=40, max_price=99, num_shares=10000, shares_ratio=0):
     try:
         # setup date
         td, last = getDateBeforeTrade()
@@ -26,12 +27,15 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
         # volume filter and price filter
         tickers = df.Ticker.unique()
         df.Volume = df.Volume.astype(float)
+        df['DealValue'] = df.Close * df.Volume
         df.Volume /= 1000
-        VolumeSelect = VolumeFilter(df, tickers, num_shares, shares_ratio)
+        DealValueSelect = df[df.DealValue>=2e8].Ticker.to_list()
+        hotTickers = crawlHotStocks()
+        VolumeSelect = VolumeFilter(df, DealValueSelect, num_shares, shares_ratio)
         AmpSelect = Amplitude(df[df.Ticker.isin(list(VolumeSelect))])
         selection = list(PriceFilter(df, list(AmpSelect), max_price, min_price))
+        selection = list(set(selection).intersection(hotTickers))
         
-        # final_select = []
         pre_3y = td + timedelta(-365*3)
         momentums = []
         for ticker in selection:
@@ -67,35 +71,21 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
                     #             if temp_df.Volume[-1] > temp_df.Vol67MA[-1] * shares_ratio:
                     #                 select_by_Volume67.append(ticker)
                 momentums.append((ticker, Calc.Momemtum(temp_df)))
-                    # output figure
+                # output figure
                 temp_df = temp_df.tail(200)
                 createPlot(td, temp_df, ticker, MACD=True)
             except:
                 print(GetException())
         
-        # print(selection)
-        expand_text = 'Logic by Ray'
-        saveRecommand(selection, 'DayTradeByRay')
-        sendResultTable(td, selection, momentums, '4', expand_text)
-        
-        # saveRecommand(select_by_EMA67_23, 'VolumeWithMACD_EMA67_23')
-        # sendResultTable(td, select_by_EMA67_23, momentums, '1-1')
-        
-        # saveRecommand(select_by_Volume5, 'VolumeWithMACD_EMA67_23_VOL5')
-        # sendResultTable(td, select_by_Volume5, momentums, '1-2')
-        
-        # saveRecommand(select_by_Volume67, 'VolumeWithMACD_EMA67_23_VOL67')
-        # sendResultTable(td, select_by_Volume67, momentums, '1-3')
-        
-        # select_by_Volume5_67 = list(set(select_by_Volume5).intersection(select_by_Volume67))
-        # saveRecommand(select_by_Volume5_67, 'VolumeWithMACD_EMA67_23_VOL5_67')
-        # sendResultTable(td, select_by_Volume5_67, momentums, '1-4')
+        expand_text = 'Logic by 陳信宏'
+        saveRecommand(selection, 'DayTradeByChenHsinHung')
+        sendResultTable(td, selection, momentums, '5', expand_text)
     except:
         print(GetException())
         
     
     
 if __name__ == '__main__':
-    main(min_price=5, max_price=30, num_shares=50000, shares_ratio=0)
+    main(min_price=40, max_price=99, num_shares=10000, shares_ratio=0)
     
     
