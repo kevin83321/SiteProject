@@ -1,4 +1,4 @@
-__updated__ = '2021-01-01 00:59:23'
+__updated__ = '2021-01-04 21:16:49'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -19,6 +19,10 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
         
         df = pd.DataFrame(data).set_index('Date')
+        if len(df.index.unique()) < 2:
+            data = list(table.find({'Date':{'$gte':(last+timedelta(-30)).strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
+            df = pd.DataFrame(data).set_index('Date')
+            df = df.loc[sorted(df.index.unique())[-2:], :]
         del df['_id']
         for col in 'Open,High,Low,Close,Volume'.split(','):
             df[col] = df[col].apply(changedType)
