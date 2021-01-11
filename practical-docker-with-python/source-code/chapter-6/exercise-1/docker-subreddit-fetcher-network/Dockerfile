@@ -6,6 +6,6 @@ WORKDIR /apps/subredditfetcher/
 VOLUME [ "/apps/subredditfetcher" ]
 RUN ["pip", "install", "-r", "requirements.txt"]
 
-ENV NBT_ACCESS_TOKEN="495637361:AAHIhiDTX1UeX17KJy0-FsMZEqEtCFYfcP8"
+ENV NBT_ACCESS_TOKEN="1473321627:AAHCL7sLppLCSdxcKDMGjvaHWmoxUk2quOY"
 
 CMD ["python", "newsbot.py"]

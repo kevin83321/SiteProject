@@ -1,6 +1,6 @@
 from peewee import *
 # db = SqliteDatabase('newsbot.db')
-db = MySQLDatabase(host="mysql", port=3306, user="root", password="dontusethisinprod", database="newsbot")
+db = MySQLDatabase(host="mysql", port=3306, user="root", password=str("dontusethisinprod"), database="newsbot")
 class BaseModel(Model):
     class Meta:
         database = db

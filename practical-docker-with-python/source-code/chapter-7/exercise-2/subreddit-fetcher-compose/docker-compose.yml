@@ -4,6 +4,7 @@ services:
         build: .
         depends_on:
             - mysql
+            - adminer
         restart: "on-failure"
         volumes:
             - "appdata:/apps/subredditfetcher"
@@ -12,7 +13,7 @@ services:
         volumes:
             - "dbdata:/var/lib/mysql"
         environment:
-            - MYSQL_ROOT_PASSWORD=dontusethisinprod
+            - "MYSQL_ROOT_PASSWORD=dontusethisinprod"
     adminer:
         image: adminer
         ports:
@@ -21,3 +22,6 @@ services:
 volumes:
     dbdata:
     appdata:
+
+# exec:
+#     - python one_time.py
