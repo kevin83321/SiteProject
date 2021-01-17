@@ -5,6 +5,7 @@ from IndexTrend import main as IndexTrend
 from Find_DayTrade_By_Queen import main as DayTradeQueen
 from Find_Day_Trade_Ray import main as DayTradeRay
 from Find_Day_Trade_陳信宏 import main as DayTradeHung
+from Short_Term_Trade_Warrant_Brother import main as ShortTermTrade
 
 def main():
     IndexTrend()
@@ -13,6 +14,7 @@ def main():
     DayTradeQueen(num_shares=500, shares_ratio=2)
     DayTradeRay(5,30,50000,0)
     DayTradeHung(40,99,10000,0)
+    ShortTermTrade()
     
 if __name__ == '__main__':
     main()

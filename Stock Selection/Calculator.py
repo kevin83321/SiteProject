@@ -47,6 +47,19 @@ class Calculator:
             return df
         
     @staticmethod
+    def BBAND(df, periods, k):
+        try:
+            if f'MA{periods}' not in df.columns:
+                df = Calculator.MA(df, [periods])
+            df['std'] = df.Close.rolling(periods).std()
+            df['upband'] = df[f'MA{periods}'] + k * df['std']
+            df['dnband'] = df[f'MA{periods}'] - k * df['std']
+        except:
+            print(GetException())
+        else:
+            return df        
+        
+    @staticmethod
     def calculateTOWER(df, lookback=3, version = 'Def'):
         df['TowerH'] = np.nan
         df['TowerL'] = np.nan

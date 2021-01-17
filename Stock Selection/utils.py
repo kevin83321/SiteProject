@@ -31,7 +31,7 @@ from six.moves import xrange#, zip
 
 from matplotlib.pylab import date2num # 导入日期到数值一一对应的转换工具
 
-__updated__ = '2021-01-01 01:52:53'
+__updated__ = '2021-01-16 16:18:19'
 
 td = datetime.today()
 parent = os.path.dirname(os.path.abspath(__file__))
@@ -199,7 +199,9 @@ def changedType(x):
     try:
         if '--' in x:
             return float('nan')
-        return float(x.replace(',',''))
+        if isinstance(x, str):
+            return float(x.replace(',',''))
+        return x
     except:
         return x
     

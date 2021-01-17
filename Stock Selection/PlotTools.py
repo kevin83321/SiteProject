@@ -59,7 +59,7 @@ def splitTicksLabels(ax, per_num=15):
         label.set_visible(False)
     return ax
 
-def plotKBar(ax, df):
+def plotKBar(ax, df, BBAND=False):
     from copy import deepcopy
     df = deepcopy(df).reset_index()
     df.Date = df.Date.apply(transforDate)
@@ -67,11 +67,18 @@ def plotKBar(ax, df):
     mpf.candlestick_ohlc(ax, [tuple(x.values()) for x in temp_df.T.to_dict().values()], 
                          colorup='r', colordown='g', width=0.8)
     plotMAs(ax, df.set_index('Date'))
+    if BBAND:
+        plotBBAND(ax, df.set_index('Date'))
     ax.legend(bbox_to_anchor=(1.1, 1.05))
     ax.set_ylabel('Price')
     
 def plotMAs(ax, df):
     cols = [x for x in df.columns if 'MA' in x and 'EMA' not in x and 'MACD' not in x and 'Vol' not in x]
+    df[cols].plot(ax=ax, legend = True)
+    ax.legend(bbox_to_anchor=(1.1, 1.05))
+    
+def plotBBAND(ax, df, periods=20):
+    cols = f'upband,dnband'.split(',')
     df[cols].plot(ax=ax, legend = True)
     ax.legend(bbox_to_anchor=(1.1, 1.05))
     
@@ -171,7 +178,7 @@ def _candlestick(ax, quotes, width=0.2, colorup='k', colordown='r',
 
     return lines, patches
 
-def createPlot(td, df, ticker, MACD=False, TOWER=False):
+def createPlot(td, df, ticker, MACD=False, TOWER=False, BBAND=False):
     try:
         temp_df = df.tail(250)
         # plor chart
@@ -197,7 +204,7 @@ def createPlot(td, df, ticker, MACD=False, TOWER=False):
         # Plot Result
         ax1 = plt.subplot(gs[0, :])
         setuptitle(ax1)
-        plotKBar(ax1, temp_df)
+        plotKBar(ax1, temp_df, BBAND=BBAND)
         
         # Plot Volume Bars
         ax2 = plt.subplot(gs[1, :])
