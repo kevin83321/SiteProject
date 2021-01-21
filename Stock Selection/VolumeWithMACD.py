@@ -1,6 +1,6 @@
 
 
-__updated__ = '2021-01-04 21:16:46'
+__updated__ = '2021-01-20 21:24:39'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -68,21 +68,22 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
                 
                 temp_df['OSC_Trend'] = temp_df['OSC'] > temp_df['OSC'].shift(1)
                 if all(temp_df['OSC_Trend'][-3:]) and all(temp_df['OSC'][-3:] > 0):
-                    final_select.append(ticker)
-                
-                    if temp_df.Close[-1] > temp_df.Open[-1]:
-                        if temp_df.Low[-1] >= temp_df.EMA67[-1]:
-                            if temp_df.Low[-1] >= temp_df.EMA23[-1]:
-                                select_by_EMA67_23.append(ticker)
-                                
-                                if temp_df.Volume[-1] > temp_df.Vol5MA[-1] * shares_ratio:
-                                    select_by_Volume5.append(ticker)
-                                if temp_df.Volume[-1] > temp_df.Vol67MA[-1] * shares_ratio:
-                                    select_by_Volume67.append(ticker)
-                    momentums.append((ticker, Calc.Momemtum(temp_df)))
-                    # output figure
-                    temp_df = temp_df.tail(200)
-                    createPlot(td, temp_df, ticker, MACD=True)
+                    if temp_df['DIF'][-1] > 0 and temp_df['MACD'][-1] > 0:
+                        final_select.append(ticker)
+                    
+                        if temp_df.Close[-1] > temp_df.Open[-1]:
+                            if temp_df.Low[-1] >= temp_df.EMA67[-1]:
+                                if temp_df.Low[-1] >= temp_df.EMA23[-1]:
+                                    select_by_EMA67_23.append(ticker)
+                                    
+                                    if temp_df.Volume[-1] > temp_df.Vol5MA[-1] * shares_ratio:
+                                        select_by_Volume5.append(ticker)
+                                    if temp_df.Volume[-1] > temp_df.Vol67MA[-1] * shares_ratio:
+                                        select_by_Volume67.append(ticker)
+                        momentums.append((ticker, Calc.Momemtum(temp_df)))
+                        # output figure
+                        temp_df = temp_df.tail(200)
+                        createPlot(td, temp_df, ticker, MACD=True)
             except:
                 print(GetException())
         

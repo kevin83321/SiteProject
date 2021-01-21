@@ -54,6 +54,7 @@ class Calculator:
             df['std'] = df.Close.rolling(periods).std()
             df['upband'] = df[f'MA{periods}'] + k * df['std']
             df['dnband'] = df[f'MA{periods}'] - k * df['std']
+            df['bandwidth'] = df['upband'] / df['dnband'] - 1
         except:
             print(GetException())
         else:

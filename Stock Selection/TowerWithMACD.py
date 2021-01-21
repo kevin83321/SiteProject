@@ -1,6 +1,6 @@
 
 
-__updated__ = '2021-01-04 21:16:02'
+__updated__ = '2021-01-20 21:25:09'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -67,16 +67,17 @@ def main(min_price=0, max_price=50, num_shares=0, shares_ratio=0):
                 temp_df['OSC_Trend'] = temp_df['OSC'] > temp_df['OSC'].shift(1)
                 if temp_df['TColor'][-2] == 'g' and temp_df['TColor'][-1] == 'r':
                     if all(temp_df['OSC_Trend'][-2:]):
-                        final_select.append(ticker)
-                        if temp_df.Low[-1] >= temp_df.EMA67[-1] and temp_df.Close[-1] > temp_df.Open[-1]:
-                            select_by_EMA67.append(ticker)
-                        if temp_df.Low[-1] >= temp_df.EMA23[-1] and temp_df.Close[-1] > temp_df.Open[-1]:
-                            select_by_EMA23.append(ticker)
-                        momentums.append((ticker, Calc.Momemtum(temp_df)))
-                        
-                        # output figure
-                        temp_df = temp_df.tail(200)
-                        createPlot(td, temp_df, ticker, MACD=True, TOWER=True)
+                        if temp_df['DIF'][-1] > 0 and temp_df['MACD'][-1] > 0:
+                            final_select.append(ticker)
+                            if temp_df.Low[-1] >= temp_df.EMA67[-1] and temp_df.Close[-1] > temp_df.Open[-1]:
+                                select_by_EMA67.append(ticker)
+                            if temp_df.Low[-1] >= temp_df.EMA23[-1] and temp_df.Close[-1] > temp_df.Open[-1]:
+                                select_by_EMA23.append(ticker)
+                            momentums.append((ticker, Calc.Momemtum(temp_df)))
+                            
+                            # output figure
+                            temp_df = temp_df.tail(200)
+                            createPlot(td, temp_df, ticker, MACD=True, TOWER=True)
                         
             except:
                 print(GetException())

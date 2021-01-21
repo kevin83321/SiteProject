@@ -1,6 +1,6 @@
 
 
-__updated__ = '2021-01-16 17:42:16'
+__updated__ = '2021-01-21 00:05:14'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -56,12 +56,13 @@ def main(min_price=0, max_price=50, num_shares=0, shares_ratio=0):
                     if (temp_df['DIF'][-1] >= 0) and (temp_df['MACD'][-1] >= 0):
                         if temp_df['slope'][-1] >= 0.01:
                             if temp_df['Low'][-1] <= temp_df['upband'][-1] <= temp_df['High'][-1] or temp_df['upband'][-1] <= temp_df['Low'][-1]:
-                                final_select.append(ticker)
-                                momentums.append((ticker, Calc.Momemtum(temp_df)))
-                            
-                                # # output figure
-                                temp_df = temp_df.tail(200)
-                                createPlot(td, temp_df, ticker, MACD=True, BBAND=True)
+                                if temp_df['bandwidth'].pct_change()[-1] > 0:
+                                    final_select.append(ticker)
+                                    momentums.append((ticker, Calc.Momemtum(temp_df)))
+                                
+                                    # # output figure
+                                    temp_df = temp_df.tail(200)
+                                    createPlot(td, temp_df, ticker, MACD=True, BBAND=True)
                         
             except:
                 print(f'Ticker : {ticker}\t Error :', GetException())
