@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-11-10	8354	XD	0.7

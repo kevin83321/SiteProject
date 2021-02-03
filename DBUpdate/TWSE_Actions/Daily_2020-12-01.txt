@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2020-12-01	2929	XD	0.17114
+2020-12-01	2929	XR	153.9

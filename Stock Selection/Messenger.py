@@ -6,6 +6,8 @@
 # Update: 2020.02.17
 # Version: 1
 
+__updated__ = '2021-01-30 12:53:34'
+
 from telegram import Bot
 
 class TelegramMessenger:

@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2021-01-13	2836	XD	0.15
+2021-01-13	2836	XR	45

@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-12-10	6111	XR	84.78220652

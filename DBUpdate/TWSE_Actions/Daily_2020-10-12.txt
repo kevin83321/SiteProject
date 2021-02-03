@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-10-12	2349	RS	540.18250000

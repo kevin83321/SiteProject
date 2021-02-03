@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-11-06	2630	XR	92

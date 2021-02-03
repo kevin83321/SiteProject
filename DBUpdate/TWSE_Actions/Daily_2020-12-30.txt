@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-12-30	00742	XD	1

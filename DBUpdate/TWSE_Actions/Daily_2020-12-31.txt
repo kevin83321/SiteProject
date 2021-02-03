@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-12-31	2719	RS	811.8734

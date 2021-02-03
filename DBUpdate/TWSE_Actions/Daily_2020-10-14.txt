@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-10-14	4551	XD	1.868757

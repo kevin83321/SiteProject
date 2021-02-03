@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2020-11-27	00690	XD	0.84
+2020-11-27	1315	XD	4

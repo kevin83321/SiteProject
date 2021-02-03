@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2020-12-04	2065	XD	0.96615817

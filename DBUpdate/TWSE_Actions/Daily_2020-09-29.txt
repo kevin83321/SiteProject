@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2020-09-29	4552	XD	1.7
+2020-09-29	4944	RS	420.2037

@@ -1,0 +1,10 @@
+CREATE TABLE `TW_Stock`.`TWSE_Actions` (
+  `Date` date NOT NULL,
+  `Ticker` varchar(10) NOT NULL,
+  `Action` varchar(4) NOT NULL,
+  `Value` float NOT NULL,
+  PRIMARY KEY (`Date`,`Ticker`,`Action`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+db.TWSE_Actions.createIndex({'Date':1, 'Ticker':1, 'Action':1},{unique:true})

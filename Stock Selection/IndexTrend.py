@@ -1,4 +1,4 @@
-__updated__ = '2020-12-29 00:44:33'
+__updated__ = '2021-02-01 22:24:07'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -120,6 +120,7 @@ def main():
                                             #   'Maturity':{'$eq':TTM},
                                               #'TradingSession':{'$eq':'Regular'}
                                                 }))
+        print(df_tx)
         df_tx = df_tx[(df_tx['Maturity'].apply(lambda x: str(x).strip()) == TTM) & (df_tx['TradingSession'] == 'Regular')]
         df_tx.index = range(len(df_tx))
         del df_tx['_id']
