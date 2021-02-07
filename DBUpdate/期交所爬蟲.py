@@ -26,6 +26,7 @@ import requests
 from datetime import datetime , timedelta
 from concurrent.futures import ThreadPoolExecutor
 from modules import Tele, Mongo
+from Log.TransforException import TransforException
 
 #%%
 ## read historical data from TAIFEX
@@ -60,6 +61,7 @@ def parseFutureID(_id, ttm):
                 shioaji_id = 'MX' + m[-1] + m_code + y[-1]
         return capital_id, shioaji_id
     except:
+        print(TransforException.GetException())
         print(_id, ttm)
     
 def createBrokerID(data):
@@ -84,6 +86,7 @@ def createBrokerID(data):
         })
         return data
     except:
+        print(TransforException.GetException())
         print(data)
 
 def update_one(table, createIDFunc, d):
@@ -97,10 +100,7 @@ def update_one(table, createIDFunc, d):
         except Exception as e:
             print(e)
     except Exception as e:
-        print(e)
-        pass
-    # except:
-    #     print({GetException()})
+        print(TransforException.GetException())
 
 def changeColNames(col):
     rename_map = {'Last':'Close', '%':'PctChange', 'Oi':'OI'}
@@ -121,34 +121,36 @@ def parseDatetime(dt):
     try:
         return pd.to_datetime(dt).strftime('%Y-%m-%d')
     except:
-        print(dt)
-        # print(GetException())
         return np.nan
 
 def createTickerOpt(data):
-    ttm = data['Maturity']
-    _id = data['Contract']
-    if _id in 'TXO,TEO,TFO':
-        strike = str(int(data['StrikePrice'])).replace('.', '').zfill(5)
-    else:
-        strike = str(float(data['StrikePrice'])*10).replace('.', '').zfill(5)
-    c_p_map = {'Call':list('ABCDEFGHIJKL'), 'Put':list('MNOPQRSTUVWX')}
-    y = ttm[:4]
-    m = ttm[4:]
-    
-    if 'W' not in ttm:
-        c_p_code = c_p_map[data['CallPut']][int(m)-1]
-        ticker = _id + strike + c_p_code + y[-1]
-    else:
-        w = m[-1]
-        c_p_code = c_p_map[data['CallPut']][int(m[:2])-1]
-        ticker = _id[:-1] + w + strike + c_p_code + y[-1]            
-    
-    data.update({
-        'TickerCapital':ticker,
-        'TickerShioaji':ticker
-    })
-    return data
+    try:
+        ttm = data['Maturity']
+        _id = data['Contract']
+        if _id in 'TXO,TEO,TFO':
+            strike = str(int(float(data['StrikePrice']))).replace('.', '').zfill(5)
+        else:
+            strike = str(float(data['StrikePrice'])*10).replace('.', '').zfill(5)
+        c_p_map = {'Call':list('ABCDEFGHIJKL'), 'Put':list('MNOPQRSTUVWX')}
+        y = ttm[:4]
+        m = ttm[4:]
+        
+        if 'W' not in ttm:
+            c_p_code = c_p_map[data['CallPut']][int(m)-1]
+            ticker = _id + strike + c_p_code + y[-1]
+        else:
+            w = m[-1]
+            c_p_code = c_p_map[data['CallPut']][int(m[:2])-1]
+            ticker = _id[:-1] + w + strike + c_p_code + y[-1]
+        
+        data.update({
+            'TickerCapital':ticker,
+            'TickerShioaji':ticker
+        })
+    except:
+        print(TransforException.GetException())
+    else:   
+        return data
 
 def parallel_update_data(createFunc, df):
     with ThreadPoolExecutor(20) as executor:
