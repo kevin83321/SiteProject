@@ -1,6 +1,6 @@
 
 
-__updated__ = '2021-01-21 00:05:14'
+__updated__ = '2021-02-21 00:09:53'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -69,7 +69,7 @@ def main(min_price=0, max_price=50, num_shares=0, shares_ratio=0):
         
         expand_text = '合併兩位前輩的短線選股'
         saveRecommand(final_select, 'ShortTermTrade')
-        sendResultTable(td, final_select, momentums, 6, expand_text=expand_text)
+        sendResultTable(td, final_select, momentums, 5, expand_text=expand_text)
     except:
         print(f'ticker : {ticker}\t Error : ',GetException())
     

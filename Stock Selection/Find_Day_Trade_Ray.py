@@ -1,4 +1,4 @@
-__updated__ = '2021-01-04 21:16:49'
+__updated__ = '2021-02-21 00:16:25'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -78,7 +78,7 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
                 print(GetException())
         
         # print(selection)
-        expand_text = 'Logic by Ray'
+        expand_text = 'DayTrade Logic by Ray'
         saveRecommand(selection, 'DayTradeByRay')
         sendResultTable(td, selection, momentums, '4', expand_text)
         
