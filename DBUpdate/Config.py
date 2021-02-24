@@ -5,13 +5,13 @@
 # Version: Test
 # !flask/bin/python
 
-__updated__ = '2021-01-30 12:32:22'
+__updated__ = '2021-02-22 22:27:53'
 
 def getConnectionConfig():
     user = 'kevin83321'
     password = 'j7629864'
-    #ip = '192.168.2.191'
-    ip = '192.168.0.10'
+    ip = '192.168.2.79'
+    # ip = '192.168.0.10'
     port = 32768
     return [user, password, ip, port]
 
