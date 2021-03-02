@@ -1,12 +1,12 @@
 # -*- encoding: UTF-8 -*-
 # CopyRight© : XIQICapital 希奇資本
-# 爬取證交所有上市的ETF成分股
+# 爬取所有上市上櫃的股票交易日資料
 # Author: Kevin Cheng 鄭圳宏
 # Create: 2020.07.01
 # Update: add log write into cmd
 # Version: 1
 
-__updated__ = '2021-01-30 12:59:20'
+__updated__ = '2021-02-28 23:09:42'
 
 from pandas import DataFrame, date_range, read_csv
 from datetime import timedelta, datetime
@@ -82,6 +82,9 @@ def OTC_HistoricalPrice(i):
         data = js["aaData"]
         for k in range(len(data)):
             o,h,l,c = [changeToFloat(x.replace(',','')) for x in data[k][4:7]+data[k][2:3]]
+            volume = int(changeToFloat(data[k][7].replace(',','')))
+            # if i >= datetime(2020,7,24):
+            #     volume = int(changeToFloat(data[k][7].replace(',','')))
             output.append(update_data_dict({
                 'Date':i.strftime("%Y-%m-%d"),
                 'Ticker':data[k][0],
@@ -89,7 +92,7 @@ def OTC_HistoricalPrice(i):
                 'High':h,
                 'Low':l,
                 'Close':c,
-                'Volume':int(changeToFloat(data[k][8].replace(',',''))),
+                'Volume':volume,
             }))
     except Exception as e:
         print(e)
@@ -139,7 +142,7 @@ if __name__ == "__main__":
                 print(f'Update {date} Historical Price of otc success')
             except Exception as e:
                 print('otc',e)
-            time.sleep(3)
+            time.sleep(5)
 
         # send finish message
         # Line().sendMessage('Update Stock Historical Price success')

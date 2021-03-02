@@ -1,12 +1,12 @@
 # -*- encoding: UTF-8 -*-
-# CopyRight© : XIQICapital 希奇資本
-# 爬取證交所有上市的ETF成分股
+# CopyRight© : Kevin Cheng
+# 所有可交易標的
 # Author: Kevin Cheng 鄭圳宏
-# Create: 2020.07.01
+# Create: 2021.02.27
 # Update: update modules
 # Version: 1
 
-__updated__ = '2021-02-01 21:00:39'
+__updated__ = '2021-02-27 14:45:32'
 
 import pandas as pd
 import requests
@@ -21,11 +21,17 @@ def requestStockList(mode):
     response = requests.get(url)
     soup = bs(response.text, 'lxml')
     updateDate = soup.select('table')[0].select('h2')[1].text.split(':')[1].strip().replace('/', '-')
-    trs = list(compress(soup.select('table')[1].select('tr'), list(map(lambda x: len(x) > 1, soup.select('table')[1].select('tr')))))[1:]
-    return list(map(parseData, product(trs, [updateDate])))
+    asset_type = ''
+    full_data = []
+    for tr in soup.select('table')[1].select('tr')[1:]:
+        if len(tr) <= 1:
+            asset_type = tr.text.strip()
+            continue
+        full_data.append(parseData([tr, updateDate, asset_type]))
+    return full_data
 
 def parseData(args):
-    tr, updateDate = args
+    tr, updateDate, asset_type = args
     tds = [x.text.strip() for x in tr]
     return {
         'Ticker':tds[0].split('\u3000')[0],
@@ -35,7 +41,8 @@ def parseData(args):
         'Market':tds[3],
         'Industry':tds[4],
         'CFICode':tds[5],
-        'UpdateDate':updateDate
+        'UpdateDate':updateDate,
+        'AssetType':asset_type
     }
     
 def updateOutput(args):
