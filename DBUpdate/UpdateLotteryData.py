@@ -5,7 +5,7 @@
 # Update: Create
 # Version: 1
 
-__updated__ = '2021-03-02 00:41:45'
+__updated__ = '2021-03-03 00:18:21'
 
 import time
 from modules import Tele, Mongo
@@ -25,7 +25,7 @@ def UpdateLotto649():
         for y in range(103, datetime.today().year):
             for m in range(1, 13):
                 final_data.extend(Lotto649(y, m))
-                time.sleep(5)
+                time.sleep(15)
         # fill current year data
         td = datetime.today()
         y = td.year

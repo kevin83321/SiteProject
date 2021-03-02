@@ -12,10 +12,10 @@ def CassandraRead():
     session = Cassandra()
     datas = session.execute("SELECT * FROM MARKET103 WHERE symbol_code='2330' AND kline_period='1440' AND update_user_id='Test' ALLOW FILTERING").all()
     
-def CassandraInsert(datas):
+def CassandraInsert(database='MARKET103', datas=[]):
     session = Cassandra()
-    batch=BatchStatement()
-    # temp_data = [dict(exchange='TW', assets_type='Stock', symbol_code='2330', kline_period='1440', kline_datetime='2021/02/24', close_price='625.00', high_price='636.00', low_price='625.00', open_price='627.00', pkno=None, trans_volume='69675637', update_date='2021/02/24', update_prog_cd='MarketApi.FormMarketApi', update_time='15:12:17', update_user_id='Test')]
+    batch = BatchStatement()
+    i = 0
     for data in datas:
         temp_k = []
         temp_v = []
@@ -28,9 +28,14 @@ def CassandraInsert(datas):
                 temp_v.append(data[k])
         cql_k = ', '.join(temp_k)
         cql_v = ', '.join(['%s',]*len(temp_k))
-        batch.add(SimpleStatement(f"INSERT INTO MARKET103 ({cql_k}) VALUES ({cql_v})"), 
+        batch.add(SimpleStatement(f"INSERT INTO {database} ({cql_k}) VALUES ({cql_v})"), 
                     tuple(temp_v))
         temp_v = []
+        i += 1
+        if i >= 65535:
+            session.execute(batch)
+            batch = BatchStatement()
+            i = 0
     session.execute(batch)
     
 def CassandraDelete(table: str= 'MARKET103', exchange: str= 'TW',
