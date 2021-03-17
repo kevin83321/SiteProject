@@ -6,7 +6,7 @@
 # Update: update modules
 # Version: 1
 
-__updated__ = '2021-02-27 14:45:32'
+__updated__ = '2021-03-13 10:28:47'
 
 import pandas as pd
 import requests
@@ -34,8 +34,8 @@ def parseData(args):
     tr, updateDate, asset_type = args
     tds = [x.text.strip() for x in tr]
     return {
-        'Ticker':tds[0].split('\u3000')[0],
-        'Name':tds[0].split('\u3000')[1],
+        'Ticker':tds[0].split('\u3000')[0].strip(),
+        'Name':tds[0].split('\u3000')[1].strip(),
         'ISINCode':tds[1],
         'IssueDate':tds[2].replace('/', '-'),
         'Market':tds[3],

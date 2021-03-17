@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2021-03-16	01010T	XD	0.230045

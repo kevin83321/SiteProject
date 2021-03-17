@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seth-小工具-股票期貨對照查詢</title>
+</head>
+<h1>歡迎使用此小工具查詢股票期貨的對應代碼</h1>
+    <text>可輸入證券代號(4~6碼)或是期貨代碼(2碼)，不分大小寫</text>
+
+<form method="POST">
+    <input type="text" name="text" autocomplete="on" value="" id="text" onkeydown="redirect(this)">
+    <input type="submit" href="#text">
+</form>
+
+<body>
+    
+    <text> {{error_msg}}</text>
+    <table>
+        <tr>
+            {% for head in header %}
+            <th align="center">{{head}}</th>
+            {% endfor %}
+        </tr>
+        {% for row in values %}
+        <tr>
+            {% for cell in row %}
+            <td align="center">{{cell}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>

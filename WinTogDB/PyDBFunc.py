@@ -10,6 +10,8 @@ from cassandra.auth import PlainTextAuthProvider
 
 from pymongo import MongoClient
 
+import pyodbc
+
 import configparser
 import os
 parent = os.path.dirname(os.path.abspath(__file__))
@@ -37,3 +39,12 @@ def Cassandra(db='casmarket'):
     auth_provider = PlainTextAuthProvider(username=user, password=password)
     cluster = Cluster([ip], port=int(port), auth_provider=auth_provider)
     return cluster.connect(db)
+
+def SQLServer():
+    config = parser['SQLSERVERSETTING']
+    user = config['user']
+    password = config['password']
+    ip = config['ip']
+    db = config['db']
+    cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'+f'SERVER={ip};DATABASE={db};UID={user};PWD={password}')
+    return cnxn, cnxn.cursor()
