@@ -122,10 +122,10 @@ def parse_cash_flow_sheet_html(soup):
         return cash_flow_dict
 
 def crawl_balance_sheet_zip(year=2019, season=1):
-    if not os.path.isfile(os.path.join(savePath, f'{year}Q{season}.zip')):
-        url = f'https://mops.twse.com.tw/server-java/FileDownLoad?step=9&fileName=tifrs-{year}Q{season}.zip&filePath=/home/html/nas/ifrs/{year}/'
-        response = requests.get(url, headers=headers, timeout=30)
-        open(os.path.join(savePath, f'{year}Q{season}.zip'),'wb').write(response.content)
+    # if not os.path.isfile(os.path.join(savePath, f'{year}Q{season}.zip')):
+    url = f'https://mops.twse.com.tw/server-java/FileDownLoad?step=9&fileName=tifrs-{year}Q{season}.zip&filePath=/home/html/nas/ifrs/{year}/'
+    response = requests.get(url, headers=headers, timeout=30)
+    open(os.path.join(savePath, f'{year}Q{season}.zip'),'wb').write(response.content)
     
 def read_data_from_file(year=2019, season=1):
     if year < 2019:
@@ -339,9 +339,9 @@ def update_db(db):
     
     # Haven't  fill all data for the updated year
     # Then Fill first
-    if last_y <= cur_y:
+    if last_y < cur_y:
+        year = last_y
         if last_q < 4:
-            year = last_y
             for quarter in range(last_q+1, 5):
                 crawl_balance_sheet_zip(year, quarter)
                 if year < 2019:
@@ -352,20 +352,31 @@ def update_db(db):
                     db.insert_many(datas)
                 else:
                     print(year, quarter, datas)
-        last_y += 1
-    
-    # Keep update Data               
-    for year in range(last_y, cur_y):
-        for quarter in range(1, 5):
-            crawl_balance_sheet_zip(year, quarter)
+        else:
+            crawl_balance_sheet_zip(year, last_q)
             if year < 2019:
-                datas = crawl_data_before_2019(year, quarter)
+                datas = crawl_data_before_2019(year, last_q)
             else:
-                datas = read_data_from_file(year, quarter)
+                datas = read_data_from_file(year, last_q)
             if datas:
                 db.insert_many(datas)
             else:
                 print(year, quarter, datas)
+    else:
+        last_y += 1
+        # Keep update Data               
+        for year in range(last_y, cur_y):
+            print(year)
+            for quarter in range(1, 5):
+                crawl_balance_sheet_zip(year, quarter)
+                if year < 2019:
+                    datas = crawl_data_before_2019(year, quarter)
+                else:
+                    datas = read_data_from_file(year, quarter)
+                if datas:
+                    db.insert_many(datas)
+                else:
+                    print(year, quarter, datas)
                     
    # update newest data
     publish_date_list = final_publish_date(cur_y)
