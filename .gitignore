@@ -1,3 +1,6 @@
 
 DBUpdate/TWSE_HistoricalPrice.txt
-FundamentalCrawler/balace_sheet/
+
+# Misc
+.DS_Store
+FundamentalCrawler/balace_sheet
