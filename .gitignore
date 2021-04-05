@@ -1,6 +1,4 @@
-
+# Historical Price Data
 DBUpdate/TWSE_HistoricalPrice.txt
-
-# Misc
-.DS_Store
-FundamentalCrawler/balace_sheet
+# Historical Fundmental Datas
+FundamentalCrawler/balace_sheet/

@@ -4,7 +4,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup as bs
 import time
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipFile
 import os
 import re
 from pymongo import MongoClient
@@ -14,6 +14,7 @@ from selenium.common import exceptions
 from webdriver_manager.chrome import ChromeDriverManager
 from itertools import product
 import json
+import configparser
 chrome = ChromeDriverManager().install()
 
 parent = os.path.dirname(os.path.abspath(__file__))
@@ -130,40 +131,44 @@ def crawl_balance_sheet_zip(year=2019, season=1):
 def read_data_from_file(year=2019, season=1):
     if year < 2019:
         return crawl_data_before_2019(year, season)
-    zip_file = ZipFile(os.path.join(savePath, f'{year}Q{season}.zip'))
-    files_in_zip = [f.filename for f in zip_file.filelist if '.html' in f.filename]
-    datas = []
-    targetPath = os.path.join(filledPath, f'{year}Q{season}')
-    if not os.path.isdir(targetPath):
-        os.makedirs(targetPath)
-        
-    for f in files_in_zip:        
-        ticker = f.split('-')[5]
-        print(ticker, year, season)
-        if os.path.isfile(os.path.join(targetPath, f'{ticker}.json')):
-            with open(os.path.join(targetPath, f'{ticker}.json'), 'r') as f:
-                temp = json.load(f)
-        else:
-            soup = bs(zip_file.open(f), 'lxml')
-            balance_dict = parse_balance_sheet_html(soup)
-
-            income_dict = parse_income_sheet_html(soup)
-
-            cash_flow_dict = parse_cash_flow_sheet_html(soup)
+    try:
+        zip_file = ZipFile(os.path.join(savePath, f'{year}Q{season}.zip'))
+        files_in_zip = [f.filename for f in zip_file.filelist if '.html' in f.filename]
+        datas = []
+        targetPath = os.path.join(filledPath, f'{year}Q{season}')
+        if not os.path.isdir(targetPath):
+            os.makedirs(targetPath)
             
-            temp = {
-                'Ticker':ticker,
-                'Year':str(year),
-                'Quarter':str(season),
-                '資產負債表':balance_dict,
-                '綜合損益表':income_dict,
-                '現金流量表':cash_flow_dict,
-                'updateDate':datetime.today().strftime('%Y-%m-%d')
-            }
-            with open(os.path.join(targetPath, f'{ticker}.json'), 'w') as f:
-                json.dump(temp, f)
-        datas.append(temp)
-    return datas
+        for f in files_in_zip:        
+            ticker = f.split('-')[5]
+            print(ticker, year, season)
+            if os.path.isfile(os.path.join(targetPath, f'{ticker}.json')):
+                with open(os.path.join(targetPath, f'{ticker}.json'), 'r') as f:
+                    temp = json.load(f)
+            else:
+                soup = bs(zip_file.open(f), 'lxml')
+                balance_dict = parse_balance_sheet_html(soup)
+
+                income_dict = parse_income_sheet_html(soup)
+
+                cash_flow_dict = parse_cash_flow_sheet_html(soup)
+                
+                temp = {
+                    'Ticker':ticker,
+                    'Year':str(year),
+                    'Quarter':str(season),
+                    '資產負債表':balance_dict,
+                    '綜合損益表':income_dict,
+                    '現金流量表':cash_flow_dict,
+                    'updateDate':datetime.today().strftime('%Y-%m-%d')
+                }
+                with open(os.path.join(targetPath, f'{ticker}.json'), 'w') as f:
+                    json.dump(temp, f)
+            datas.append(temp)
+    except BadZipFile:
+        print(f'{year}-{season} haven\'t publish')
+    else:
+        return datas
 
 def crawl_web_html_before_2019_with_selenium(ticker, year, season):
     driver = webdriver.Chrome(chrome)
@@ -390,11 +395,24 @@ def update_db(db):
                 db.insert_many(datas)
             else:
                 print(year, quarter, datas)
-            
-if __name__ == '__main__':
-    client = MongoClient('mongodb://kevin:j7629864@localhost:27017')
     
-    schema = client['admin']
+    
+def Mongo(parser):
+    config = parser['MONGOSETTING']
+    user = config['user']
+    password = config['password']
+    ip = config['ip']
+    port = config['port']
+    client = MongoClient(f"mongodb://{user}:{password}@{ip}:{port}")
+    return client['admin']        
+if __name__ == '__main__':
+    parent = os.path.dirname(os.path.abspath(__file__))
+
+    parser = configparser.ConfigParser()
+    parser.read(os.path.join(parent, 'database.conf'))
+    parser.sections()
+    
+    schema = Mongo(parser)
     dbs = schema.list_collection_names()
     db_name = 'TWSE.Fundmental'
     db = schema[db_name]
