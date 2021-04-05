@@ -404,7 +404,8 @@ def Mongo(parser):
     ip = config['ip']
     port = config['port']
     client = MongoClient(f"mongodb://{user}:{password}@{ip}:{port}")
-    return client['admin']        
+    return client['admin']
+
 if __name__ == '__main__':
     parent = os.path.dirname(os.path.abspath(__file__))
 
