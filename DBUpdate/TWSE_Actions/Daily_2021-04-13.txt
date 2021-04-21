@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2021-04-13	4973	XD	1.0

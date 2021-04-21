@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2021-04-19	5205	RS	400.0
+2021-04-19	5475	RS	700.0
