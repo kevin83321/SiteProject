@@ -1,7 +1,7 @@
 # Reference : http://www.cmoney.com.tw/S2_formula.asp
 # Create : 2021-03-19
 
-__updated__ = "2021-04-27 00:44:20"
+__updated__ = "2021-05-02 22:17:19"
 
 __str__ = """
 資產負債表
@@ -481,5 +481,15 @@ def CalculateAllIndicators(last_datas, update_datas, pre_y_datas):
     # LONG_TERM_FUNDS_FIXED_ASSETS_RATIO = LongTermFundsFixedsAssetsRatio(update_datas),
     EQUITY_LIABILITY_RATIO = EquityLiabilityRatio(update_datas),
     EQUITY_LONG_TERM_DEBT_RATIO = EquityLongTermDebtRatio(update_datas),
-    CAPITAL_TOTAL_ASSETS_REATIO = CapitalTotalAssetsRatio(update_datas)
+    CAPITAL_TOTAL_ASSETS_REATIO = CapitalTotalAssetsRatio(update_datas),
+    NET_RATIO = NetRatio(update_datas),
+    LONG_TERM_DEBT_NET_RATIO = LongTermDebtNetRatio(update_datas),
+    FIXED_ASSET_NET_RATIO = FixedAssetsNetRatio(update_data),
+    LEVERAGE_RATIO = LeverageRatio(update_data),
+    CURRENT_RATIO = CurrentRatio(update_data),
+    QUICK_RATIO = QuickRatio(update_data),
+    CASH_TO_CURRENT_ASSETS_RATIO = Cash2CurrentAssetsRatio(update_data),
+    CASH_TO_CURRENT_LIABILITY_RATIO = Cash2CurrentLiabilityRatio(update_data)
+    
+    
     )
