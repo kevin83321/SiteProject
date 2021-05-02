@@ -1,6 +1,6 @@
 # Create : 2020-12-04
 
-__updated__ = '2020-12-06 22:27:55'
+__updated__ = '2021-04-26 15:05:23'
 
 from pymongo import MongoClient
 from ShareHolder import main as ShareHolder
@@ -19,24 +19,34 @@ def final_publish_date(year):
 def getStartEnd(publish_dates):
     try:
         firstQ, lastQ = publish_dates[0], publish_dates[-1]
+        print(firstQ, lastQ)
         start_date = datetime(firstQ[0], firstQ[1]*3-2, 1)
-        if lastQ[1]*3 == 12:
+        if lastQ[1] == 4:
             end_date = datetime(lastQ[0]+1, 1, 1)
         else:
             end_date = datetime(lastQ[0], lastQ[1]*3+1, 1)
     except Exception as e:
-        print(e)
+        print(start_date)
+        print(end_date)
+        print('getStartEnd, Error : ', e)
     else:
+        
         return start_date, end_date
     
 def GetLastNQuarters(today = datetime.today()):
     try:
+        print(today)
         publish_dates = final_publish_date(today.year)
         Quarter = -1
         Quarter += sum([today >= publish_date for publish_date in publish_dates])
-        quarters = [(Y, Q) for Y, Q in product(range(today.year - 1, today.year), range(Quarter+1, 5))]
+        if Quarter == -1:
+            quarters = [(today.year - 2, 4)] + [(Y, Q) for Y, Q in product(range(today.year - 1, today.year), range(1, 5))]
+        else:
+            quarters = [(Y, Q) for Y, Q in product(range(today.year - 1, today.year), range(Quarter+1, 5))]
+        print(quarters)
         if Quarter:
             quarters.extend([(Y, Q) for Y, Q in product(range(today.year, today.year + 1), range(1, Quarter+1))])
+        print(quarters)
     except Exception as e:
         print(e)
     else:
@@ -44,8 +54,8 @@ def GetLastNQuarters(today = datetime.today()):
 
 def Getdb(db_name):
     try:
-        # client = MongoClient('mongodb://kevin:j7629864@localhost:27017')
-        client = MongoClient('mongodb://xiqi:xiqi2018@220.135.204.227:27017')
+        client = MongoClient('mongodb://kevin83321:j7629864@192.168.2.79:32768')
+        # client = MongoClient('mongodb://xiqi:xiqi2018@220.135.204.227:27017')
         schema = client['admin']
         db = schema['TWSE'][db_name]
     except Exception as e:
@@ -57,7 +67,8 @@ def getStockList():
     try:
         db = Getdb('StockList')
         updateDate = sorted(db.distinct('UpdateDate'))[-1]
-        data = list(db.find({'UpdateDate':{'$eq':updateDate}, 'Industry':{'$ne':''}}))
+        # data = list(db.find({'UpdateDate':{'$eq':updateDate}, 'Industry':{'$ne':''}}))
+        data = list(db.find({'UpdateDate':{'$eq':updateDate}, 'AssetType':{'$eq':'股票'}}))
     except Exception as e:
         print(e)
     else:
