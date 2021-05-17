@@ -5,11 +5,12 @@
 # Update: Insert First Time
 # Version: 1
 
-__updated__ = '2021-03-13 10:37:46'
+__updated__ = '2021-05-04 23:29:37'
 
 from PyCasFunc import CassandraInsert
 from PyDBFunc import Mongo
 from datetime import datetime
+from LineNotify import WintogLineNotify
 
 def getOTCList():
     schema = Mongo()
@@ -21,13 +22,15 @@ def getOTCList():
     asset_type = dict((x['Ticker'].strip(), x['AssetType'])  for x in datas)
     return datas, asset_type, updateDate
 
-def getHistoricalData(latest=False):
+def getHistoricalData(latest=False, dateStr:str=None):
     schema = Mongo()
     table = schema['TWSE.historicalPrice']
     temp_datas, asset_type, updateDate = getOTCList()
     otc_list = [x['Ticker'] for x in temp_datas]
     if latest:
         datas = list(table.find({'Ticker':{'$in':otc_list}, 'Date':{'$gte':updateDate}}))
+    elif dateStr:
+        datas = list(table.find({'Ticker':{'$in':otc_list}, 'Date':{'$gte':dateStr}}))
     else: 
         datas = list(table.find({'Ticker':{'$in':otc_list}, 'Date':{'$gte':'2013-12-01'}}))
     datas = [ChangeIntoCasForm(data, asset_type[data['Ticker']]) for data in datas]
@@ -55,5 +58,8 @@ def ChangeIntoCasForm(data, asset_type):
     
 if __name__ == '__main__':
     datas = getHistoricalData(True)
+    # datas = getHistoricalData(dateStr='2021-05-03')
     # datas = [dict(exchange='TW', assets_type='Stock', symbol_code='1336', kline_period='1440', kline_datetime='2021/02/24', close_price='625.00', high_price='636.00', low_price='625.00', open_price='627.00', pkno=None, trans_volume='69675637', update_date='2021/02/24', update_prog_cd='MarketApi.FormMarketApi', update_time='15:12:17', update_user_id='Test')]
+    num = len(datas)
     CassandraInsert(datas=datas)
+    WintogLineNotify(f'[MarketApi 更新台灣上櫃股票每日價格完成] 筆數: {num}')
