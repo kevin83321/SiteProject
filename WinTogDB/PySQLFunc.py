@@ -5,7 +5,7 @@
 # Update: Create
 # Version: 1
 
-__updated__ = '2021-03-06 11:41:54'
+__updated__ = '2021-05-24 00:50:40'
 
 from PyDBFunc import SQLServer
 
@@ -18,13 +18,14 @@ def executeSQL(sql):
     
 def Insert(db = 'MAEKET101', k_str='', v_str=''):
     try:
-        sql = f"""INSERT INTO [CloudInvest].[dbo].[MARKET101]
+        sql = f"""INSERT INTO [CloudInvest].[dbo].[{db}]
                 ({k_str})
                 VALUES 
                 ({v_str})"""
-        executeSQL(sql)
+        print(sql)
+        # executeSQL(sql)
         #commit the transaction
-        cnxn.commit()
+        # cnxn.commit()
     except Exception as e:
         print(e)
 

@@ -67,6 +67,32 @@ test_sql = """SELECT TOP (1000) [PKNO]
 ,[FINANCE_CREDIT_EVALUATION]
 FROM [CloudInvest].[dbo].[MARKET124]"""
 
+FundKeys = [
+    'FIXED_ASSETS_RATIO', 'FIXED_ASSETS_EQUITY_RATIO',
+    'FIXED_ASSETS_LONG_TERM_DEBT_RATIO', 'FIXED_ASSETS_LONG_TERM_FUNDS_RATIO',
+    'LIABILITY_RATIO', 'LONG_TERM_FUNDS_FIXED_ASSETS_RATIO',
+    'EQUITY_LIABILITY_RATIO', 'EQUITY_LONG_TERM_DEBT_RATIO',
+    'CAPITAL_TOTAL_ASSETS_REATIO', 'NET_RATIO',
+    'LONG_TERM_DEBT_NET_RATIO', 'FIXED_ASSET_NET_RATIO',
+    'LEVERAGE_RATIO', 'CURRENT_RATIO',
+    'QUICK_RATIO', 'CASH_TO_CURRENT_ASSETS_RATIO',
+    'CASH_TO_CURRENT_LIABILITY_RATIO', 'CAPITAL_TO_CURRENT_ASSETS_RATIO',
+    'SHORT_TERM_BORROWING_TO_CURRENT_ASSETS_RATIO', 'PAYABLES_TURNOVER_RATIO',
+    'REVEIVABLE_TURNOVER_RATIO', 'INVENTORY_TURNOVER_RATIO',
+    'FIXED_ASSET_TURNOVER_RATIO', 'TOTAL_ASSET_TURNOVER_RATIO',
+    'NET_TURNOVER_RATIO', 'OPERATING_INCOME_TO_CAPITAL_RATIO',
+    'PRETAX_PROFIT_TO_CAPITAL_RATIO', 'GROSS_MARGIN',
+    'OPERATING_EXPENSE_RATIO', 'OPERATING_PROFIT_RATIO',
+    'PRETAX_PROFIT_MARGIN', 'FINAL_PROFIT_MARGIN',
+    'PRETAX_RETURN_ON_EQUITY', 'AFTERTAX_RETURN_ON_EQUITY',
+    'PRETAX_RETURN_ON_ASSETS', 'AFTERTAX_RETURN_ON_ASSETS',
+    'AFTERTAX_RETURN_ON_FIXED_ASSETS', 'REVENUE_QUARTERLY_CHANGE_RATIO',
+    'REVENUE_GROWTH_RATIO', 'TOTAL_ASSET_GROWTH_RATIO',
+    'NET_GROWTH_RATIO', 'FIXED_ASSET_GROWTH_RATIO',
+    'RD_EXPENSE_RATIO', 'MANAGEMENT_EXPENSE_RATIO',
+    'CASH_FLOW_RATIO', 'BUSINESS_GROWTH_RATIO',
+    'PRETAX_NET_GROWTH_RATIO', 'AFTERTAX_NET_GROWTH_RATIO',
+    'FINANCE_CREDIT_EVALUATION']
 
   
 def ReadStockList():
@@ -117,11 +143,17 @@ def main():
     update_datas = dict((x['Ticker'], x) for x in ReadFundmentalData(update_quarter))
     pre_y_datas = dict((x['Ticker'], x) for x in ReadFundmentalData((update_quarter[0]-1, update_quarter[1])))
     
-    results = []
+    # results = []
     for ticker in tickers:
-        results.append(CalculateAllIndicators(last_datas[ticker], 
-                               update_datas[ticker],
-                               pre_y_datas[ticker]))
+        print(ticker)
+        Indicators = CalculateAllIndicators(last_datas[ticker], 
+                                update_datas[ticker],
+                                pre_y_datas[ticker])
+        Insert('MARKET124', FundKeys, [Indicators[k] for k in FundKeys])
+        break
+        # results.append(CalculateAllIndicators(last_datas[ticker], 
+        #                        update_datas[ticker],
+        #                        pre_y_datas[ticker]))
     
 if __name__ == '__main__':
     main()

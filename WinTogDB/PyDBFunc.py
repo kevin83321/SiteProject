@@ -48,3 +48,17 @@ def SQLServer():
     db = config['db']
     cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'+f'SERVER={ip};DATABASE={db};UID={user};PWD={password}')
     return cnxn, cnxn.cursor()
+
+def MongoDataReader(tb_name, condition):
+    schema = Mongo()
+    table = schema[tb_name]
+    datas = list(table.find(condition))
+    for d in datas:
+        del d['_id']
+    return datas
+
+def MongoDistinct(tb_name, distinct_h):
+    schema = Mongo()
+    table = schema[tb_name]
+    return list(table.distinct(distinct_h))
+    
