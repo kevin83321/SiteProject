@@ -1,7 +1,7 @@
 # Reference : http://www.cmoney.com.tw/S2_formula.asp
 # Create : 2021-03-19
 
-__updated__ = "2021-05-24 01:36:29"
+__updated__ = "2021-05-29 15:40:35"
 
 __str__ = """
 資產負債表
@@ -20,7 +20,6 @@ __str__ = """
 現金流量表
  - 現金及約當現金(期末現金及約當現金餘額)
  - 稅前純益(本期稅前淨利（淨損）)
- - 稅後純益(本期淨利（淨損）)
  - 支付之利息
  - 折舊費用
  - 攤銷費用
@@ -29,6 +28,7 @@ __str__ = """
  - 其他投資活動
  - 投資活動之淨現金流入（流出）
 綜合損益表
+ - 稅後純益(本期淨利（淨損）)
  - 營業收入淨額(營業收入合計)
  - 銷貨成本(銷貨成本合計)
  - 營業成本(營業成本合計)
@@ -38,6 +38,10 @@ __str__ = """
  - 管銷費用(推銷費用合計 + 管理費用合計)
  - 營業費用(營業費用合計)
 """
+
+def FindKeys(data, target=None):
+    for key in data.keys():
+        print(key, key == target)
 
 def FixedAssetsRatio(data) -> float:
     """
@@ -59,7 +63,10 @@ def FixedAssetsEquityRatio(data) -> float:
     固定資產對股東權益比率(%) = 固定資產(千) / 股東權益(千)
     """
     FixedAsset = float(data['資產負債表']['非流動資產合計']['Value'])
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
     return FixedAsset / TotalRights
 
 def FixedAssetsLongTermDebtRatio(data) -> float:
@@ -78,7 +85,10 @@ def FixedAssetsLongTermFundsRatio(data) -> float:
     固定資產對長期資金比率(%) = 固定資產(千) / (股東權益(千) + 長期負債(千))
     """
     FixedAsset = float(data['資產負債表']['非流動資產合計']['Value'])
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
     LongTermDebt = float(data['資產負債表']['非流動負債合計']['Value'])
     return FixedAsset / (TotalRights + LongTermDebt)
 
@@ -114,7 +124,10 @@ def EquityLiabilityRatio(data):
     TODO: calculate EQUITY_LIABILITY_RATIO
     股東權益對負債比率(%) = 股東權益(千) / 負債總計(千)
     """
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
     if "負債總額" not in data['資產負債表'].keys():
         TotalDebt = float(data['資產負債表']['非流動負債合計']['Value'])
         TotalDebt += float(data['資產負債表']['流動負債合計']['Value'])
@@ -127,7 +140,10 @@ def EquityLongTermDebtRatio(data):
     TODO: calculate EQUITY_LONG_TERM_DEBT_RATIO
     股東權益對長期負債比率(%) = 股東權益(千) / 長期負債(千)
     """
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
     LongTermDebt = float(data['資產負債表']['非流動負債合計']['Value'])
     return TotalRights / LongTermDebt
 
@@ -151,7 +167,10 @@ def NetRatio(data):
     TODO: calculate NET_RATIO
     淨值比率 = 股東權益(千) / 資產總計(千)
     """
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
     
     if "資產總額" not in data['資產負債表'].keys():
         TotalAsset = float(data['資產負債表']['非流動資產合計']['Value'])
@@ -186,7 +205,10 @@ def LeverageRatio(data):
     else:
         TotalDebt = float(data['資產負債表']['負債總額']['Value'])
         
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
     return TotalDebt / TotalRights
 
 def CurrentRatio(data):
@@ -209,11 +231,15 @@ def QuickRatio(data) -> float:
         Inventory = float(data['資產負債表']['存貨合計']['Value'])
     else:
         Inventory = float(data['資產負債表']['存貨']['Value'])
-        
-    if '預付款項合計' in data['資產負債表']:
-        PrePayment = float(data['資產負債表']['預付款項合計']['Value'])
-    else:
-        PrePayment = float(data['資產負債表']['預付款項']['Value'])
+    try:
+        if '預付款項合計' in data['資產負債表']:
+            PrePayment = float(data['資產負債表']['預付款項合計']['Value'])
+        else:
+            PrePayment = float(data['資產負債表']['預付款項']['Value'])
+    except:
+        PrePayment = sum([float(data['現金流量表'][key]['Value']) for key in '預付設備款增加,其他預付款項增加,長期預付租金'.split(',') if key in data['現金流量表'].keys()])
+        # PrePayment = float(data['現金流量表']['預付設備款增加']['Value'])#其他預付款項增加
+        # PrePayment += float(data['現金流量表']['其他預付款項增加']['Value'])#其他預付款項增加
     
     return (FlowAsset - Inventory - PrePayment) / FlowDebt
 
@@ -251,29 +277,54 @@ def ShortTermBorrowing2CurrentAssetsRatio(data):
     短期借款與流動資產比率(%) = 短期借款(千) / 流動資產(千)
     """
     FlowAsset = float(data['資產負債表']['流動資產合計']['Value'])
-    
-    if '短期借款合計' in data['資產負債表'].keys():
-        ShortDebt = float(data['資產負債表']['短期借款合計']['Value'])
+    try:
+        try:
+            if '短期借款合計' in data['資產負債表'].keys():
+                ShortDebt = float(data['資產負債表']['短期借款合計']['Value'])
+            else:
+                ShortDebt = float(data['資產負債表']['短期借款']['Value'])
+        except:
+            ShortDebt = float(data['現金流量表']['短期借款增加']['Value']) - float(data['現金流量表']['短期借款減少']['Value'])
+    except:
+        return 0
     else:
-        ShortDebt = float(data['資產負債表']['短期借款']['Value'])
-    
-    return ShortDebt / FlowAsset
+        return ShortDebt / FlowAsset
 
-def PayablesTurnoverRatio(data):
+def PayablesTurnoverRatio(pre_data, update_data):
     """
     TODO: calculate PAYABLES_TURNOVER_RATIO
     應付款項週轉率(%) = 銷貨成本 / 平均應付帳款
     """
-    if '應付帳款合計' in data['資產負債表'].keys():
-        Payables = float(data['資產負債表']['應付帳款合計']['Value'])
-    else:
-        Payables = float(data['資產負債表']['應付帳款']['Value'])
+    try:
+        if '應付帳款合計' in update_data['資產負債表'].keys():
+            Payables = float(update_data['資產負債表']['應付帳款合計']['Value'])
+        else:
+            Payables = float(update_data['資產負債表']['應付帳款']['Value'])
+    except:
+        Payables = sum([float(value['Value']) for key, value in update_data['資產負債表'].items() if '應付' in key and not '費用' in key])
         
-    if '銷貨成本合計' in data['綜合損益表'].keys():
-        CostofSales = float(data['綜合損益表']['銷貨成本合計']['Value'])
-    else:
-        CostofSales = float(data['綜合損益表']['銷貨成本']['Value'])
-    return CostofSales / Payables
+    try:
+        if '銷貨成本合計' in update_data['綜合損益表'].keys():
+            CostofSales = float(update_data['綜合損益表']['銷貨成本合計']['Value'])
+        else:
+            CostofSales = float(update_data['綜合損益表']['銷貨成本']['Value'])
+    except:
+        if '存貨合計' in pre_data['資產負債表'].keys():
+            PreInventory = float(pre_data['資產負債表']['存貨合計']['Value'])
+        else:
+            PreInventory = float(pre_data['資產負債表']['存貨']['Value'])
+            
+        try:
+            AdjInventory = float(update_data['現金流量表']['存貨（增加）減少']['Value'])
+        except:
+            AdjInventory = float(update_data['現金流量表']['存貨減少(增加)之調整數']['Value'])
+            
+        if '存貨合計' in update_data['資產負債表'].keys():
+            CurrentInventory = float(update_data['資產負債表']['存貨合計']['Value'])
+        else:
+            CurrentInventory = float(update_data['資產負債表']['存貨']['Value'])
+        CostofSales = PreInventory + AdjInventory - CurrentInventory
+    return CostofSales / Payables if Payables != 0 else 0
 
 def ReceivableTurnoverRatio(data):
     """
@@ -281,17 +332,42 @@ def ReceivableTurnoverRatio(data):
     應收款項週轉率(%) = 營業收入淨額(千) / 應收帳款與票據(千)
     // 應收款項週轉天數 = 360 / (營業收入淨額(千) / 應收帳款與票據(千))
     """
-    Reveivable = float(data['資產負債表']['應收帳款淨額']['Value'])
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
-    return Revenue / Reveivable
+    try:
+        Receivable = float(data['資產負債表']['應收帳款淨額']['Value'])
+    except:
+        try:
+            Receivable = float(data['資產負債表']['應收帳款']['Value'])
+        except:
+            try:
+                Receivable = float(data['資產負債表']['應收帳款－關係人淨額']['Value'])
+                Receivable += float(data['現金流量表']['應收帳款－關係人（增加）減少']['Value'])
+            except:
+                Receivable = float(data['資產負債表']['應收帳款－關係人淨額']['Value'])
+                Receivable += float(data['現金流量表']['應收帳款（增加）減少']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
+    return Revenue / Receivable if Receivable != 0 else 0
 
 def InventoryTurnoverRatio(data):
     """
     TODO: calculate INVENTORY_TURNOVER_RATIO
     存貨週轉率(%) = 營業成本(千) / 存貨(千)
     """
-    Inventory = float(data['資產負債表']['存貨合計']['Value'])
-    CostofOperation = float(data['資產負債表']['營業成本合計']['Value'])
+    if '存貨合計' in data['資產負債表'].keys():
+        Inventory = float(data['資產負債表']['存貨合計']['Value'])
+    else:
+        Inventory = float(data['資產負債表']['存貨']['Value'])
+    try:
+        if '營業成本合計' in data['綜合損益表'].keys():
+            CostofOperation = float(data['綜合損益表']['營業成本合計']['Value'])
+        else:
+            CostofOperation = float(data['綜合損益表']['營業成本']['Value'])
+    except:
+        CostofOperation = float(data['綜合損益表']['銷貨成本']['Value'])
+        CostofOperation += float(data['綜合損益表']['租賃成本']['Value'])
+        CostofOperation += float(data['綜合損益表']['推銷費用']['Value'])
     return CostofOperation / Inventory
     
 def FixedAssetTurnoverRatio(data):
@@ -300,7 +376,10 @@ def FixedAssetTurnoverRatio(data):
     固定資產週轉率(%) = 營業收入淨額(千) / 固定資產(千)
     """
     FixedAsset = float(data['資產負債表']['非流動資產合計']['Value'])
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
     return Revenue / FixedAsset
 
 def TotalAssetTurnoverRatio(data):
@@ -308,7 +387,10 @@ def TotalAssetTurnoverRatio(data):
     TODO: calculate TOTAL_ASSET_TURNOVER_RATIO
     總資產週轉率(%) = 營業收入淨額(千) / 資產總計(千)
     """
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
     
     if "資產總額" not in data['資產負債表'].keys():
         TotalAsset = float(data['資產負債表']['非流動資產合計']['Value'])
@@ -323,8 +405,14 @@ def NetTurnoverRatio(data):
     TODO: calculate NET_TURNOVER_RATIO
     淨值週轉率(%) = 營業收入淨額(千) / 股東權益(千)
     """
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
     return Revenue / TotalRights
     
 def OperatingIncome2CapitalRatio(data):
@@ -334,7 +422,10 @@ def OperatingIncome2CapitalRatio(data):
     """
     FlowAsset = float(data['資產負債表']['流動資產合計']['Value'])
     FlowDebt = float(data['資產負債表']['流動負債合計']['Value'])
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
     return Revenue / (FlowAsset - FlowDebt)    
     
 def PretaxProfit2CapitalRatio(data):
@@ -342,7 +433,7 @@ def PretaxProfit2CapitalRatio(data):
     TODO: calculate PRETAX_PROFIT_TO_CAPITAL_RATIO 
     稅前淨利 / (流動資產(千) - 流動負債(千))
     """
-    ReturnBeforeFee = float(data['資產負債表']['本期稅前淨利（淨損）']['Value'])
+    ReturnBeforeFee = float(data['現金流量表']['本期稅前淨利（淨損）']['Value'])
     FlowAsset = float(data['資產負債表']['流動資產合計']['Value'])
     FlowDebt = float(data['資產負債表']['流動負債合計']['Value'])
     return ReturnBeforeFee / (FlowAsset + FlowDebt)
@@ -352,8 +443,14 @@ def GrossMargin(data):
     TODO: calculate GROSS_MARGIN
     毛利率(%) = 營業毛利(千) / 營業收入淨額(千)
     """
-    Profit = float(data['綜合損益表']['營業毛利（毛損）淨額']['Value'])
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    try:
+        Profit = float(data['綜合損益表']['營業毛利（毛損）淨額']['Value'])
+    except:
+        Profit = float(data['綜合損益表']['繼續營業單位稅前淨利（淨損）']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
     return Profit / Revenue
 
 def OperatingExpenseRatio(data):
@@ -362,7 +459,10 @@ def OperatingExpenseRatio(data):
     營業費用率
     """
     Expense = float(data['綜合損益表']['營業費用合計']['Value'])
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
     return Expense / Revenue
     
 def OperatingProfitRatio(data):
@@ -370,8 +470,14 @@ def OperatingProfitRatio(data):
     TODO: calculate OPERATING_PROFIT_RATIO
     營業利益率(%) = 營業利益(千) / 營業收入淨額(千)
     """
-    Income = float(data['綜合損益表']['營業收入合計']['Value'])
-    Revenue = float(data['綜合損益表']['營業利益（損失）']['Value'])
+    try:
+        Income = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Income = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業利益（損失）']['Value'])
+    except:
+        Revenue = float(data['綜合損益表']['繼續營業單位本期淨利（淨損）']['Value'])
     return Revenue / Income
 
 def PretaxProfitMargin(data):
@@ -379,8 +485,11 @@ def PretaxProfitMargin(data):
     TODO: calculate PRETAX_PROFIT_MARGIN
     稅前純益率(%) = 稅前純益(千) / 營業收入淨額(千)
     """
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
-    PretaxProfit = float(data['資產負債表']['本期稅前淨利（淨損）']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
+    PretaxProfit = float(data['現金流量表']['本期稅前淨利（淨損）']['Value'])
     return PretaxProfit / Revenue 
 
 def FinalProfitMargin(data):
@@ -388,8 +497,11 @@ def FinalProfitMargin(data):
     TODO: calculate FINAL_PROFIT_MARGIN 
     稅後純益率(%) = 稅前純益(千) / 營業收入淨額(千)
     """
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
-    NetPnL = float(data['現金流量表']['本期淨利（淨損）']['Value'])
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        Revenue = float(data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
+    NetPnL = float(data['綜合損益表']['本期淨利（淨損）']['Value'])
     return NetPnL / Revenue 
 
 def PretaxReturnOnEquity(data):
@@ -397,9 +509,12 @@ def PretaxReturnOnEquity(data):
     TODO: calculate PRETAX_RETURN_ON_EQUITY
     稅前淨值報酬率(%) = 稅前純益(千) / 股東權益(千)
     """
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
-    ReturnBeforeFee = float(data['資產負債表']['本期稅前淨利（淨損）']['Value'])
-    return ReturnBeforeFee / TotalRights 
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
+    PretaxProfit = float(data['現金流量表']['本期稅前淨利（淨損）']['Value'])
+    return PretaxProfit / TotalRights 
 
 def AftertaxReturnOnEquity(data):
     """
@@ -407,8 +522,11 @@ def AftertaxReturnOnEquity(data):
     稅後淨值報酬率(%) = 稅後純益(千) / 股東權益(千)
     稅後權益報酬率(ROE)
     """
-    TotalRights = float(data['資產負債表']['權益總額']['Value'])
-    ReturnAfterFee = float(data['資產負債表']['本期淨利（淨損）']['Value'])
+    try:
+        TotalRights = float(data['資產負債表']['權益總額']['Value'])
+    except:
+        TotalRights = float(data['資產負債表']['權益總計']['Value'])
+    ReturnAfterFee = float(data['綜合損益表']['本期淨利（淨損）']['Value'])
     return ReturnAfterFee / TotalRights
 
 def PretaxReturnOnAssets(data):
@@ -416,7 +534,7 @@ def PretaxReturnOnAssets(data):
     TODO: calculate PRETAX_RETURN_ON_ASSETS
     稅前資產報酬率(%) = 稅前純益(千) / 資產總計(千)
     """
-    ReturnBeforeFee = float(data['資產負債表']['本期稅前淨利（淨損）']['Value'])
+    ReturnBeforeFee = float(data['現金流量表']['本期稅前淨利（淨損）']['Value'])
     
     if "資產總額" not in data['資產負債表'].keys():
         TotalAsset = float(data['資產負債表']['非流動資產合計']['Value'])
@@ -432,7 +550,7 @@ def AftertaxReturnOnAssets(data):
     稅後資產報酬率(%) = 稅後純益(千) / 資產總計(千)
     稅後資產報酬率(ROA)
     """
-    ReturnAfterFee = float(data['資產負債表']['本期淨利（淨損）']['Value'])
+    ReturnAfterFee = float(data['綜合損益表']['本期淨利（淨損）']['Value'])
     
     if "資產總額" not in data['資產負債表'].keys():
         TotalAsset = float(data['資產負債表']['非流動資產合計']['Value'])
@@ -447,17 +565,24 @@ def AftertaxReturnOnFixedAssets(data):
     TODO: calculate AFTERTAX_RETURN_ON_FIXED_ASSETS
     本期淨利 / 非流動資產
     """
-    ReturnAfterFee = float(data['資產負債表']['本期淨利（淨損）']['Value'])
+    ReturnAfterFee = float(data['綜合損益表']['本期淨利（淨損）']['Value'])
     FixedAsset = float(data['資產負債表']['非流動資產合計']['Value'])
     return ReturnAfterFee / FixedAsset
 
-def RevenueQuarterlyChangeRatio(data):
+def RevenueQuarterlyChangeRatio(last_data, update_data):
     """
     TODO: calculate REVENUE_QUARTERLY_CHANGE_RATIO 
     營業收入變化率(季)
     """
-    LastRevenue = float(data['綜合損益表']['營業收入合計']['Value'])
-    CurrentRevenue = float(data['綜合損益表']['營業收入合計']['Value'])
+    try:
+        LastRevenue = float(last_data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        LastRevenue = float(last_data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
+        
+    try:
+        CurrentRevenue = float(update_data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        CurrentRevenue = float(update_data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
     return CurrentRevenue / LastRevenue - 1
 
 def RevenueGrowthRatio(pre_y_data, update_data):
@@ -465,8 +590,15 @@ def RevenueGrowthRatio(pre_y_data, update_data):
     TODO: calculate REVENUE_GROWTH_RATIO
     營收成長率(%) = (營業收入淨額(千) - 去年同期營業收入淨額(千)) / 去年同期營業收入淨額(千)
     """
-    LastRevenue = float(pre_y_data['綜合損益表']['營業收入合計']['Value'])
-    CurrentRevenue = float(update_data['綜合損益表']['營業收入合計']['Value'])
+    try:
+        LastRevenue = float(pre_y_data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        LastRevenue = float(pre_y_data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
+        
+    try:
+        CurrentRevenue = float(update_data['綜合損益表']['營業收入合計']['Value'])
+    except:
+        CurrentRevenue = float(update_data['現金流量表']['營業活動之淨現金流入（流出）']['Value'])
     return CurrentRevenue / LastRevenue - 1
 
 def TotalAssetGrowthRatio(pre_y_data, update_data):
@@ -492,8 +624,16 @@ def NetGrowthRatio(pre_y_data, update_data):
     TODO: calculate NET_GROWTH_RATIO
     淨值成長率(%) = (股東權益(千) - 去年同期股東權益(千)) / 去年同期股東權益(千)
     """
-    LastTotalRights = float(pre_y_data['資產負債表']['權益總額']['Value'])
-    CurrentTotalRights = float(update_data['資產負債表']['權益總額']['Value'])
+    
+    if '權益總額' in pre_y_data['資產負債表']:
+        LastTotalRights = float(pre_y_data['資產負債表']['權益總額']['Value'])
+    else:
+        LastTotalRights = float(pre_y_data['資產負債表']['權益總計']['Value'])
+        
+    if '權益總額' in update_data['資產負債表']:
+        CurrentTotalRights = float(update_data['資產負債表']['權益總額']['Value'])
+    else:
+        CurrentTotalRights = float(update_data['資產負債表']['權益總計']['Value'])
     return CurrentTotalRights / LastTotalRights - 1
     
 def FixedAssetGrowthRatio(pre_y_data, update_data):
@@ -510,19 +650,38 @@ def RDExpenseRatio(data):
     TODO: calculate RD_EXPENSE_RATIO
     研發費用比率(%) = 研發費用(千) / 營業收入淨額(千)
     """
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
-    RD = float(data['綜合損益表']['研究發展費用合計']['Value'])
-    return RD / Revenue
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+        if '研究發展費用合計' in data['綜合損益表'].keys():
+            RD = float(data['綜合損益表']['研究發展費用合計']['Value'])
+        else:
+            RD = float(data['綜合損益表']['研究發展費用']['Value'])
+    except:
+        return float('nan')
+    else:
+        return RD / Revenue
 
 def ManagementExpenseRatio(data):
     """
     TODO: calculate MANAGEMENT_EXPENSE_RATIO
     管銷費用比率(%) = 管銷費用(千) / 營業收入淨額(千)
     """
-    Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
-    SalesExpense = float(data['綜合損益表']['推銷費用合計']['Value'])
-    ManagementExpense = float(data['綜合損益表']['管理費用合計']['Value'])
-    return (SalesExpense + ManagementExpense) / Revenue
+    try:
+        Revenue = float(data['綜合損益表']['營業收入合計']['Value'])
+        
+        if '推銷費用合計' in data['綜合損益表'].keys():
+            SalesExpense = float(data['綜合損益表']['推銷費用合計']['Value'])
+        else:
+            SalesExpense = float(data['綜合損益表']['推銷費用']['Value'])
+            
+        if '管理費用合計' in data['綜合損益表'].keys():
+            ManagementExpense = float(data['綜合損益表']['管理費用合計']['Value'])
+        else:
+            ManagementExpense = float(data['綜合損益表']['管理費用']['Value'])
+    except:
+        return float('nan')
+    else:
+        return (SalesExpense + ManagementExpense) / Revenue
 
 def CashFlowRatio(data):
     """
@@ -530,17 +689,23 @@ def CashFlowRatio(data):
     現金流量比率 = 營業活動的淨現金流量／流動負債
     營業活動的淨現金流量 = 本期稅後淨利 +/- 不影響現金流量之收益費損(折舊費用、攤銷費用..) +/-  營業活動相關之資產及負債淨變動(應收帳款、存貨增減、預付款項..)＋收取之利息＋收取之股利- 支付之利息 .
     """
-    ReturnAfterFee = float(data['資產負債表']['本期淨利（淨損）']['Value'])
+    ReturnAfterFee = float(data['綜合損益表']['本期淨利（淨損）']['Value'])
     FlowDebt = float(data['資產負債表']['流動負債合計']['Value'])
-    pass
+    return ReturnAfterFee / FlowDebt
 
 def BusinessGrowthRatio(pre_y_data, update_data):
     """
     TODO: calculate BUSINESS_GROWTH_RATIO 
     營業利益成長率 = Pre營業利益（損失） / Last營業利益（損失） - 1
     """
-    PreBusinessPnL = float(pre_y_data['綜合損益表']['營業利益（損失）']['Value'])
-    LastBusinessPnL = float(update_data['綜合損益表']['營業利益（損失）']['Value'])
+    try:
+        PreBusinessPnL = float(pre_y_data['綜合損益表']['營業利益（損失）']['Value'])
+    except:
+        PreBusinessPnL = float(pre_y_data['綜合損益表']['繼續營業單位本期淨利（淨損）']['Value'])
+    try:
+        LastBusinessPnL = float(update_data['綜合損益表']['營業利益（損失）']['Value'])
+    except:
+        LastBusinessPnL = float(update_data['綜合損益表']['繼續營業單位本期淨利（淨損）']['Value'])
     return LastBusinessPnL / PreBusinessPnL - 1
 
 def PretaxNetGrowthRatio(pre_y_data, update_data):
@@ -548,8 +713,8 @@ def PretaxNetGrowthRatio(pre_y_data, update_data):
     TODO: calculate PRETAX_NET_GROWTH_RATIO
     稅前淨利成長率
     """
-    LastReturnBeforeFee = float(pre_y_data['資產負債表']['本期稅前淨利（淨損）']['Value'])
-    CurrentReturnBeforeFee = float(update_data['資產負債表']['本期稅前淨利（淨損）']['Value'])
+    LastReturnBeforeFee = float(pre_y_data['現金流量表']['本期稅前淨利（淨損）']['Value'])
+    CurrentReturnBeforeFee = float(update_data['現金流量表']['本期稅前淨利（淨損）']['Value'])
     return CurrentReturnBeforeFee / LastReturnBeforeFee - 1
 
 def AftertaxNetGrowthRatio(pre_y_data, update_data):
@@ -557,8 +722,8 @@ def AftertaxNetGrowthRatio(pre_y_data, update_data):
     TODO: calculate AFTERTAX_NET_GROWTH_RATIO
     稅後淨利成長率
     """
-    LastReturnAfterFee = float(pre_y_data['資產負債表']['本期淨利（淨損）']['Value'])
-    CurrentReturnAfterFee = float(update_data['資產負債表']['本期淨利（淨損）']['Value'])
+    LastReturnAfterFee = float(pre_y_data['綜合損益表']['本期淨利（淨損）']['Value'])
+    CurrentReturnAfterFee = float(update_data['綜合損益表']['本期淨利（淨損）']['Value'])
     return CurrentReturnAfterFee / LastReturnAfterFee - 1
 
 def FinanceCreditEvaluation(data):
@@ -604,7 +769,7 @@ def CalculateAllIndicators(last_datas, update_datas, pre_y_datas):
     CASH_TO_CURRENT_LIABILITY_RATIO = Cash2CurrentLiabilityRatio(update_datas),
     CAPITAL_TO_CURRENT_ASSETS_RATIO = Capital2CurrentDFlowDebtsRatio(update_datas),
     SHORT_TERM_BORROWING_TO_CURRENT_ASSETS_RATIO = ShortTermBorrowing2CurrentAssetsRatio(update_datas),
-    PAYABLES_TURNOVER_RATIO = PayablesTurnoverRatio(update_datas),
+    PAYABLES_TURNOVER_RATIO = PayablesTurnoverRatio(last_datas, update_datas),
     REVEIVABLE_TURNOVER_RATIO = ReceivableTurnoverRatio(update_datas),
     INVENTORY_TURNOVER_RATIO = InventoryTurnoverRatio(update_datas),
     FIXED_ASSET_TURNOVER_RATIO = FixedAssetTurnoverRatio(update_datas),
@@ -622,7 +787,7 @@ def CalculateAllIndicators(last_datas, update_datas, pre_y_datas):
     PRETAX_RETURN_ON_ASSETS = PretaxReturnOnAssets(update_datas),
     AFTERTAX_RETURN_ON_ASSETS = AftertaxReturnOnAssets(update_datas),
     AFTERTAX_RETURN_ON_FIXED_ASSETS = AftertaxReturnOnFixedAssets(update_datas),
-    REVENUE_QUARTERLY_CHANGE_RATIO = RevenueQuarterlyChangeRatio(update_datas),
+    REVENUE_QUARTERLY_CHANGE_RATIO = RevenueQuarterlyChangeRatio(last_datas, update_datas),
     REVENUE_GROWTH_RATIO = RevenueGrowthRatio(pre_y_datas, update_datas),
     TOTAL_ASSET_GROWTH_RATIO = TotalAssetGrowthRatio(pre_y_datas, update_datas),
     NET_GROWTH_RATIO = NetGrowthRatio(pre_y_datas, update_datas),

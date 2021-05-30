@@ -150,7 +150,7 @@ def main():
                                 update_datas[ticker],
                                 pre_y_datas[ticker])
         Insert('MARKET124', FundKeys, [Indicators[k] for k in FundKeys])
-        break
+        # break
         # results.append(CalculateAllIndicators(last_datas[ticker], 
         #                        update_datas[ticker],
         #                        pre_y_datas[ticker]))
