@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2021-06-08	2347	XD	3.3

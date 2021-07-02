@@ -5,7 +5,7 @@
 # Update: Create
 # Version: 1
 
-__updated__ = '2021-05-24 00:50:40'
+__updated__ = '2021-06-30 01:16:55'
 
 from PyDBFunc import SQLServer
 
@@ -17,17 +17,17 @@ def executeSQL(sql):
     
     
 def Insert(db = 'MAEKET101', k_str='', v_str=''):
-    try:
-        sql = f"""INSERT INTO [CloudInvest].[dbo].[{db}]
-                ({k_str})
-                VALUES 
-                ({v_str})"""
-        print(sql)
-        # executeSQL(sql)
-        #commit the transaction
-        # cnxn.commit()
-    except Exception as e:
-        print(e)
+    # try:
+    sql = f"""INSERT INTO [CloudInvest].[dbo].[{db}]
+            ({k_str})
+            VALUES 
+            ({v_str})"""
+    print(sql)
+    executeSQL(sql)
+    #commit the transaction
+    cnxn.commit()
+    # except Exception as e:
+    #     print(e)
 
 def GetPKNO(db='MARKET101'):
     sql = f"""SELECT ALL [PKNO] FROM [CloudInvest].[dbo].[{db}]"""

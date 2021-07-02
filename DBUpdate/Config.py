@@ -5,14 +5,14 @@
 # Version: Test
 # !flask/bin/python
 
-__updated__ = '2021-02-22 22:27:53'
+__updated__ = '2021-06-09 00:31:54'
 
 def getConnectionConfig():
     user = 'kevin83321'
     password = 'j7629864'
     ip = '192.168.2.79'
     # ip = '192.168.0.10'
-    port = 32768
+    port = 49154 # 32768
     return [user, password, ip, port]
 
 header = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36', 'upgrade-insecure-requests': '1'}

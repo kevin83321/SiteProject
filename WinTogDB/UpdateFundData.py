@@ -2,8 +2,7 @@ from datetime import datetime
 from PySQLFunc import executeSQL, Insert, ReadSQL
 from PyDBFunc import Mongo, MongoDataReader, MongoDistinct
 from numpy import isnan
-from FundIndicatorFunc import CalculateAllIndicators
-
+from FundIndicatorFunc import CalculateAllIndicators, CalculateNullIndicators
 
 test_sql = """SELECT TOP (1000) [PKNO]
 ,[UPDATE_USER_ID]
@@ -73,7 +72,7 @@ FundKeys = [
     'LIABILITY_RATIO', 'LONG_TERM_FUNDS_FIXED_ASSETS_RATIO',
     'EQUITY_LIABILITY_RATIO', 'EQUITY_LONG_TERM_DEBT_RATIO',
     'CAPITAL_TOTAL_ASSETS_REATIO', 'NET_RATIO',
-    'LONG_TERM_DEBT_NET_RATIO', 'FIXED_ASSET_NET_RATIO',
+    # 'LONG_TERM_DEBT_NET_RATIO', 'FIXED_ASSET_NET_RATIO',
     'LEVERAGE_RATIO', 'CURRENT_RATIO',
     'QUICK_RATIO', 'CASH_TO_CURRENT_ASSETS_RATIO',
     'CASH_TO_CURRENT_LIABILITY_RATIO', 'CAPITAL_TO_CURRENT_ASSETS_RATIO',
@@ -94,6 +93,42 @@ FundKeys = [
     'PRETAX_NET_GROWTH_RATIO', 'AFTERTAX_NET_GROWTH_RATIO',
     'FINANCE_CREDIT_EVALUATION']
 
+
+BasicKeys = """UPDATE_USER_ID,UPDATE_DATE,UPDATE_TIME,\
+            UPDATE_PROG_CD,EXCHANGE,ASSETS_TYPE,SYMBOL_CODE\
+            ,DATA_YEAR,DATA_SEASON,ANNOUNCE_DATE""".replace(' ', '').split(',')
+
+def RoundTo(value):
+    # print(value)
+    if isinstance(value, float):
+        if not isnan(value):
+            return round(value, 2)
+        return "NULL"
+    return value
+            
+def final_publish_date(year):
+    return  [datetime(year, 5, 15),
+                datetime(year, 8, 14),
+                datetime(year, 11, 14),
+                datetime(year+1, 3, 31)]
+
+def FillOtherKV(data, info, last_quarter):
+    dt = datetime.today()
+    announce_date = final_publish_date(last_quarter[0])[last_quarter[1]-1] if last_quarter[1] != 1 else final_publish_date(last_quarter[0]-1)[-1]
+    data.update({
+        "UPDATE_USER_ID":"'System'",
+        "UPDATE_DATE":dt.strftime("'%Y/%m/%d'"),
+        "UPDATE_TIME":dt.strftime("'%H:%M:%S'"),
+        "UPDATE_PROG_CD":"'Python'",
+        "EXCHANGE":"'TW'",
+        "ASSETS_TYPE":"'Stock'",
+        "DATA_YEAR":f"'{last_quarter[0]}'",
+        "DATA_SEASON":f"'{last_quarter[1]}'",
+        "SYMBOL_CODE":"'"+info["Ticker"]+"'",
+        "ANNOUNCE_DATE":announce_date.strftime("'%Y-%m-%d'")
+    })
+    return data
+
   
 def ReadStockList():
     tb_name = 'TWSE.StockList'
@@ -104,7 +139,7 @@ def ReadStockList():
         'AssetType':{"$eq":"股票"}
     }
     datas = MongoDataReader(tb_name, condition)
-    return [d['Ticker'] for d in datas]
+    return datas#dict((d['Ticker'], {d['Ticker'],d['Ticker']}) for d in datas)
 
 def get_updated_quater(tb_name):
     last_y = sorted(MongoDistinct(tb_name, "Year"))[-1]
@@ -116,7 +151,7 @@ def get_updated_quater(tb_name):
     return [last_y, last_q]
 
 def ReadFundmentalData(quarter):
-    tickers = ReadStockList()
+    tickers = [x['Ticker'] for x in ReadStockList()]
     tb_name = 'TWSE.Fundmental'
     condition = {
         'Ticker':{'$in':tickers},
@@ -134,28 +169,34 @@ def GetLastUpdateQuarter():
     return last_Q
 
 def main():
+    
     last_quarter = GetLastUpdateQuarter() # (year, quarter)
     update_quarter = (int(last_quarter[0]), int(last_quarter[1])+1)
     if update_quarter[1] > 4:
         update_quarter = (update_quarter[0] + 1, 1)
-    tickers = ReadStockList()
+    tickers_Info = ReadStockList()
+    tickers = [x['Ticker'] for x in tickers_Info]
+    info_dict = dict((x['Ticker'], x) for x in tickers_Info)
     last_datas = dict((x['Ticker'], x) for x in ReadFundmentalData(last_quarter))
     update_datas = dict((x['Ticker'], x) for x in ReadFundmentalData(update_quarter))
     pre_y_datas = dict((x['Ticker'], x) for x in ReadFundmentalData((update_quarter[0]-1, update_quarter[1])))
-    
     # results = []
-    for ticker in tickers:
-        print(ticker)
-        Indicators = CalculateAllIndicators(last_datas[ticker], 
-                                update_datas[ticker],
-                                pre_y_datas[ticker])
-        Insert('MARKET124', FundKeys, [Indicators[k] for k in FundKeys])
-        # break
-        # results.append(CalculateAllIndicators(last_datas[ticker], 
-        #                        update_datas[ticker],
-        #                        pre_y_datas[ticker]))
+    for i, ticker in enumerate(tickers):
+        print(ticker, ticker in last_datas.keys(), ticker in update_datas.keys(), ticker in pre_y_datas.keys())
+        print()
+        if all([ticker in last_datas.keys(), ticker in update_datas.keys(), ticker in pre_y_datas.keys()]):
+            Indicators = CalculateAllIndicators(last_datas[ticker], 
+                                    update_datas[ticker],
+                                    pre_y_datas[ticker])
+        else:
+            Indicators = CalculateNullIndicators()
+        Indicators = FillOtherKV(Indicators, info_dict[ticker], update_quarter)
+        full_key = FundKeys+BasicKeys
+        Insert('MARKET124', ",".join(full_key), ",".join([f"{RoundTo(Indicators[k])}" for k in full_key]))
     
 if __name__ == '__main__':
     main()
+    # FillOtherKV("")
+    # print(ReadStockList()[0])
     
     

@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2021-06-02	6204	XD	10.0

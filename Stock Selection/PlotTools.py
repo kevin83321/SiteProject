@@ -14,7 +14,8 @@ from matplotlib.font_manager import fontManager, FontProperties
 ChineseFont = FontProperties([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial' in f.name][0])
 
 def plotVolume(ax, df):
-    df['Volume'].plot(kind='bar', ax=ax)
+    col = 'Adj_Volume' if 'Adj_Volume' in df.columns else 'Volume'
+    df[col].plot(kind='bar', ax=ax)
     vol_ma_cols = [col for col in df.columns if 'Vol' in col and 'MA' in col]
     if vol_ma_cols:
         df[vol_ma_cols].plot(ax=ax)
@@ -178,7 +179,7 @@ def _candlestick(ax, quotes, width=0.2, colorup='k', colordown='r',
 
     return lines, patches
 
-def createPlot(td, df, ticker, MACD=False, TOWER=False, BBAND=False):
+def createPlot(td, df, ticker, MACD=False, TOWER=False, BBAND=False, extra_name=""):
     try:
         temp_df = df.tail(250)
         # plor chart
@@ -227,7 +228,7 @@ def createPlot(td, df, ticker, MACD=False, TOWER=False, BBAND=False):
                     continue
         
         # output Fig
-        filename = f'{text}.png'
+        filename = f'{text} by {extra_name}.png' if len(extra_name) else f'{text}.png'
         full_path = os.path.join(fig_path, filename)
         
         plt.savefig(full_path)
