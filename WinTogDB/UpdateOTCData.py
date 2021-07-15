@@ -5,7 +5,7 @@
 # Update: Insert First Time
 # Version: 1
 
-__updated__ = '2021-06-22 01:11:43'
+__updated__ = '2021-07-15 01:39:33'
 
 from PyCasFunc import CassandraInsert
 from PyDBFunc import Mongo
@@ -108,12 +108,25 @@ def ChangeIntoCasForm(data, asset_type):
         'update_user_id': 'Kevin',
     }
     
+def Update(dt=datetime.today()):
+    start_date = datetime.strptime(dt, "%Y-%m-%d") if isinstance(dt, str) else dt
+    end_date = datetime.today()
+    i = 0
+    while 1:
+        date = start_date + timedelta(i)
+        try:
+            dateStr = date.strftime("%Y-%m-%d")
+            datas = getHistoricalData(dateStr=dateStr)
+            num = len(datas)
+            CassandraInsert(datas=datas)
+        except:
+            pass
+        else:
+            WintogLineNotify(f'[MarketApi 更新台灣上櫃股票 {dateStr} 價格完成] 筆數: {num}')
+        i += 1
+        if date > end_date:
+            break
+
+
 if __name__ == '__main__':
-    datas = getHistoricalData(True)
-    # datas = getHistoricalData(dateStr='2021-05-03')
-    # datas = [dict(exchange='TW', assets_type='Stock', symbol_code='1336', kline_period='1440', kline_datetime='2021/02/24', close_price='625.00', high_price='636.00', low_price='625.00', open_price='627.00', pkno=None, trans_volume='69675637', update_date='2021/02/24', update_prog_cd='MarketApi.FormMarketApi', update_time='15:12:17', update_user_id='Test')]
-    num = len(datas)
-    if not num:
-        datas = OTC_HistoricalPrice(date=datetime.today())
-    CassandraInsert(datas=datas)
-    WintogLineNotify(f'[MarketApi 更新台灣上櫃股票每日價格完成] 筆數: {num}')
+    Update()
