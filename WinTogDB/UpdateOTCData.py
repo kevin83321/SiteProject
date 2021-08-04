@@ -9,7 +9,7 @@ __updated__ = '2021-07-15 01:39:33'
 
 from PyCasFunc import CassandraInsert
 from PyDBFunc import Mongo
-from datetime import datetime
+from datetime import datetime, timedelta
 from LineNotify import WintogLineNotify
 import requests
 

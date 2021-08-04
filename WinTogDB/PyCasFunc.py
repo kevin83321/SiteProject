@@ -48,6 +48,40 @@ def CassandraInsert(database='MARKET103', datas=[]):
             session = Cassandra()
             
     session.execute(batch)
+
+def CassandraUpdate(database='MARKET103', datas=[]):
+    session = Cassandra()
+    batch = BatchStatement()
+    i = 0
+    temp_k = []
+    while datas:
+        try:
+            data = datas.pop(0)
+            temp_v = []
+            if not temp_k:
+                for k, v in data.items():
+                    temp_k.append(k)
+                    temp_v.append(v)
+                cql_v = ', '.join(['%s',]*len(temp_k))
+            else:
+                for k in temp_k:
+                    temp_v.append(data[k])
+            cql_k = ', '.join(temp_k)
+            # cql_v = ', '.join(['%s',]*len(temp_k))
+            cql = f"UPDATE {database} ({cql_k}) VALUES ({cql_v})"
+            batch.add(SimpleStatement(cql), tuple(temp_v))
+            i += 1
+            if i >= 100:
+                session.execute(batch, 60)
+                batch = BatchStatement()
+                i = 0
+                print('updte 100 datas')
+                time.sleep(5)
+        except:
+            time.sleep(5)
+            session = Cassandra()
+            
+    session.execute(batch)
     
 def CassandraDelete(table: str= 'MARKET103', exchange: str= 'TW',
                     assets_type: str= 'Stock', symbol_code: str='',

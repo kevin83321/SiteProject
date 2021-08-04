@@ -12,7 +12,7 @@ def getConnectionConfig():
     password = 'j7629864'
     ip = '192.168.2.79'
     # ip = '192.168.0.10'
-    port = 49154 # 32768
+    port = 49153 # 32768
     return [user, password, ip, port]
 
 header = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36', 'upgrade-insecure-requests': '1'}

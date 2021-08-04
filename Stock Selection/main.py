@@ -15,7 +15,7 @@ def main():
     DayTradeQueen(num_shares=500, shares_ratio=2)
     DayTradeRay(5,30,50000,0)
     DayTradeHung(40,99,10000,0)
-    ShortTermTrade()
+    ShortTermTrade(min_price=0, max_price=9999, num_shares=10000, shares_ratio=1.5)
     dental_stock()
     
 if __name__ == '__main__':

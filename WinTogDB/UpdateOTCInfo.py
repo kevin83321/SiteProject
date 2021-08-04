@@ -1,6 +1,6 @@
 from UpdateOTCData import getOTCList
 from datetime import datetime
-from PySQLFunc import executeSQL, GetPKNO, Insert
+from PySQLFunc import Insert
 from numpy import isnan
 
 def changeIntoSQLForm(data):
@@ -35,7 +35,7 @@ def InsertSQLInfo(datas):
             temp_k = list(data.keys())
             k_str = ', '.join(temp_k)
         v_str = ', '.join([str(data[k]) for k in temp_k])
-        Insert(db = 'MAEKET101', k_str=k_str, v_str=v_str)        
+        Insert(db = 'MAEKET101', k_str=k_str, v_str=v_str)
     
 if __name__ == '__main__':
     datas = OTCInfo()
