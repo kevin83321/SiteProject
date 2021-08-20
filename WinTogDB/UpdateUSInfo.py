@@ -1,5 +1,7 @@
 import requests
 from LineNotify import WintogLineNotify
+from datetime import datetime, timedelta
+from time import sleep
 from PySQLFunc import executeSQL, GetPKNO, Insert
 
 def crawl_json_data(url, header):
@@ -18,10 +20,10 @@ def changeIntoSQLForm(data):
         'ASSETS_TYPE':"'STOCK'", #  if data['AssetType'] == '股票' else f"'{data['AssetType']}'", #data['AssetType'] 
         'SYMBOL_CODE':f"'{data['symbol']}'", 
         'SYMBOL_ATTR':"'Listed'", 
-        'SYMBOL_NAME':f"'{data['name']}'", 
+        'SYMBOL_NAME':f"'{' '.join(data['name'].split(' ')[:2])}'".replace("Corporation", "Corp.").split(',')[0]+"\'", 
         'IS_ORDER':1, 
-        'PUBLIC_DATE':"", # f"'{data['IssueDate'].replace('-', '/')}'"
-        'INDUSTRY':data['INDUSTRY']
+        'PUBLIC_DATE':"''", # f"'{data['IssueDate'].replace('-', '/')}'"
+        'INDUSTRY':f"'{data['INDUSTRY']}'", 
     }
 
 def GetListedEquity():
@@ -67,7 +69,7 @@ def GetEquityProfile(data):
     }
     profile_data = crawl_json_data(profile_url_root, headers_profile)
     profile_detail = profile_data['data']
-    return {'INDUSTRY': profile_detail['Industry']['value'] if profile_detail != None else ""}
+    return {'INDUSTRY': profile_detail['Sector']['value'] if profile_detail != None else ""}
 
 def InsertSQLInfo(datas):
     temp_k = None
@@ -76,7 +78,7 @@ def InsertSQLInfo(datas):
             temp_k = list(data.keys())
             k_str = ', '.join(temp_k)
         v_str = ', '.join([str(data[k]) for k in temp_k])
-        Insert(db = 'MAEKET101', k_str=k_str, v_str=v_str)
+        Insert(db = 'MARKET101', k_str=k_str, v_str=v_str)
 
 def UpdateInfo():
     rows = GetListedEquity()
@@ -86,8 +88,8 @@ def UpdateInfo():
             data.update(GetEquityProfile(data))
             datas.append(changeIntoSQLForm(data))
             sleep(1)
-        except:
-            pass
+        except Exception as e:
+            print(e)
     InsertSQLInfo(datas)
 
 if __name__ == '__main__':

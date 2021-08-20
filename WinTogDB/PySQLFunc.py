@@ -8,6 +8,7 @@
 __updated__ = '2021-06-30 01:16:55'
 
 from PyDBFunc import SQLServer
+import pyodbc
 
 cnxn, cursor = SQLServer()
 
@@ -23,9 +24,12 @@ def Insert(db = 'MAEKET101', k_str='', v_str=''):
             VALUES 
             ({v_str})"""
     print(sql)
-    executeSQL(sql)
-    #commit the transaction
-    cnxn.commit()
+    try:
+        executeSQL(sql)
+        #commit the transaction
+        cnxn.commit()
+    except pyodbc.IntegrityError:
+        pass
     # except Exception as e:
     #     print(e)
 
