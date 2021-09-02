@@ -11,6 +11,8 @@ def crawl_json_data(url, header):
 def changeIntoSQLForm(data):
     td = datetime.today()
     d, t = td.strftime('%Y/%m/%d %H:%M:%S').split(' ')
+    name = ' '.join(data['name'].split(' ')[:2]).replace('Corporation', 'Corp.').replace('\'', '').split(',')[0]
+    name = f"'{name}'" if len(name) <= 15 else f"'{data['symbol']}'"
     return {
         'UPDATE_USER_ID':"'Kevin'",
         'UPDATE_DATE':f"'{d}'",
@@ -20,7 +22,7 @@ def changeIntoSQLForm(data):
         'ASSETS_TYPE':"'STOCK'", #  if data['AssetType'] == '股票' else f"'{data['AssetType']}'", #data['AssetType'] 
         'SYMBOL_CODE':f"'{data['symbol']}'", 
         'SYMBOL_ATTR':"'Listed'", 
-        'SYMBOL_NAME':f"'{' '.join(data['name'].split(' ')[:2])}'".replace("Corporation", "Corp.").split(',')[0]+"\'", 
+        'SYMBOL_NAME': name, 
         'IS_ORDER':1, 
         'PUBLIC_DATE':"''", # f"'{data['IssueDate'].replace('-', '/')}'"
         'INDUSTRY':f"'{data['INDUSTRY']}'", 
