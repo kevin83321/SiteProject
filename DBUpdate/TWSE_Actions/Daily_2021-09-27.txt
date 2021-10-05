@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2021-09-27	4576	XR	10
+2021-09-27	6727	XD	2.5
