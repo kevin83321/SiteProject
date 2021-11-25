@@ -5,6 +5,8 @@
 # Version: Test
 # !flask/bin/python
 
+__updated__ = '2021-10-17 16:39:58'
+
 from waitress import serve
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
@@ -20,7 +22,7 @@ if not os.path.isdir(path): path = os.getcwd()
 # setup web app
 app = Flask(__name__)
 #FreqMap = {'0':'TICK','1':'1MIN','2':"DAILY"}
-@app.route('/Api/Quote/TWSE/DAILY', methods=['GET','POST'])
+@app.route('/Api/Quote/TWSE/DAILY', methods=['POST'])
 def getTWSEDaily():
     """
     取得股票日資料
@@ -29,10 +31,11 @@ def getTWSEDaily():
         params = {
             'Ticker':None,
             'StartDate':None,
-            'EndDate':None
+            'EndDate':None,
+            'table_name':'historicalPrice', 
+            'db_name':'TWSE'
         }
-        for key in params.keys(): params[key] = request.args[key]
-        params.update({'table_name':'historicalPrice', 'db_name':'TWSE'})
+        params.update(request.args)
         return getDailyPrice(params)
     except Exception as e:
         print(e)
@@ -53,10 +56,11 @@ def getTAIFEXDaily():
         params = {
             'Ticker':None,
             'StartDate':None,
-            'EndDate':None
+            'EndDate':None,
+            'table_name':'historicalPrice', 
+            'db_name':'TAIFEX'
         }
-        for key in params.keys(): params[key] = request.args[key]
-        params.update({'table_name':'historicalPrice', 'db_name':'TAIFEX'})
+        params.update(request.args)
         return getDailyPrice(params)
     except Exception as e:
         print(e)
@@ -78,10 +82,11 @@ def getUSSEDaily():
         params = {
             'Ticker':None,
             'StartDate':None,
-            'EndDate':None
+            'EndDate':None,
+            'table_name':'historicalPrice', 
+            'db_name':'USSE'
         }
-        for key in params.keys(): params[key] = request.args[key]
-        params.update({'table_name':'historicalPrice', 'db_name':'USSE'})
+        params.update(request.args)
         return getDailyPrice(params)
     except Exception as e:
         print(e)
@@ -93,6 +98,7 @@ def help():
         'Api/Quote/Daily/Future':'',
     }
     return msg
+
 @app.route('/')
 def index():
     return 'this is index page'

@@ -1,5 +1,3 @@
-
-
 __updated__ = '2021-02-21 00:09:53'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot

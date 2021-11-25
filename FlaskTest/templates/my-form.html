@@ -3,31 +3,49 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
     <title>Seth-小工具-股票期貨對照查詢</title>
 </head>
 <h1>歡迎使用此小工具查詢股票期貨的對應代碼</h1>
     <text>可輸入證券代號(4~6碼)或是期貨代碼(2碼)，不分大小寫</text>
 
-<form method="POST">
-    <input type="text" name="text" autocomplete="on" value="" id="text" onkeydown="redirect(this)">
-    <input type="submit" href="#text">
+<form method="GET">
+    <input type="text" name="text" autocomplete="on" value="" id="text">
+    <input type="button" name="searchBtn" id="searchBtn" onclick="UpdateStatus()" value="Submit">
+    <script>
+    function UpdateStatus(){
+
+        //make an ajax call and get status value using the same 'id'
+        const xhr = new XMLHttpRequest();
+        var var1= document.getElementById("text").value;
+        var dataJSON = {};
+        dataJSON["stockId"] = var1;
+        xhr.open('POST', '../api', true)
+        xhr.send(JSON.stringify(dataJSON));
+        xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if(xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById("mapping_table").innerHTML = xhr.response;
+                }
+            }
+        } // function end
+    // Get the input field
+    var input = document.getElementById("text");
+    // Execute a function when the user releases a key on the keyboard
+    input.addEventListener("keydown", function(event) {
+    // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("searchBtn").click();
+        }
+    });
+    </script>
+    
 </form>
 
+
 <body>
-    
-    <text> {{error_msg}}</text>
-    <table>
-        <tr>
-            {% for head in header %}
-            <th align="center">{{head}}</th>
-            {% endfor %}
-        </tr>
-        {% for row in values %}
-        <tr>
-            {% for cell in row %}
-            <td align="center">{{cell}}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
+    <div id="mapping_table">{{mapping_table}}</div>
 </body>
+</html>

@@ -1,6 +1,4 @@
-
-
-__updated__ = '2021-01-20 21:24:39'
+__updated__ = '2021-10-24 10:02:18'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -87,17 +85,17 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
             except:
                 print(GetException())
         
-        saveRecommand(final_select, 'VolumeWithMACD')
-        sendResultTable(td, final_select, momentums)
+        # saveRecommand(final_select, 'VolumeWithMACD')
+        # sendResultTable(td, final_select, momentums)
         
-        saveRecommand(select_by_EMA67_23, 'VolumeWithMACD_EMA67_23')
-        sendResultTable(td, select_by_EMA67_23, momentums, '1-1')
+        # saveRecommand(select_by_EMA67_23, 'VolumeWithMACD_EMA67_23')
+        # sendResultTable(td, select_by_EMA67_23, momentums, '1-1')
         
-        saveRecommand(select_by_Volume5, 'VolumeWithMACD_EMA67_23_VOL5')
-        sendResultTable(td, select_by_Volume5, momentums, '1-2')
+        # saveRecommand(select_by_Volume5, 'VolumeWithMACD_EMA67_23_VOL5')
+        # sendResultTable(td, select_by_Volume5, momentums, '1-2')
         
-        saveRecommand(select_by_Volume67, 'VolumeWithMACD_EMA67_23_VOL67')
-        sendResultTable(td, select_by_Volume67, momentums, '1-3')
+        # saveRecommand(select_by_Volume67, 'VolumeWithMACD_EMA67_23_VOL67')
+        # sendResultTable(td, select_by_Volume67, momentums, '1-3')
         
         select_by_Volume5_67 = list(set(select_by_Volume5).intersection(select_by_Volume67))
         saveRecommand(select_by_Volume5_67, 'VolumeWithMACD_EMA67_23_VOL5_67')

@@ -8,6 +8,8 @@ from Find_Day_Trade_陳信宏 import main as DayTradeHung
 from Short_Term_Trade_Warrant_Brother import main as ShortTermTrade
 from Day_Trade_dental_stock import main as dental_stock
 from ReversedBB import main as ReversedBB
+from StrongTrend import main as StrongTrend
+from WeakTrend import main as WeakTrend
 
 def main():
     IndexTrend()
@@ -19,6 +21,8 @@ def main():
     ShortTermTrade(min_price=0, max_price=9999, num_shares=10000, shares_ratio=1.5)
     dental_stock()
     ReversedBB(min_price=0, max_price=9999, num_shares=5000, shares_ratio=1)
+    StrongTrend(min_price=15, max_price=100, num_shares=1000, shares_ratio=1)
+    WeakTrend(min_price=15, max_price=100, num_shares=1000, shares_ratio=1)
     
 if __name__ == '__main__':
     main()

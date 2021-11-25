@@ -1,16 +1,17 @@
 # CopyRight : Kevin Cheng 鄭圳宏
 # Author: Kevin Cheng 鄭圳宏
 # Create: 2020.06.06
-# Update: 2020.06.06
 # Version: Test
 # !flask/bin/python
 
+__updated__ = '2021-10-17 16:39:39'
+
 def getConnectionConfig():
-    user = 'kevin'
+    user = 'kevin83321'
     password = 'j7629864'
     #ip = '192.168.2.191'
-    ip = 'localhost'
-    port = 27017
+    ip = '192.168.2.173'
+    port = 49153
     return [user, password, ip, port]
 
 class HelpMsg:

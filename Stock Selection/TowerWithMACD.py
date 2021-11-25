@@ -1,6 +1,6 @@
 
 
-__updated__ = '2021-01-20 21:25:09'
+__updated__ = '2021-10-24 10:01:20'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -82,14 +82,14 @@ def main(min_price=0, max_price=50, num_shares=0, shares_ratio=0):
             except:
                 print(GetException())
         
-        saveRecommand(final_select, 'TOWERWithMACD')
-        sendResultTable(td, final_select, momentums, 2)
+        # saveRecommand(final_select, 'TOWERWithMACD')
+        # sendResultTable(td, final_select, momentums, 2)
         
-        saveRecommand(select_by_EMA67, 'TOWERWithMACD_EMA67')
-        sendResultTable(td, select_by_EMA67, momentums, '2-1')
+        # saveRecommand(select_by_EMA67, 'TOWERWithMACD_EMA67')
+        # sendResultTable(td, select_by_EMA67, momentums, '2-1')
         
-        saveRecommand(select_by_EMA23, 'TOWERWithMACD_EMA23')
-        sendResultTable(td, select_by_EMA23, momentums, '2-2')
+        # saveRecommand(select_by_EMA23, 'TOWERWithMACD_EMA23')
+        # sendResultTable(td, select_by_EMA23, momentums, '2-2')
         
         select_by_EMA67_23 = list(set(select_by_EMA23).intersection(select_by_EMA67))
         saveRecommand(select_by_EMA67_23, 'TOWERWithMACD_EMA67_23')
