@@ -21,8 +21,8 @@ def main():
     ShortTermTrade(min_price=0, max_price=9999, num_shares=10000, shares_ratio=1.5)
     dental_stock()
     ReversedBB(min_price=0, max_price=9999, num_shares=5000, shares_ratio=1)
-    StrongTrend(min_price=15, max_price=100, num_shares=1000, shares_ratio=1)
-    WeakTrend(min_price=15, max_price=100, num_shares=1000, shares_ratio=1)
+    StrongTrend(min_price=15, max_price=9999, num_shares=1000, shares_ratio=1)
+    WeakTrend(min_price=15, max_price=9999, num_shares=1000, shares_ratio=1)
     
 if __name__ == '__main__':
     main()

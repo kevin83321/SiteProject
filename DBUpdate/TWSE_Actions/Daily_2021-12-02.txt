@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2021-12-02	4989	XD	0.666666
+2021-12-02	6523	XD	5.22

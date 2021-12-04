@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2021-12-03	8942	XD	1.5

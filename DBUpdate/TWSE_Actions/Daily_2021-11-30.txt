@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2021-11-30	2302	XD	0.30065
+2021-11-30	2630	XR	39.9
