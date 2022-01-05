@@ -1,4 +1,4 @@
-__updated__ = '2021-01-04 21:16:52'
+__updated__ = '2021-12-11 17:57:07'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -15,6 +15,11 @@ def main(min_price=40, max_price=99, num_shares=10000, shares_ratio=0):
         td, last = getDateBeforeTrade()
         
         # setup data
+        schema = getSchema('TWSE')
+        table = schema['StockList']
+        last_date = sorted(table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in table.find({"UpdateDate":{"$eq":last_date}}))
+        
         schema = getSchema('TWSE')
         table = schema['historicalPrice']
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
@@ -76,14 +81,14 @@ def main(min_price=40, max_price=99, num_shares=10000, shares_ratio=0):
                     #                 select_by_Volume67.append(ticker)
                 momentums.append((ticker, Calc.Momemtum(temp_df)))
                 # output figure
-                temp_df = temp_df.tail(200)
-                createPlot(td, temp_df, ticker, MACD=True)
+                # temp_df = temp_df.tail(200)
+                # createPlot(td, temp_df, ticker, MACD=True)
             except:
                 print(GetException())
         
         expand_text = 'Logic by 陳信宏'
         saveRecommand(selection, 'DayTradeByChenHsinHung')
-        sendResultTable(td, selection, momentums, '5', expand_text)
+        sendResultTable(td, selection, momentums, '5', expand_text, info_data)
     except:
         print(GetException())
         

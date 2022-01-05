@@ -1,4 +1,4 @@
-__updated__ = '2021-10-24 10:02:18'
+__updated__ = '2021-12-22 23:09:21'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -15,6 +15,11 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
         print(td, last)
         
         # setup data
+        schema = getSchema('TWSE')
+        table = schema['StockList']
+        last_date = sorted(table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in table.find({"UpdateDate":{"$eq":last_date}}))
+        
         schema = getSchema('TWSE')
         table = schema['historicalPrice']
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
@@ -67,21 +72,22 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
                 temp_df['OSC_Trend'] = temp_df['OSC'] > temp_df['OSC'].shift(1)
                 if all(temp_df['OSC_Trend'][-3:]) and all(temp_df['OSC'][-3:] > 0):
                     if temp_df['DIF'][-1] > 0 and temp_df['MACD'][-1] > 0:
-                        final_select.append(ticker)
-                    
-                        if temp_df.Close[-1] > temp_df.Open[-1]:
-                            if temp_df.Low[-1] >= temp_df.EMA67[-1]:
-                                if temp_df.Low[-1] >= temp_df.EMA23[-1]:
-                                    select_by_EMA67_23.append(ticker)
-                                    
-                                    if temp_df.Volume[-1] > temp_df.Vol5MA[-1] * shares_ratio:
-                                        select_by_Volume5.append(ticker)
-                                    if temp_df.Volume[-1] > temp_df.Vol67MA[-1] * shares_ratio:
-                                        select_by_Volume67.append(ticker)
-                        momentums.append((ticker, Calc.Momemtum(temp_df)))
-                        # output figure
-                        temp_df = temp_df.tail(200)
-                        createPlot(td, temp_df, ticker, MACD=True)
+                        if (temp_df.Low.iloc[-1] / temp_df.EMA67.iloc[-1] - 1) <= .05:
+                            final_select.append(ticker)
+                        
+                            if temp_df.Close[-1] > temp_df.Open[-1]:
+                                if temp_df.Low[-1] >= temp_df.EMA67[-1]:
+                                    if temp_df.Low[-1] >= temp_df.EMA23[-1]:
+                                        select_by_EMA67_23.append(ticker)
+                                        
+                                        if temp_df.Volume[-1] > temp_df.Vol5MA[-1] * shares_ratio:
+                                            select_by_Volume5.append(ticker)
+                                        if temp_df.Volume[-1] > temp_df.Vol67MA[-1] * shares_ratio:
+                                            select_by_Volume67.append(ticker)
+                            momentums.append((ticker, Calc.Momemtum(temp_df)))
+                            # output figure
+                            # temp_df = temp_df.tail(200)
+                            # createPlot(td, temp_df, ticker, MACD=True)
             except:
                 print(GetException())
         
@@ -97,9 +103,13 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
         # saveRecommand(select_by_Volume67, 'VolumeWithMACD_EMA67_23_VOL67')
         # sendResultTable(td, select_by_Volume67, momentums, '1-3')
         
+        expend_text = "底部爆大量(相對)，有起飛的可能，可逢低布局\n"
+        expend_text += "若順利起飛且未跌破10MA則續抱\n"
+        expend_text += "若未起飛且K線跌出60MA則出場(損)，或虧損>10%(或個人可接受之虧損幅度)"
+
         select_by_Volume5_67 = list(set(select_by_Volume5).intersection(select_by_Volume67))
         saveRecommand(select_by_Volume5_67, 'VolumeWithMACD_EMA67_23_VOL5_67')
-        sendResultTable(td, select_by_Volume5_67, momentums, '1-4')
+        sendResultTable(td, select_by_Volume5_67, momentums, '1-4', expend_text, info_data)
     except:
         print(GetException())
         

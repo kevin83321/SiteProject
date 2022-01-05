@@ -6,11 +6,20 @@ class Calculator:
     def MACD(df, inp_col = 'DI'):
         try:
             if inp_col == 'DI':
-                df['DI'] = (df.High.astype(float) + df.Low.astype(float) + 2 * df.Close.astype(float)) / 4
+                df = Calculator.DI(df)
             df = Calculator.EMA(df, [12, 26], inp_col)
             df['DIF'] = df.EMA12 - df.EMA26
             df['MACD'] = df.DIF.ewm(span=9).mean()
             df['OSC'] = (df.DIF - df.MACD)
+        except:
+            print(GetException())
+        else:
+            return df
+        
+    @staticmethod
+    def DI(df):
+        try:
+            df['DI'] = (df.High.astype(float) + df.Low.astype(float) + 2 * df.Close.astype(float)) / 4
         except:
             print(GetException())
         else:

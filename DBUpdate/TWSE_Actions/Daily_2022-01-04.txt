@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-01-04	5287	XR	183.09383515

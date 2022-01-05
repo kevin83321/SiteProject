@@ -1,4 +1,4 @@
-__updated__ = '2021-06-22 01:01:23'
+__updated__ = '2021-12-22 23:10:02'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -7,7 +7,7 @@ from utils import (
     sendResultTable, VolumeFilter, PriceFilter,
     changedType, createRecommandTable,
     Amplitude, Increase, os, totalValue,
-    getStockList
+    getStockList, datetime
 )
     
 def Increase_filter(df):
@@ -22,13 +22,14 @@ def Decrease_filter(df):
     dec_select = list(Increase(df, amp_select, top=False))
     return list(set(value_select).intersection(dec_select))
             
-def main():
+def main(td = datetime.today()):
     try:
         # setup date
-        td, last = getDateBeforeTrade()
+        td, last = getDateBeforeTrade(td)
         
         stocklist_table = getSchema('TWSE.StockList')
         last_date = sorted(stocklist_table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in stocklist_table.find({"UpdateDate":{"$eq":last_date}}))
         tickers = [x['Ticker'].strip() for x in stocklist_table.find({"UpdateDate":{"$eq":last_date}, "AssetType":{"$eq":"股票"}})]
         
         info_table = getSchema('Stock.Info')
@@ -65,7 +66,7 @@ def main():
         
         df = pd.DataFrame(data)
         df = df[df.Ticker.isin(tickers)]
-        print(df, '\n', df.shape)
+        # print(df, '\n', df.shape)
         
         
         final_select = []
@@ -96,8 +97,9 @@ def main():
                 temp_df['Vol5MA'] = temp_df.Adj_Volume.rolling(5).mean()
                 temp_df['Vol67MA'] = temp_df.Adj_Volume.rolling(67).mean()
                 
-                last_data = temp_df.loc[td.strftime('%Y-%m-%d')] 
-                final_select.append(ticker)
+                if (temp_df['Low'][-1] / temp_df['EMA67'][-1] - 1) >= .15:
+                    last_data = temp_df.loc[td.strftime('%Y-%m-%d')] 
+                    final_select.append(ticker)
                 # temp_df['OSC_Trend'] = temp_df['OSC'] > temp_df['OSC'].shift(1)
                 # if all(temp_df['OSC_Trend'][-3:]) and all(temp_df['OSC'][-3:] > 0):
                 #     final_select.append(ticker)
@@ -111,15 +113,20 @@ def main():
                                 #     select_by_Volume5.append(ticker)
                                 # if temp_df.Volume[-1] > temp_df.Vol67MA[-1] * shares_ratio:
                                 #     select_by_Volume67.append(ticker)
-                momentums.append((ticker, Calc.Momemtum(temp_df)))
-                # output figure
-                temp_df = temp_df.tail(200)
-                createPlot(td, temp_df, ticker, MACD=True, extra_name='Dental Stock')
+                    momentums.append((ticker, Calc.Momemtum(temp_df)))
+                    # output figure
+                    # temp_df = temp_df.tail(200)
+                    # createPlot(td, temp_df, ticker, MACD=True, extra_name='Dental Stock')
             except:
                 print(GetException())
+                
+        expand_text = "當沖用(3)，強勢股且量大\n"
+        expand_text += "前一天高點為壓力，過高則做多，高點未過則走空\n"
+        expand_text += "前一天低點為支撐，過低則做多，低點未過則走多\n"
+        expand_text += "當沖注意紀律\n"
         
         saveRecommand(final_select, 'PowerfulStocks')
-        sendResultTable(td, final_select, momentums, '6')
+        sendResultTable(td, final_select, momentums, '6', expand_text, info_data)
         
         # saveRecommand(select_by_EMA67_23, 'PowerfulStocks_EMA67_23')
         # sendResultTable(td, select_by_EMA67_23, momentums, '6-1')
@@ -135,10 +142,8 @@ def main():
         # sendResultTable(td, select_by_Volume5_67, momentums, '1-4')
     except:
         print(GetException())
-        
-    
     
 if __name__ == '__main__':
-    main()#min_price=20, max_price=200, num_shares=2000, shares_ratio=1.5)
+    main()#datetime(2021,12,10))#min_price=20, max_price=200, num_shares=2000, shares_ratio=1.5)
     
     

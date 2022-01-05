@@ -1,11 +1,11 @@
-__updated__ = '2021-10-24 10:02:18'
+__updated__ = '2021-12-24 00:57:01'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
     pd, np, getSchema, getDateBeforeTrade, 
     saveRecommand, timedelta, GetException,
     sendResultTable, VolumeFilter, PriceFilter,
-    changedType, createRecommandTable
+    changedType, createRecommandTable, datetime
 )
 
 def ReadSTCFUTMapping():
@@ -49,14 +49,19 @@ def ReadSTCFUTMapping():
         mapping['FutToStc'].update({row.FUT_Ticker: STC_Ticker})
     return mapping
             
-def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
+def main(date=datetime.today(), min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
     try:
         fut_stc_mapping = ReadSTCFUTMapping()
         # setup date
-        td, last = getDateBeforeTrade()
-        print(td, last)
+        td, last = getDateBeforeTrade(date)
+        # print(td, last)
         
         # setup data
+        schema = getSchema('TWSE')
+        table = schema['StockList']
+        last_date = sorted(table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in table.find({"UpdateDate":{"$eq":last_date}}))
+        
         schema = getSchema('TWSE')
         table = schema['historicalPrice']
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
@@ -88,6 +93,7 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
             try:
                 pre_3y = td + timedelta(-365*1)
                 temp_df = pd.DataFrame(list(table.find({'Ticker':{'$eq':ticker},'Date':{'$gte':pre_3y.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))).set_index('Date')
+                
                 if temp_df is None or temp_df.empty:continue
                 del temp_df['_id']
                 temp_df.Close = temp_df.Close.replace('--', float('nan'))
@@ -104,12 +110,13 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
                     temp_df[col] = temp_df[col].apply(changedType)
 
                 max_oc = temp_df[['Close', 'Open']].max(axis=1)
+                min_oc = temp_df[['Close', 'Open']].min(axis=1)
                 # last_two_max = max(temp_df.Close.iloc[-3], temp_df.Open.iloc[-3])
-                # last_one_max = max(temp_df.Close, temp_df.Open)
-                # td_max = max(temp_df.Close, temp_df.Open)
+                # last_one_max = max(temp_df.Close.iloc[-2], temp_df.Open.iloc[-2])
+                # td_max = max(temp_df.Close.iloc[-1], temp_df.Open)
                 # temp_df = Calc.BBAND(temp_df, 20, 2)
                 # if temp_df is None or temp_df.empty:continue
-                # temp_df = Calc.MA(temp_df, [5,10])
+                # temp_df = Calc.MA(temp_df, [5,10, 20])
                 # if temp_df is None or temp_df.empty:continue
                 # temp_df['bandwpct_chg'] = temp_df.bandwidth.pct_change()
                 # temp_df['bandwpct_chg_std'] = temp_df['bandwpct_chg'].rolling(20).std()
@@ -117,28 +124,41 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
                 # temp_df['slope20'] = temp_df.MA20.pct_change()
                 # temp_df['slope5'] = temp_df.MA5.pct_change()
                 # temp_df['slope10'] = temp_df.MA10.pct_change()
+                # temp_df['Ret'] = temp_df.Close.pct_change()
 
-                condi1 = max(max_oc.iloc[-3], max_oc.iloc[-1]) < max_oc.iloc[-2]
-                condi2 = temp_df.Close.iloc[-1] < temp_df.Open.iloc[-1]
-                condi3 = ticker in fut_stc_mapping['TickerToName'].keys()
+                condi1 = temp_df.Close.iloc[-3] > temp_df.Open.iloc[-3]
+                condi2 = max(max_oc.iloc[-3], max_oc.iloc[-1]) < min_oc.iloc[-2]
+                # condi3 = min_oc.iloc[-2] > max_oc.iloc[-1]
+                condi4 = (temp_df.Volume.iloc[-1] / temp_df.Volume.iloc[-2]) > shares_ratio
+                condi5 = temp_df.Close.iloc[-1] < min(temp_df.Open.iloc[-1], max_oc.iloc[-3])
+                # condi1 = max(max_oc.iloc[-3], max_oc.iloc[-1]) < max_oc.iloc[-2] # temp_df.slope5.pct_change().iloc[-1] < 0#
+                # condi2 = (max_oc.iloc[-2] / max_oc.iloc[-22] - 1) >= .2
+                # condi3 = temp_df.Low.iloc[-1] <= temp_df.MA10.iloc[-1]
+                # condi4 = temp_df.slope10.pct_change().iloc[-1] < 0
+                # condi5 = temp_df.High.iloc[-2] > temp_df.MA20.iloc[-2] and temp_df.Low.iloc[-2] < temp_df.MA20.iloc[-2]
+                # condi2 = temp_df.Close.iloc[-1] < min(temp_df.Open.iloc[-1], temp_df.MA20.iloc[-1])#, temp_df.Low.iloc[-2])
+                # condi3 = ticker in fut_stc_mapping['TickerToName'].keys() or True
+                # condi6 = #temp_df['Ret'].iloc[-1] < 0
                 # condi4 = temp_df.bandwpct_chg.pct_change().iloc[-1] > 0
                 # condi6 = temp_df['bandwpct_chg_std'].pct_change().iloc[-1] > 0
                 # condi5 = temp_df.MA5.iloc[-1] < temp_df.MA10.iloc[-1]  and temp_df.MA10.iloc[-1] < temp_df.MA20.iloc[-1] 
                 # condi7 = temp_df['bandwidth'].iloc[-1] >= 0.1
-                if all([condi1, condi2 ,condi3]): # ,condi3,condi4,condi5, condi6
+                if all([condi1, condi2, condi4, condi5]): # ,condi3,condi4,condi5, condi6 
                     mom = Calc.Momemtum(temp_df)
                     if mom is None:continue
                     final_select.append(ticker)
                     momentums.append((ticker, mom))
-            except:
+            except Exception as e:
                 pass
+                # print(e)
+                # os._exit(0)
         
         saveRecommand(final_select, 'WeakTrend')
-        expand_text = "弱勢股挑選 : 出現頭部反轉，近一日收黑K\n"
+        expand_text = "弱勢股挑選 : 頭部A轉，近一日收黑K\n" #(波段漲幅>20%)
         expand_text += "這是一個放空選股，請不要傻傻做多當韭菜\n"
         expand_text += "進場 : 隔日K棒接近收盤時為黑K或常上引線紅K\n"
         # expand_text += "出場 : 損 : 10%, 在布林底部反轉出現紅K向上穿越MA5(最低價>MA5)"
-        sendResultTable(td, final_select, momentums, '9', expand_text=expand_text)
+        sendResultTable(td, final_select, momentums, '9', expand_text=expand_text, Industry=info_data)
         
         # saveRecommand(select_by_EMA67_23, 'VolumeWithMACD_EMA67_23')
         # sendResultTable(td, select_by_EMA67_23, momentums, '1-1')
@@ -158,6 +178,7 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
     
     
 if __name__ == '__main__':
+    # main(date=datetime(2021,4,24), min_price=15, max_price=9999, num_shares=1000, shares_ratio=1)
     main(min_price=15, max_price=9999, num_shares=1000, shares_ratio=1)
     
     

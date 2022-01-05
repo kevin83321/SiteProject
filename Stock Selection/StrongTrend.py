@@ -1,4 +1,4 @@
-__updated__ = '2021-10-24 10:02:18'
+__updated__ = '2021-12-22 23:10:18'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -12,12 +12,18 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
     try:
         # setup date
         td, last = getDateBeforeTrade()
-        print(td, last)
+        # print(td, last)
         
         # setup data
         schema = getSchema('TWSE')
+        table = schema['StockList']
+        last_date = sorted(table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in table.find({"UpdateDate":{"$eq":last_date}}))
+        
+        schema = getSchema('TWSE')
         table = schema['historicalPrice']
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
+        
         
         df = pd.DataFrame(data).set_index('Date')
         if len(df.index.unique()) < 2:
@@ -73,8 +79,8 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
                     final_select.append(ticker)
                     momentums.append((ticker, Calc.Momemtum(temp_df)))
                     # output figure
-                    temp_df = temp_df.tail(200)
-                    createPlot(td, temp_df, ticker, MACD=True)
+                    # temp_df = temp_df.tail(200)
+                    # createPlot(td, temp_df, ticker, MACD=True)
             except:
                 print(GetException())
         
@@ -82,7 +88,7 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
         expand_text = "強勢股挑選 : 開布林，MA(5,20)趨勢向上，布林變動加大\n"
         expand_text += "進場 : 隔日K棒過布林上緣不進，收黑K且MA20(布林中線未續上，或過布林上緣\n"
         expand_text += "出場 : 損 : 10%, 離開MA5"
-        sendResultTable(td, final_select, momentums, '8', expand_text=expand_text)
+        sendResultTable(td, final_select, momentums, '8', expand_text=expand_text, Industry=info_data)
         
         # saveRecommand(select_by_EMA67_23, 'VolumeWithMACD_EMA67_23')
         # sendResultTable(td, select_by_EMA67_23, momentums, '1-1')

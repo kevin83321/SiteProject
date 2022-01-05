@@ -1,6 +1,6 @@
 
 
-__updated__ = '2021-01-20 21:27:13'
+__updated__ = '2021-12-22 23:09:33'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -19,6 +19,11 @@ def main(num_shares=2000, shares_ratio=1.5):
         td, last = getDateBeforeTrade()
         
         # setup data
+        schema = getSchema('TWSE')
+        table = schema['StockList']
+        last_date = sorted(table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in table.find({"UpdateDate":{"$eq":last_date}}))
+        
         schema = getSchema('TWSE')
         table = schema['historicalPrice']
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
@@ -108,16 +113,16 @@ def main(num_shares=2000, shares_ratio=1.5):
                             #                 select_by_Volume67.append(ticker)
                                 momentums.append((ticker, Calc.Momemtum(temp_df)))
                                 # output figure
-                                temp_df = temp_df.tail(200)
-                                createPlot(td, temp_df, ticker, MACD=True)
+                                # temp_df = temp_df.tail(200)
+                                # createPlot(td, temp_df, ticker, MACD=True)
             except:
                 print(GetException())
         # print(f'final selection', final_select)
         # print(df[df.Ticker.isin(final_select)])
-        expand_text = 'Logic by Queen\n'
-        expand_text += 'Adjust with MACD And Volume > MA5 or Yesterday\n'
+        expand_text = '當沖用(1)，後續再調整\n'
+        # expand_text += 'Adjust with MACD And Volume > MA5 or Yesterday\n'
         saveRecommand(final_select, 'DayTrade_by_Queen')
-        sendResultTable(td, final_select, momentums, '3', expand_text)
+        sendResultTable(td, final_select, momentums, '3', expand_text, info_data)
     except:
         print(GetException())
         

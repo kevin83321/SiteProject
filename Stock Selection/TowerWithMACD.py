@@ -1,6 +1,4 @@
-
-
-__updated__ = '2021-10-24 10:01:20'
+__updated__ = '2021-12-22 23:09:12'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -16,6 +14,11 @@ def main(min_price=0, max_price=50, num_shares=0, shares_ratio=0):
         td, last = getDateBeforeTrade()
         
         # setup data
+        schema = getSchema('TWSE')
+        table = schema['StockList']
+        last_date = sorted(table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in table.find({"UpdateDate":{"$eq":last_date}}))
+        
         schema = getSchema('TWSE')
         table = schema['historicalPrice']
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
@@ -76,8 +79,8 @@ def main(min_price=0, max_price=50, num_shares=0, shares_ratio=0):
                             momentums.append((ticker, Calc.Momemtum(temp_df)))
                             
                             # output figure
-                            temp_df = temp_df.tail(200)
-                            createPlot(td, temp_df, ticker, MACD=True, TOWER=True)
+                            # temp_df = temp_df.tail(200)
+                            # createPlot(td, temp_df, ticker, MACD=True, TOWER=True)
                         
             except:
                 print(GetException())
@@ -90,10 +93,14 @@ def main(min_price=0, max_price=50, num_shares=0, shares_ratio=0):
         
         # saveRecommand(select_by_EMA23, 'TOWERWithMACD_EMA23')
         # sendResultTable(td, select_by_EMA23, momentums, '2-2')
+
+        expend_text = "底部爆大量(相對)，且多是均線糾結的向上突破，有起飛的可能，可逢低布局\n"
+        expend_text += "若順利起飛且未跌破10MA則續抱\n"
+        expend_text += "若未起飛且K線跌出60MA則出場(損)，或虧損>10%(或個人可接受之虧損幅度)"
         
         select_by_EMA67_23 = list(set(select_by_EMA23).intersection(select_by_EMA67))
         saveRecommand(select_by_EMA67_23, 'TOWERWithMACD_EMA67_23')
-        sendResultTable(td, select_by_EMA67_23, momentums, '2-3')
+        sendResultTable(td, select_by_EMA67_23, momentums, '2-3', expend_text, info_data)
     except:
         print(GetException())
     

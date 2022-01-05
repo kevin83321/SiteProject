@@ -31,7 +31,7 @@ from six.moves import xrange#, zip
 
 from matplotlib.pylab import date2num # 导入日期到数值一一对应的转换工具
 
-__updated__ = '2021-01-16 16:18:19'
+__updated__ = '2021-12-28 20:55:46'
 
 td = datetime.today()
 parent = os.path.dirname(os.path.abspath(__file__))
@@ -81,6 +81,7 @@ def getDateBeforeTrade(td:datetime=None, adj_days=0):
     if td <= td.replace(hour=5, minute=0, second=0):
         td += timedelta(-1)
     td += timedelta(days=-adj_days)
+    print(td)
     if td.weekday() == 0:
         last = td + timedelta(-3)
     elif td.weekday() == 6:
@@ -94,26 +95,27 @@ def getDateBeforeTrade(td:datetime=None, adj_days=0):
         
     return td, last
 
-def createRecommandTable(tickers, momentum=None):
+def createRecommandTable(tickers, momentum:list=None, Industry:dict=None):
     try:
         table = PrettyTable()
+        tickers = sorted(tickers)
+        table.add_column('股票代號', tickers)
         if momentum:
-            sorted_mom = [(ticker, f'{round(mom * 100, 2)} %') for ticker, mom in sorted(momentum, key=lambda x: x[1])[::-1] if ticker in tickers]
-            tickers = [x[0] for x in sorted_mom]
-            moms = [x[1] for x in sorted_mom]
-            table.add_column('Stock', tickers)
-            table.add_column('Momentum', moms)
-        else:
-            table.add_column('Stock', tickers)
+            sorted_mom = dict([(ticker, f'{round(mom * 100, 2)} %') for ticker, mom in sorted(momentum, key=lambda x: x[1])[::-1] if ticker in tickers])
+            moms = [sorted_mom[x] for x in tickers]
+            table.add_column('動量', moms)
+        if Industry:
+            industry = [Industry[x] for x in tickers]
+            table.add_column('產業', industry)
         table.align = 'r'
     except:
         print(GetException())
     else:
         return table
     
-def sendResultTable(td, tickers, momentum=None, algo_num=1, expand_text=''):
+def sendResultTable(td, tickers, momentum=None, algo_num=1, expand_text='', Industry:dict=None):
     try:
-        table = createRecommandTable(tickers, momentum)
+        table = createRecommandTable(tickers, momentum, Industry)
         tdStr = td.strftime('%Y-%m-%d')
         text = f'{tdStr} \n'
         text += f'透過狗狗{algo_num}號\n'

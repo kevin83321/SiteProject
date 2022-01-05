@@ -1,4 +1,4 @@
-__updated__ = '2021-02-21 00:16:25'
+__updated__ = '2021-12-22 23:09:44'
 from Calculator import Calculator as Calc
 from PlotTools import createPlot
 from utils import (
@@ -14,6 +14,11 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
         td, last = getDateBeforeTrade()
         
         # setup data
+        schema = getSchema('TWSE')
+        table = schema['StockList']
+        last_date = sorted(table.distinct("UpdateDate"))[-1]
+        info_data = dict((x['Ticker'], x['Industry']+f"({x['Market'][-1]})") for x in table.find({"UpdateDate":{"$eq":last_date}}))
+        
         schema = getSchema('TWSE')
         table = schema['historicalPrice']
         data = list(table.find({'Date':{'$gte':last.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
@@ -72,15 +77,16 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
                     #                 select_by_Volume67.append(ticker)
                 momentums.append((ticker, Calc.Momemtum(temp_df)))
                     # output figure
-                temp_df = temp_df.tail(200)
-                createPlot(td, temp_df, ticker, MACD=True)
+                # temp_df = temp_df.tail(200)
+                # createPlot(td, temp_df, ticker, MACD=True)
             except:
                 print(GetException())
         
         # print(selection)
-        expand_text = 'DayTrade Logic by Ray'
+        expand_text = "當沖用(2)，後續再調整"
+        # expand_text = 'DayTrade Logic by Ray'
         saveRecommand(selection, 'DayTradeByRay')
-        sendResultTable(td, selection, momentums, '4', expand_text)
+        sendResultTable(td, selection, momentums, '4', expand_text, info_data)
         
         # saveRecommand(select_by_EMA67_23, 'VolumeWithMACD_EMA67_23')
         # sendResultTable(td, select_by_EMA67_23, momentums, '1-1')
