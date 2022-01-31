@@ -8,12 +8,12 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ParseMode
 # import pandas as pd
 # import json
-from MessageReply import reply_order, set_stock, reply_more_info, backtest, updatebot, show_help_info, show_strategy_info, show_strategy_list_buttons
+from TGBot.MessageReply import reply_order, set_stock, reply_more_info, backtest, updatebot, show_help_info, show_strategy_info, show_strategy_list_buttons
 # from CallbackReply import set_stock1, set_strategy, runbacktest, placeorder
 # from PrepareForBot import add_user, get_user_list, read_stock_dict
 #from datetime import datetime
-from Log.TransforException import GetException
-from Messenger.TelegramMessenger import TelegramMessenger as tele
+from TGBot.Log.TransforException import GetException
+from TGBot.Messenger.TelegramMessenger import TelegramMessenger as tele
 
 def sendError(func_name):
     tele.sendMessage(f'In {str(__file__)} {func_name}, Error : {GetException()}')

@@ -1,20 +1,20 @@
-# CopyRight : XIQICapital 希奇資本
-# 記錄檔模組
+# CopyRight : Kevin Cheng 鄭圳宏
 # Author: Kevin Cheng 鄭圳宏
-# Create: 2019.07.27
-# Update: 2020.02.26
-# Version: Test
+# Created: 2022.2.1
+# Version: 0.0.0
 
-from xqctrader.Singleton.Singleton import Singleton
-from xqctrader.Events.ErrorEvent import ErrorEvent
-from xqctrader.Log.TransforException import GetException
-from xqctrader.Messenger.LineMessenger import LineMessenger as Line
-from xqctrader.Messenger.TelegramMessenger import TelegramMessenger as Telegram
+__update__ = ""
+
+# from xqctrader.Singleton.Singleton import Singleton
+# from xqctrader.Events.ErrorEvent import ErrorEvent
+from .TransforException import GetException
+from TGBot.Messenger.LineMessenger import LineMessenger as Line
+from TGBot.Messenger.TelegramMessenger import TelegramMessenger as Telegram
 import os
 from datetime import datetime
 import requests
 
-class Logger(Singleton):
+class Logger:#(Singleton):
 
     def __init__(self, dt, eventmanager, live_or_Backtest='RealTime'):
         """

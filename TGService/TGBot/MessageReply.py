@@ -1,13 +1,13 @@
-# CopyRight : XIQICapital 希奇資本
+# CopyRight : Kevin Cheng 鄭圳宏
 # Author: Kevin Cheng 鄭圳宏
-# Update: 2019.11.08
+# Created: 2022.2.1
 # Version: 0.0.0
 
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ParseMode
 # from PlotGraph import PlotSingleAsset, PlotSingleAssetInterDay
 
-from Log.TransforException import GetException
-from Messenger.TelegramMessenger import TelegramMessenger as tele
+from TGBot.Log.TransforException import GetException
+from TGBot.Messenger.TelegramMessenger import TelegramMessenger as tele
 
 def sendError(func_name):
     tele.sendMessage(f'In {str(__file__)} {func_name}, Error : {GetException()}')
