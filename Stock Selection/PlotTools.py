@@ -75,8 +75,9 @@ def plotKBar(ax, df, BBAND=False):
     
 def plotMAs(ax, df):
     cols = [x for x in df.columns if 'MA' in x and 'EMA' not in x and 'MACD' not in x and 'Vol' not in x]
-    df[cols].plot(ax=ax, legend = True)
-    ax.legend(bbox_to_anchor=(1.1, 1.05))
+    if cols:
+        df[cols].plot(ax=ax, legend = True)
+        ax.legend(bbox_to_anchor=(1.1, 1.05))
     
 def plotBBAND(ax, df, periods=20):
     cols = f'upband,dnband'.split(',')

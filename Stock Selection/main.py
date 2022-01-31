@@ -11,6 +11,7 @@ from ReversedBB import main as ReversedBB
 from StrongTrend import main as StrongTrend
 from WeakTrend import main as WeakTrend
 from BottomV import main as BottomV
+from CrossDayTrade import main as CrossDayTrade
 
 def main():
     IndexTrend()
@@ -23,8 +24,9 @@ def main():
     # dental_stock()
     # ReversedBB(min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
     StrongTrend(min_price=0, max_price=9999, num_shares=1000, shares_ratio=2)
-    # WeakTrend(min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
+    WeakTrend(min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
     # BottomV(min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
+    CrossDayTrade(min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
     
 if __name__ == '__main__':
     main()

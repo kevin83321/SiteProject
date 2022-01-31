@@ -61,23 +61,26 @@ def main(min_price=30, max_price=200, num_shares=2000, shares_ratio=2):
                     continue
                 for col in 'Open,High,Low,Close,Volume'.split(','):
                     temp_df[col] = temp_df[col].apply(changedType)
+                temp_df['Adj V'] = temp_df.Volume.apply(lambda x: int(x/1000))
                 temp_df = Calc.MACD(temp_df)
                 temp_df = Calc.MA(temp_df, [5,10,20,60,300])
                 temp_df = Calc.EMA(temp_df, [67, 23])
                 temp_df['Vol5MA'] = temp_df.Volume.rolling(5).mean()
                 temp_df['Vol67MA'] = temp_df.Volume.rolling(67).mean()
+                temp_df['VMA20'] = temp_df['Adj V'].rolling(20).mean()
+                v_slope = temp_df.VMA20.pct_change().iloc[-1]
                 
-                last_data = temp_df.loc[td.strftime('%Y-%m-%d')] 
+                # last_data = temp_df.loc[td.strftime('%Y-%m-%d')] 
                 
                 temp_df['OSC_Trend'] = temp_df['OSC'] > temp_df['OSC'].shift(1)
                 if all(temp_df['OSC_Trend'][-3:]) and all(temp_df['OSC'][-3:] > 0):
                     if temp_df['DIF'][-1] > 0 and temp_df['MACD'][-1] > 0:
-                        if (temp_df.Low.iloc[-1] / temp_df.EMA67.iloc[-1] - 1) <= .05:
+                        if (temp_df.Low.iloc[-1] / temp_df.EMA67.iloc[-1] - 1) <= .05 and v_slope > 0:
                             final_select.append(ticker)
                         
                             if temp_df.Close[-1] > temp_df.Open[-1]:
                                 if temp_df.Low[-1] >= temp_df.EMA67[-1]:
-                                    if temp_df.Low[-1] >= temp_df.EMA23[-1]:
+                                    if temp_df.Low[-1] >= temp_df.EMA23[-1] :
                                         select_by_EMA67_23.append(ticker)
                                         
                                         if temp_df.Volume[-1] > temp_df.Vol5MA[-1] * shares_ratio:

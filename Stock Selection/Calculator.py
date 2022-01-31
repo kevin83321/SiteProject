@@ -156,3 +156,37 @@ class Calculator:
             # print(df)
         else:
             return mom
+
+    @staticmethod
+    def get_minimum_tick(cost):
+        if cost < 10:
+            return 0.01
+        elif cost < 50:
+            return 0.05
+        elif cost < 100:
+            return 0.1
+        elif cost < 500:
+            return 0.5
+        elif cost < 1000:
+            return 1
+        else:
+            return 5
+
+    @staticmethod
+    def CalculateUpDnLimit(price, up_ratio=0.1, down_ratio=0.1):
+        tmp_up = tmp_dn = price
+        while 1:
+            tmp_tick_up = Calculator.get_minimum_tick(tmp_up)
+            tmp_up = round(tmp_up+tmp_tick_up,2)
+            if tmp_up / price > 1 + up_ratio:
+                up_limit = tmp_up - tmp_tick_up
+                break
+
+        while 1:
+            tmp_tick_dn = Calculator.get_minimum_tick(tmp_dn)
+            # tmp_dn -= tmp_tick_dn
+            tmp_dn = round(tmp_dn - tmp_tick_dn,2)
+            if tmp_dn / price < 1 - down_ratio:
+                dn_limit = tmp_dn + tmp_tick_dn
+                break
+        return round(up_limit, 2), round(dn_limit, 2)

@@ -69,20 +69,24 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                 # temp_df = Calc.calculateTOWER(temp_df)
                 # temp_df = Calc.BBAND(temp_df, 20, 2)
                 temp_df['slope'] = temp_df['MA20'].pct_change()
+                temp_df['slope_10'] = temp_df['MA10'].pct_change()
                 temp_df['Adj V'] = temp_df.Volume.apply(lambda x: int(x/1000))
                 temp_df['VMA5'] = temp_df['Adj V'].rolling(5).mean()
+                temp_df['VMA20'] = temp_df['Adj V'].rolling(20).mean()
                 # temp_df['upslope'] = temp_df['upband'].pct_change()
                 # temp_df['bandwidth'] = temp_df['upband'] / temp_df['dnband'] - 1
                 v_ratio = (temp_df['Adj V'].iloc[-1] / temp_df['Adj V'].iloc[-2])
+                v_slope = temp_df.VMA20.pct_change().iloc[-1]
                 
                 condi_1 = temp_df.VMA5.iloc[-1] >= 1000
-                condi_2 = temp_df.MA5.iloc[-1] > temp_df.MA10.iloc[-1]
-                condi_3 = temp_df.MA10.iloc[-1] > temp_df.MA20.iloc[-1]
+                condi_2 = temp_df.slope_10.iloc[-1] > 0 and temp_df.MA5.iloc[-1] > temp_df.MA10.iloc[-1]
+                condi_3 = temp_df.MA5.iloc[-1] > temp_df.MA20.iloc[-1]
                 condi_4 = 1.5 <= v_ratio and v_ratio <= 5
                 condi_5 = temp_df.slope.iloc[-1] > 0
+                condi_6 = v_slope > 0
                 # condi_6 = (temp_df.Low.iloc[-1] / temp_df.MA60 - 1) < 0.03 or (temp_df.Low.iloc[-1] / temp_df.MA150 - 1) < 0.03
                 # if all([eval(f'condi_{i}') for i in range(1,5)]):
-                if all([condi_1, condi_2, condi_3, condi_4, condi_5]):
+                if all([condi_1, condi_2, condi_3, condi_4, condi_5, condi_6]):
                     final_select.append(ticker)
                     momentums.append((ticker, Calc.Momemtum(temp_df)))
                 # if temp_df['OSC'][-2] <= 0 and temp_df['OSC'][-1] >= 0:

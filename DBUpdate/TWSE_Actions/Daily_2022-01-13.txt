@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-01-13	5483	XD	3.5

@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-01-25	3289	XD	0.44412403

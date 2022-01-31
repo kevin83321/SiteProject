@@ -10,6 +10,7 @@ __updated__ = '2020-11-22 23:22:07'
 
 def crawl_json_data(url):
     res = requests.get(url, headers=header)
+    # print(res)
     return res.json()
 
 def import_file_as_module(module_name, file_path):

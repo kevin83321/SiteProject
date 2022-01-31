@@ -83,7 +83,7 @@ def writeStrongTicker(dtStr, tickers):
 
 if __name__ == '__main__':
     api = sj.Shioaji()
-    api.login("F128497445", "j7629864")
+    api.login("F128497445", "89118217k")
     tickers = getFollowedAssets()
     up_limit_ticker = {}
     for ticker in tickers:

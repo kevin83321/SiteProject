@@ -53,6 +53,7 @@ def TSE_HistoricalPrice(i):
         date = i.strftime('%Y%m%d')
         url = 'https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=' + \
             date + '&type=ALLBUT0999&_=1553846233285'
+
         js = crawl_json_data(url)
         data = js['data9']
         for k in range(len(data)):
@@ -106,19 +107,23 @@ if __name__ == "__main__":
         table = client['admin']['TWSE']['historicalPrice']
         start_date = datetime.strptime(sorted(table.distinct(
             'Date'))[-1], '%Y-%m-%d') + timedelta(days=1)
-        # start_date = datetime(2020,7,24)
+        # start_date = datetime(2022,1,5)
+        # date_range = date_range(start_date, start_date)
         date_range = date_range(start_date, datetime.today())
         for date in date_range:
+            print(date)
             try:
                 # crawl tse daily data
                 if os.path.isfile(os.path.join(
                         tsepath, f"{date.strftime('%Y-%m-%d')}.txt")):
-                    df_tse = read_csv(os.path.join(
-                        tsepath, f"{date.strftime('%Y-%m-%d')}.txt"), sep='\t')
-                    data_tse = [update_data_dict(x) for x in list(df_tse.T.to_dict().values())]
+                    try:
+                        df_tse = read_csv(os.path.join(
+                            tsepath, f"{date.strftime('%Y-%m-%d')}.txt"), sep='\t')
+                        data_tse = [update_data_dict(x) for x in list(df_tse.T.to_dict().values())]
+                    except:
+                        data_tse = TSE_HistoricalPrice(date)
                 else:
                     data_tse = TSE_HistoricalPrice(date)
-                
                 if len(data_tse) > 0:
                     DataFrame(data_tse).to_csv(os.path.join(
                         tsepath, f"{date.strftime('%Y-%m-%d')}.txt"), sep='\t', index=None, float_format='%g')
@@ -130,9 +135,12 @@ if __name__ == "__main__":
                 # crawl otc daily data
                 if os.path.isfile(os.path.join(
                         otcpath, f"{date.strftime('%Y-%m-%d')}.txt")):
-                    df_otc = read_csv(os.path.join(
-                        otcpath, f"{date.strftime('%Y-%m-%d')}.txt"), sep='\t')
-                    data_otc = [update_data_dict(x) for x in list(df_otc.T.to_dict().values())]
+                    try:
+                        df_otc = read_csv(os.path.join(
+                            otcpath, f"{date.strftime('%Y-%m-%d')}.txt"), sep='\t')
+                        data_otc = [update_data_dict(x) for x in list(df_otc.T.to_dict().values())]
+                    except:
+                        data_otc = OTC_HistoricalPrice(date)
                 else:
                     data_otc = OTC_HistoricalPrice(date)
                 if len(data_otc) > 0:
@@ -148,4 +156,4 @@ if __name__ == "__main__":
         # Line().sendMessage('Update Stock Historical Price success')
         Tele().sendMessage('Update Stock Historical Price success', group='UpdateMessage')
     except Exception as e:
-        print(e)
+        print("Main Loop Error : ",e)
