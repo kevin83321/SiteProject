@@ -11,7 +11,9 @@ from utils import (
 from matplotlib.font_manager import fontManager, FontProperties
 # for f in fontManager.ttflist:
 #     print(f.name)
-ChineseFont = FontProperties([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial' in f.name][0])
+ChineseFont = FontProperties([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial ' in f.name][0])
+# print([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial' in f.name])
+# print(ChineseFont)
 
 def plotVolume(ax, df):
     col = 'Adj_Volume' if 'Adj_Volume' in df.columns else 'Volume'
@@ -64,7 +66,10 @@ def plotKBar(ax, df, BBAND=False):
     from copy import deepcopy
     df = deepcopy(df).reset_index()
     df.Date = df.Date.apply(transforDate)
-    temp_df = df['Date,Open,High,Low,Close,Volume'.split(',')]
+    try:
+        temp_df = df['Date,Open,High,Low,Close,Volume'.split(',')]
+    except:
+        temp_df = df['Date,Open,High,Low,Close'.split(',')]
     mpf.candlestick_ohlc(ax, [tuple(x.values()) for x in temp_df.T.to_dict().values()], 
                          colorup='r', colordown='g', width=0.8)
     plotMAs(ax, df.set_index('Date'))

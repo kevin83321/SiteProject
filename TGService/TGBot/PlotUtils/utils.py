@@ -17,7 +17,8 @@ from matplotlib.transforms import Affine2D
 import matplotlib.dates as mpl_dates
 from matplotlib.pylab import date2num # 导入日期到数值一一对应的转换工具
 from matplotlib.font_manager import fontManager, FontProperties
-ChineseFont = FontProperties([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial' in f.name][0])
+ChineseFont = FontProperties([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial ' in f.name][0])
+print(ChineseFont)
 
 try:
     from TGBot.Log.TransforException import GetException

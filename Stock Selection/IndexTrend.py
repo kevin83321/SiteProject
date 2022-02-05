@@ -5,12 +5,12 @@ from utils import (
     pd, np, getSchema, getDateBeforeTrade, 
     saveRecommand, timedelta, GetException,
     sendResultTable, changedType, createRecommandTable, 
-    datetime, os
+    datetime, os, fig_path
 )
 from crawler import getTaiFut
 import pandas_datareader.data as web
 import calendar
-
+from RS_Pivots import mainPlot
 
 def getNearbyMonth():
     td = datetime.today()
@@ -155,6 +155,7 @@ def main():
         expand_text += f'根據SPD計算，可以進場做"{signal_map[signal[-1]]}"\n'
         sendResultTable(td, ['TWII '+last.strftime('%Y-%m-%d'), 'TWII '+td.strftime('%Y-%m-%d')], 
                         momentums, '大', expand_text)
+        mainPlot("TWSE", df=df_twse)
     except:
         print(GetException())
     

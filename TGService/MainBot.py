@@ -3,6 +3,7 @@
 # Update: 2022.1.31
 # Version: 0.0.0
 
+from calendar import c
 import random, os
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ParseMode
@@ -36,7 +37,12 @@ def start(bot, update):
         bot.send_message(chat_id=update.message.chat_id, text="\n*歡迎訪問凱文的私人秘書* \n\n"+"==================\n"+"以下為小秘書的功能之簡介:\n\n"+text, 
                         reply_markup=kb_markup, parse_mode=ParseMode.MARKDOWN)
 
+def test(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text="\n*測試回覆功能* \n\n"+"==================\n"+"以下為小秘書的功能之簡介:\n\n",#+text, 
+                            reply_markup=kb_markup, parse_mode=ParseMode.MARKDOWN)
+
 def CallbackProcess(bot, update):
+    # print(update.)
     data = update.callback_query.data.split(',')
     chat_id = update.callback_query.from_user.id
     print(data)
@@ -68,7 +74,12 @@ def CallbackProcess(bot, update):
 
 def message_process(bot, update, user_data):
     msg = update.message.text.lower()
-    chat_id = update.message.from_user.id
+    chat_id = update.message.chat_id
+    # if "-" not in chat_id:
+    #     chat_id = update.message.from_user.id
+    # print(chat_id)
+    # print(chat_id)
+    print(f"{msg} in message_process")
     # backtest_setting[chat_id] = backtest_setting.get(chat_id, {})
     # setting = backtest_setting.get(chat_id, {})
     # add_user(user_list, chat_id, path)
@@ -95,6 +106,7 @@ if __name__ == "__main__":
     updater = Updater('1473321627:AAHCL7sLppLCSdxcKDMGjvaHWmoxUk2quOY')
     # set bottons and quit link
     updater.dispatcher.add_handler(CommandHandler('start', start))
+    updater.dispatcher.add_handler(CommandHandler('test', test))
     updater.dispatcher.add_handler(MessageHandler(Filters.text, message_process, pass_user_data=True))
     updater.dispatcher.add_handler(CallbackQueryHandler(CallbackProcess))
     # launch backend engine

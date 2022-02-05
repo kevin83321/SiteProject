@@ -5,11 +5,12 @@ from utils import (
     pd, np, getSchema, getDateBeforeTrade, 
     saveRecommand, timedelta, GetException,
     sendResultTable, changedType, createRecommandTable, 
-    datetime, os
+    datetime, os, sendPhoto
 )
 from crawler import getTaiFut
 import pandas_datareader.data as web
 import calendar
+from RS_Pivots import mainPlot
 
 
 def getNearbyMonth():
@@ -107,6 +108,7 @@ def main():
         TWSE_table = schema['HistoricalPrice.Index.Interday']
         pre_3y = td + timedelta(-365*3)
         df_twse = pd.DataFrame(TWSE_table.find({'IndexName':{'$eq':'發行量加權股價指數'},'Date':{'$gte':pre_3y.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))
+        # print(df_twse)
         del df_twse['_id']
         df_twse = df_twse.set_index('Date')
         df_twse.index = pd.to_datetime(df_twse.index)
@@ -159,6 +161,7 @@ def main():
             expand_text += "進場，一律注意停損，自設可接受範圍"
 
         sendResultTable(td, final_select, momentums, '大', expand_text=expand_text)
+        sendPhoto("大盤之支撐壓力", mainPlot("TWSE", df=df_twse.iloc[-250:]))
     except:
         print(GetException())
     
