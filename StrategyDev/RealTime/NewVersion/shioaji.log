@@ -1,0 +1,110 @@
+[E 2022-01-20 08:55:33,965 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 400}, 'response': {'token': '', 'accounts': [], 'detail': 'Incorrect userid or password', 'ip_address': '61.218.28.226', 'client_name': ''}}
+[E 2022-01-20 16:07:33,345 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 400}, 'response': {'token': '', 'accounts': [], 'detail': 'Incorrect userid or password', 'ip_address': '61.218.28.226', 'client_name': ''}}
+[E 2022-01-21 14:06:32,448 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 400}, 'response': {'token': '', 'accounts': [], 'detail': 'Incorrect userid or password', 'ip_address': '61.218.28.226', 'client_name': ''}}
+[E 2022-02-15 09:24:42,109 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-02-24 08:44:07,247 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:187:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-02-24 14:15:35,155 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-02 13:22:44,687 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 406}, 'response': {'detail': 'Order price error.'}}
+[E 2022-03-04 14:23:49,618 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-07 14:00:28,962 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-07 14:00:41,271 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2022-03-08 14:03:51,924 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-11 13:28:37,298 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-14 13:27:54,405 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-16 13:00:11,808 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] Topic: api/v1/order/place_order, Status Code is None.
+[E 2022-03-17 13:03:39,966 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:425:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-17 13:03:49,345 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2022-03-18 13:05:56,108 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2022-03-22 13:27:24,674 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-23 08:49:22,072 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-23 13:26:12,178 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-23 13:26:32,803 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-24 08:42:11,894 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-24 13:08:48,483 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-24 13:09:12,705 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-24 13:09:19,914 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2022-03-24 13:10:02,641 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-24 13:40:43,820 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-24 13:40:48,778 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-25 08:43:41,595 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-25 13:28:05,589 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-25 13:28:10,294 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-28 08:43:49,660 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-28 13:25:50,262 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-29 08:54:02,900 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 400}, 'response': {'token': '', 'accounts': [], 'detail': 'Incorrect userid or password', 'ip_address': '61.218.28.226', 'client_name': '', 'contract_download': False, 'web_token': ''}}
+[E 2022-03-29 08:54:30,036 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 400}, 'response': {'token': '', 'accounts': [], 'detail': 'Incorrect userid or password', 'ip_address': '61.218.28.226', 'client_name': '', 'contract_download': False, 'web_token': ''}}
+[E 2022-03-29 08:54:54,141 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-30 09:00:37,621 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-30 13:08:50,944 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-30 13:08:56,079 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-31 08:53:47,552 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-01 08:43:19,716 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-01 13:26:34,964 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-01 13:26:39,382 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-06 08:46:03,595 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-06 16:31:31,480 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-07 08:34:14,907 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-08 08:39:36,361 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-08 13:26:31,391 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-08 13:26:37,083 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-11 08:52:26,185 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-11 11:02:07,309 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-11 13:12:02,413 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-11 13:12:10,954 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2022-04-11 13:12:21,237 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2022-04-11 13:23:02,330 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-12 08:42:00,439 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-12 13:25:42,514 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-12 13:25:52,981 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-13 08:34:59,709 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-13 13:17:27,798 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-13 13:17:30,390 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2022-04-13 13:21:12,444 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-14 08:46:53,690 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-14 13:26:17,654 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-14 13:26:24,926 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-15 08:40:27,817 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-15 13:26:07,404 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-15 13:26:14,708 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-18 08:48:42,834 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-19 13:23:01,830 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-20 08:47:16,603 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-20 13:25:17,568 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-20 13:25:27,023 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-21 08:43:45,610 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-21 13:25:28,703 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-22 08:46:06,199 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-22 08:48:07,338 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-22 13:26:02,756 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-04-22 13:26:07,602 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-25 08:42:05,871 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-26 08:38:56,245 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-28 08:38:16,063 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-28 09:05:16,961 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] Topic: api/v1/order/place_order, Status Code is None.
+[E 2022-04-29 08:29:12,559 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-03 08:52:17,288 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-04 08:54:27,382 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-05 08:35:21,418 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-06 08:39:04,133 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-09 08:51:06,541 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-10 08:41:46,975 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-12 07:13:13,452 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-12 08:36:18,068 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-13 08:40:07,940 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-13 13:52:36,003 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-16 08:31:03,820 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-17 08:44:23,422 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-18 08:44:22,503 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-19 08:14:19,754 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-19 09:05:19,763 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:450:place_order] Topic: api/v1/order/place_order, Status Code is None.
+[E 2022-05-20 08:56:45,598 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-23 08:29:31,780 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-24 09:01:15,053 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-24 09:01:23,998 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-25 08:49:29,240 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-26 09:08:35,091 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-27 08:56:24,515 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-30 08:44:41,509 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-05-31 08:37:55,311 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-06-01 08:42:19,758 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-06-02 08:49:02,495 c:\users\user2\appdata\local\programs\python\python37\lib\site-packages\shioaji\shioaji.py:212:login] Expecting value: line 1 column 1 (char 0)
