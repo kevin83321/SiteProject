@@ -8,6 +8,7 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMa
 
 from TGBot.Log.TransforException import GetException
 from TGBot.Messenger.TelegramMessenger import TelegramMessenger as tele
+from TGBot.PlotUtils.RS_Pivots import mainPlot
 
 def sendError(func_name):
     tele.sendMessage(f'In {str(__file__)} {func_name}, Error : {GetException()}')
@@ -124,6 +125,7 @@ def updatebot(bot, chat_id, kb_markup):
 def show_help_info(bot, chat_id):
     try:
         text = "`使用說明` : 跳出此訊息，說明機器人之使用方法\n"
+        text += "`畫圖設定` : 交易所-股票代碼-畫圖類型 ex tw-2330-rs , rs=支撐與壓力\n"
         bot.send_message(chat_id=chat_id,text=text, parse_mode=ParseMode.MARKDOWN)
     except:
         sendError('show_help_info')
@@ -153,3 +155,15 @@ def reply_more_info(bot, chat_id):
                                 )
     except:
         sendError('reply_more_info')
+
+def reply_stock_figure(bot, chat_id:str, msg:str):
+    exchange, ticker, plot_type = msg.split('-')
+    figfile = None
+    if exchange.lower() == "tw":
+        if plot_type.lower() == "rs":
+           figfile = mainPlot(ticker)
+    if figfile:
+        bot.send_photo(chat_id=chat_id,photo=open(figfile,'rb'), caption=f'\n上圖是 {ticker} 的歷史價格走勢')
+    else:
+        reply_no_data(bot, chat_id, ticker)
+    

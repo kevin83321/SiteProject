@@ -78,43 +78,44 @@ def calculatePivots(df):
     return pivots
 
 def plot_all(ax, levels, df, ticker, expand_text=""):
-    # global date_tickers
-    df = deepcopy(df)
-    # fig, ax = plt.subplots(figsize=(16, 9))
-    plotKBar(ax, df)#.set_index("Date"))
-    # date_tickers = df.Date.values
-    df['DateStr'] = df.Date
-    df.Date = df.Date.apply(transforDate)
-    for i in range(len(levels)):
-        next_level = None
-        level = levels[i]
-        try:
-            next_level = levels[i+1]
-        except:
-            pass
-        xmax = df['Date'].max()
-        if next_level:
-            if str(next_level[0]).isnumeric():
-                xmax = df['Date'][next_level[0]]
+    try:
+        # global date_tickers
+        df = deepcopy(df)
+        # fig, ax = plt.subplots(figsize=(16, 9))
+        plotKBar(ax, df)#.set_index("Date"))
+        # date_tickers = df.Date.values
+        df['DateStr'] = df.Date
+        df.Date = df.Date.apply(transforDate)
+        for i in range(len(levels)):
+            next_level = None
+            level = levels[i]
+            try:
+                next_level = levels[i+1]
+            except:
+                pass
+            xmax = df['Date'].max()
+            if next_level:
+                if str(next_level[0]).isnumeric():
+                    xmax = df['Date'][next_level[0]]
+                else:
+                    xmax = df[df.DateStr == next_level[0]].Date
+            if str(level[0]).isnumeric():
+                xmin = df['Date'][level[0]]
             else:
-                xmax = df[df.DateStr == next_level[0]].Date
-        if str(level[0]).isnumeric():
-            xmin = df['Date'][level[0]]
-        else:
-            xmin = df[df.DateStr == level[0]].Date
-        plt.hlines(level[1], xmin = xmin, xmax = xmax, colors='blue', linestyle='--')
-    # plt.title(f"Support and resistance ({expand_text}) of {ticker} in the past one year.")
-    # plt.show()
+                xmin = df[df.DateStr == level[0]].Date
+            plt.hlines(level[1], xmin = xmin, xmax = xmax, colors='blue', linestyle='--')
+    except:
+        pass
 
 def mainPlot(ticker, td=datetime.today(), extra_name="", df = None):
     try:
-        print('in mainplot', ChineseFont)
-        df = df.reset_index()
-        df.Date = df.Date.apply(lambda x: x.strftime("%Y-%m-%d"))
+        # print('in mainplot', ChineseFont)
         if df is None:
             df = GetData(ticker, td)
         if df.empty:
             df = GetData(ticker, td)
+        df = df.reset_index()
+        df.Date = df.Date.apply(lambda x: x.strftime("%Y-%m-%d") if isinstance(x, datetime) else x) # pd.to_datetime(df.Date) #
         levels = calculatePivots(df)
         # temp_df = df.tail(250)
         # plor chart
@@ -122,7 +123,7 @@ def mainPlot(ticker, td=datetime.today(), extra_name="", df = None):
         
         # set axis to be Clear
         plt.yticks([])
-        plt.xticks([])
+        # plt.xticks([])
         # set title
         dayStr = (td+timedelta(1)).strftime("%Y-%m-%d")
         # text = f'Recommend {ticker} for follow up in next tradable day.'

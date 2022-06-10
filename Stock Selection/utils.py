@@ -114,10 +114,10 @@ def createRecommandTable(tickers, momentum:list=None, Industry:dict=None):
         table.add_column('股票代號', tickers)
         if momentum:
             sorted_mom = dict([(ticker, f'{round(mom * 100, 2)} %') for ticker, mom in sorted(momentum, key=lambda x: x[1])[::-1] if ticker in tickers])
-            moms = [sorted_mom[x] for x in tickers]
+            moms = [sorted_mom.get(x, "") for x in tickers]
             table.add_column('動量', moms)
         if Industry:
-            industry = [Industry[x] for x in tickers]
+            industry = [Industry.get(x, "") for x in tickers]
             table.add_column('產業', industry)
         table.align = 'r'
     except:

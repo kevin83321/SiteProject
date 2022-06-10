@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-02-14	8080	RS	500.0

@@ -107,7 +107,7 @@ if __name__ == "__main__":
         table = client['admin']['TWSE']['historicalPrice']
         start_date = datetime.strptime(sorted(table.distinct(
             'Date'))[-1], '%Y-%m-%d') + timedelta(days=1)
-        # start_date = datetime(2022,1,5)
+        # start_date = datetime(2022,4,7)
         # date_range = date_range(start_date, start_date)
         date_range = date_range(start_date, datetime.today())
         for date in date_range:

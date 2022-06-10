@@ -31,9 +31,9 @@ def format_date(x, pos):
 
 def setuptitle(ax):
     setuplayout(ax)
-    ax.get_yaxis().set_visible(False)
+    # ax.get_yaxis().set_visible(False)
     ax.get_xaxis().set_visible(False)
-    ax.set_ylabel('')
+    # ax.set_ylabel('')
     ax.set_xlabel('')
     
 def setuplayout(ax):

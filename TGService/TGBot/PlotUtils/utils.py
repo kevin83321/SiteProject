@@ -39,4 +39,16 @@ def GetData(ticker, td = datetime.today(), years=1):
     table = schema['historicalPrice']
     pre_3y = td + timedelta(-365*years)
     temp_df = pd.DataFrame(list(table.find({'Ticker':{'$eq':ticker},'Date':{'$gte':pre_3y.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}}))).set_index('Date')
+    for col in "Open,High,Low,Close,Volume".split(','):
+        temp_df[col] = temp_df[col].apply(changedType)
     return temp_df
+
+def changedType(x):
+    try:
+        if '--' in x:
+            return float('nan')
+        if isinstance(x, str):
+            return float(x.replace(',',''))
+        return x
+    except:
+        return x

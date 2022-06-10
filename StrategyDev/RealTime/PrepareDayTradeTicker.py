@@ -66,12 +66,10 @@ def getFollowedAssets(followedAssets=None):
     else:
         return followedAssets
 
-def writeStrongTicker(dtStr, tickers):
-    print(os.path.join(StrongPath, f'{dtStr}_strongTicker.json'))
-    print(tickers)
-    # f = open(os.path.join(StrongPath, f'{dtStr}_strongTicker.json'), 'w', encoding='utf-8')
-    # json.dump(tickers,f)
-    # f.close()
+def writeStrongTicker(dtStr, tickers, datapath = None):
+    global StrongPath
+    if datapath:
+        StrongPath = datapath
     try:
         with open(os.path.join(StrongPath, f'{dtStr}_strongTicker.json'), 'w') as f:
             json.dump(tickers,f)

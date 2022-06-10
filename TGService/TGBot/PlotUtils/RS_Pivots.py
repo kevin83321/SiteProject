@@ -32,9 +32,13 @@ def is_resistance(df,i):
     return (cond1 and cond2 and cond3 and cond4)
 
 # to make sure the new level area does not exist already
-def is_far_from_level(value, levels, df):    
-    ave =  np.mean(df['High'] - df['Low'])    
-    return np.sum([abs(value-level)<ave for _,level in levels])==0
+def is_far_from_level(value, levels, df):
+    try:
+        ave =  np.mean(df['High'] - df['Low'])
+        return np.sum([abs(value-level)<ave for _,level in levels])==0
+    except:
+        ave =  np.mean(df['High'].apply(lambda x: float(x)) - df['Low'].apply(lambda x: float(x)))
+        return np.sum([abs(value-level)<ave for _,level in levels])==0
 
 def calculateLevels(df):
     # a list to store resistance and support levels
@@ -51,60 +55,67 @@ def calculateLevels(df):
     return levels
 
 def calculatePivots(df):
-    pivots = []
-    max_list = []
-    min_list = []
-    for i in range(5, len(df)-5):
-        # taking a window of 9 candles
-        high_range = df['High'][i-5:i+4]
-        current_max = high_range.max()
+    try:
+        pivots = []
+        max_list = []
+        min_list = []
+        for i in range(5, len(df)-5):
+            # taking a window of 9 candles
+            high_range = df['High'][i-5:i+4]
+            current_max = high_range.max()
 
-        # if we find a new maximum value, empty the max_list 
-        if current_max not in max_list:
-            max_list = []
-        max_list.append(current_max)
+            # if we find a new maximum value, empty the max_list 
+            if current_max not in max_list:
+                max_list = []
+            max_list.append(current_max)
 
-        # if the maximum value remains the same after shifting 5 times
-        if len(max_list)==5 and is_far_from_level(current_max,pivots,df):
-            pivots.append((high_range.idxmax(), current_max))
+            # if the maximum value remains the same after shifting 5 times
+            if len(max_list)==5 and is_far_from_level(current_max,pivots,df):
+                pivots.append((high_range.idxmax(), current_max))
 
-        low_range = df['Low'][i-5:i+5]
-        current_min = low_range.min()
-        if current_min not in min_list:
-            min_list = []
-        min_list.append(current_min)
-        if len(min_list)==5 and is_far_from_level(current_min,pivots,df):
-            pivots.append((low_range.idxmin(), current_min))
-    return pivots
+            low_range = df['Low'][i-5:i+5]
+            current_min = low_range.min()
+            if current_min not in min_list:
+                min_list = []
+            min_list.append(current_min)
+            if len(min_list)==5 and is_far_from_level(current_min,pivots,df):
+                pivots.append((low_range.idxmin(), current_min))
+        return pivots
+    except:
+        print(GetException())
+
 
 def plot_all(ax, levels, df, ticker, expand_text=""):
-    # global date_tickers
-    df = deepcopy(df)
-    # fig, ax = plt.subplots(figsize=(16, 9))
-    plotKBar(ax, df)#.set_index("Date"))
-    # date_tickers = df.Date.values
-    df['DateStr'] = df.Date
-    df.Date = df.Date.apply(transforDate)
-    for i in range(len(levels)):
-        next_level = None
-        level = levels[i]
-        try:
-            next_level = levels[i+1]
-        except:
-            pass
-        xmax = df['Date'].max()
-        if next_level:
-            if str(next_level[0]).isnumeric():
-                xmax = df['Date'][next_level[0]]
+    try:
+        # global date_tickers
+        df = deepcopy(df)
+        # fig, ax = plt.subplots(figsize=(16, 9))
+        plotKBar(ax, df)#.set_index("Date"))
+        # date_tickers = df.Date.values
+        df['DateStr'] = df.Date
+        df.Date = df.Date.apply(transforDate)
+        for i in range(len(levels)):
+            next_level = None
+            level = levels[i]
+            try:
+                next_level = levels[i+1]
+            except:
+                pass
+            xmax = df['Date'].max()
+            if next_level:
+                if str(next_level[0]).isnumeric():
+                    xmax = df['Date'][next_level[0]]
+                else:
+                    xmax = df[df.DateStr == next_level[0]].Date
+            if str(level[0]).isnumeric():
+                xmin = df['Date'][level[0]]
             else:
-                xmax = df[df.DateStr == next_level[0]].Date
-        if str(level[0]).isnumeric():
-            xmin = df['Date'][level[0]]
-        else:
-            xmin = df[df.DateStr == level[0]].Date
-        plt.hlines(level[1], xmin = xmin, xmax = xmax, colors='blue', linestyle='--')
-    # plt.title(f"Support and resistance ({expand_text}) of {ticker} in the past one year.")
-    # plt.show()
+                xmin = df[df.DateStr == level[0]].Date
+            plt.hlines(level[1], xmin = xmin, xmax = xmax, colors='blue', linestyle='--')
+        # plt.title(f"Support and resistance ({expand_text}) of {ticker} in the past one year.")
+        # plt.show()
+    except:
+        print(GetException())
 
 def mainPlot(ticker, td=datetime.today(), extra_name=""):
     try:
@@ -116,8 +127,8 @@ def mainPlot(ticker, td=datetime.today(), extra_name=""):
         fig = plt.figure(figsize=(16, 12))
         
         # set axis to be Clear
-        plt.yticks([])
-        plt.xticks([])
+        # plt.yticks([])
+        # plt.xticks([])
         # set title
         dayStr = (td+timedelta(1)).strftime("%Y-%m-%d")
         # text = f'Recommend {ticker} for follow up in next tradable day.'
@@ -148,6 +159,7 @@ def mainPlot(ticker, td=datetime.today(), extra_name=""):
         plt.savefig(full_path)
         plt.show(block=False)
         plt.close()
+        return full_path
     except:
         print(GetException())
 

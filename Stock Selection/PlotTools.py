@@ -73,13 +73,20 @@ def plotKBar(ax, df, BBAND=False):
     mpf.candlestick_ohlc(ax, [tuple(x.values()) for x in temp_df.T.to_dict().values()], 
                          colorup='r', colordown='g', width=0.8)
     plotMAs(ax, df.set_index('Date'))
+    plotEMAs(ax, df.set_index("Date"))
     if BBAND:
         plotBBAND(ax, df.set_index('Date'))
     ax.legend(bbox_to_anchor=(1.1, 1.05))
     ax.set_ylabel('Price')
     
 def plotMAs(ax, df):
-    cols = [x for x in df.columns if 'MA' in x and 'EMA' not in x and 'MACD' not in x and 'Vol' not in x]
+    cols = [x for x in df.columns if 'MA' in x and 'EMA' not in x and 'MACD' not in x and 'Vol' not in x and  'V' not in x]
+    if cols:
+        df[cols].plot(ax=ax, legend = True)
+        ax.legend(bbox_to_anchor=(1.1, 1.05))
+
+def plotEMAs(ax, df):
+    cols = [x for x in df.columns if 'EMA' in x]
     if cols:
         df[cols].plot(ax=ax, legend = True)
         ax.legend(bbox_to_anchor=(1.1, 1.05))

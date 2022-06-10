@@ -35,3 +35,36 @@
 [E 2022-01-23 17:56:02,222 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
 [E 2022-01-23 18:01:39,696 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
 [E 2022-01-23 22:41:48,485 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-19 15:31:33,971 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 16:14:12,283 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 16:40:57,439 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 16:57:46,665 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 17:14:32,026 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 17:40:07,175 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 17:59:27,118 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 18:34:23,203 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 18:52:47,618 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 19:09:32,280 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 19:15:46,510 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 20:02:00,309 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 20:16:53,182 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 20:41:30,603 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 21:06:00,558 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 22:09:14,992 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 23:03:16,414 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-19 23:49:15,032 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-20 01:10:40,109 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-20 01:39:08,267 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-21 18:45:44,636 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:45:44,645 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:45:58,128 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:45:58,135 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:45:58,142 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:46:26,462 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:46:26,469 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:46:42,292 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:46:42,299 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:47:12,819 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-03-21 18:47:12,829 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 401}, 'response': {'detail': 'Token is expired.'}}
+[E 2022-05-13 23:44:51,067 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-05-14 08:58:15,615 c:\users\kevin\appdata\local\programs\python\python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}

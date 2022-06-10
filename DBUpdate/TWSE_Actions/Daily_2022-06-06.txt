@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2022-06-06	1342	XD	3
+2022-06-06	8422	XD	10

@@ -1,0 +1,7 @@
+[E 2022-03-11 13:20:15,419 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {}
+[E 2022-03-25 13:20:23,680 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\shioaji.py:167:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-03-25 13:21:15,916 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\shioaji.py:167:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-14 13:27:04,703 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\shioaji.py:167:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-14 14:34:43,519 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\shioaji.py:167:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-14 14:36:20,031 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\shioaji.py:167:login] Expecting value: line 1 column 1 (char 0)
+[E 2022-04-15 13:20:41,092 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}

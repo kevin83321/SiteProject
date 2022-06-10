@@ -9,7 +9,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ParseMode
 # import pandas as pd
 # import json
-from TGBot.MessageReply import reply_order, set_stock, reply_more_info, backtest, updatebot, show_help_info, show_strategy_info, show_strategy_list_buttons
+from TGBot.MessageReply import reply_order, set_stock, reply_more_info, backtest, updatebot, show_help_info, show_strategy_info, show_strategy_list_buttons, reply_stock_figure
 # from CallbackReply import set_stock1, set_strategy, runbacktest, placeorder
 # from PrepareForBot import add_user, get_user_list, read_stock_dict
 #from datetime import datetime
@@ -45,7 +45,7 @@ def CallbackProcess(bot, update):
     # print(update.)
     data = update.callback_query.data.split(',')
     chat_id = update.callback_query.from_user.id
-    print(data)
+    # print(data)
     # backtest_setting[chat_id] = backtest_setting.get(chat_id, {})
     # setting = backtest_setting[chat_id]
     # add_user(user_list, chat_id, path)
@@ -86,7 +86,8 @@ def message_process(bot, update, user_data):
     try:
         if '-' in msg:
             ## Do plot stock figure
-            print(msg)
+            if len(msg.split('-')) == 3:
+                reply_stock_figure(bot, chat_id, msg)
             # set_stock(bot, chat_id, msg.replace('.tw',''), setting, stock_id_name)
         elif '使用說明' in msg:
             show_help_info(bot, chat_id)
@@ -110,5 +111,8 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(MessageHandler(Filters.text, message_process, pass_user_data=True))
     updater.dispatcher.add_handler(CallbackQueryHandler(CallbackProcess))
     # launch backend engine
-    updater.start_polling()
-    updater.idle()
+    try:
+        updater.start_polling()
+        updater.idle()
+    except:
+        os._exit(0)

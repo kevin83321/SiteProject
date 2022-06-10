@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2022-05-27	3257	XD	5
+2022-05-27	6690	XD	3.699785
