@@ -1,0 +1,203 @@
+﻿[2020-08-13 00:44:29.089966], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 77 'fig.append_trace(data)') : append_trace() missing 2 required positional arguments: 'row' and 'col'
+[2020-08-13 00:45:31.233629], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 77 'fig.append_trace(data)') : append_trace() missing 2 required positional arguments: 'row' and 'col'
+[2020-08-13 00:58:30.533530], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 107 'fig.append(zero_wealth)') : 'Figure' object has no attribute 'append'
+[2020-08-13 00:59:33.894368], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 77 'fig.append_trace(data,secondary_y=True)') : append_trace() got an unexpected keyword argument 'secondary_y'
+[2020-08-13 01:01:05.403825], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 107 'fig.append_trace(zero_wealth1,1)') : name 'zero_wealth1' is not defined
+[2020-08-13 01:01:26.128138], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 107 'fig.append_trace(zero_wealth,1)') : append_trace() missing 1 required positional argument: 'col'
+[2020-08-13 01:01:46.095613], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 119 'graph1 = plotly.offline.plot({"data": fig1}, #, 'layout':layout') : name 'fig1' is not defined
+[2020-08-13 01:08:55.092495], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py Plot Asset Growth, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 148 'line_group=[f'5th Percentile Wealth (die at {age})', f'95th Percentile Wealth (die at {age})'])') : Value of 'x' is not the name of a column in 'data_frame'. Expected one of ['5%', '50%', '95%'] but received: Age
+[2020-08-13 01:08:56.215493], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 105 'data.append(zero_wealth)') : 'NoneType' object has no attribute 'append'
+[2020-08-13 01:11:29.591221], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py Plot Asset Growth, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 172 'line=dict(color=color.replace('light','heavy'))') : 
+    Invalid value of type 'builtins.str' received for the 'color' property of scatter.line
+        Received value: 'heavycyan'
+
+    The 'color' property is a color and may be specified as:
+      - A hex string (e.g. '#ff0000')
+      - An rgb/rgba string (e.g. 'rgb(255,0,0)')
+      - An hsl/hsla string (e.g. 'hsl(0,100%,50%)')
+      - An hsv/hsva string (e.g. 'hsv(0,100%,100%)')
+      - A named CSS color:
+            aliceblue, antiquewhite, aqua, aquamarine, azure,
+            beige, bisque, black, blanchedalmond, blue,
+            blueviolet, brown, burlywood, cadetblue,
+            chartreuse, chocolate, coral, cornflowerblue,
+            cornsilk, crimson, cyan, darkblue, darkcyan,
+            darkgoldenrod, darkgray, darkgrey, darkgreen,
+            darkkhaki, darkmagenta, darkolivegreen, darkorange,
+            darkorchid, darkred, darksalmon, darkseagreen,
+            darkslateblue, darkslategray, darkslategrey,
+            darkturquoise, darkviolet, deeppink, deepskyblue,
+            dimgray, dimgrey, dodgerblue, firebrick,
+            floralwhite, forestgreen, fuchsia, gainsboro,
+            ghostwhite, gold, goldenrod, gray, grey, green,
+            greenyellow, honeydew, hotpink, indianred, indigo,
+            ivory, khaki, lavender, lavenderblush, lawngreen,
+            lemonchiffon, lightblue, lightcoral, lightcyan,
+            lightgoldenrodyellow, lightgray, lightgrey,
+            lightgreen, lightpink, lightsalmon, lightseagreen,
+            lightskyblue, lightslategray, lightslategrey,
+            lightsteelblue, lightyellow, lime, limegreen,
+            linen, magenta, maroon, mediumaquamarine,
+            mediumblue, mediumorchid, mediumpurple,
+            mediumseagreen, mediumslateblue, mediumspringgreen,
+            mediumturquoise, mediumvioletred, midnightblue,
+            mintcream, mistyrose, moccasin, navajowhite, navy,
+            oldlace, olive, olivedrab, orange, orangered,
+            orchid, palegoldenrod, palegreen, paleturquoise,
+            palevioletred, papayawhip, peachpuff, peru, pink,
+            plum, powderblue, purple, red, rosybrown,
+            royalblue, rebeccapurple, saddlebrown, salmon,
+            sandybrown, seagreen, seashell, sienna, silver,
+            skyblue, slateblue, slategray, slategrey, snow,
+            springgreen, steelblue, tan, teal, thistle, tomato,
+            turquoise, violet, wheat, white, whitesmoke,
+            yellow, yellowgreen
+[2020-08-13 01:11:30.702638], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 105 'data.append(zero_wealth)') : 'NoneType' object has no attribute 'append'
+[2020-08-13 01:22:00.571438], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py Plot Asset Growth, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 157 'line=dict(color=color.replace('light', 'medium'))') : 
+    Invalid value of type 'builtins.str' received for the 'color' property of scatter.line
+        Received value: 'mediumcyan'
+
+    The 'color' property is a color and may be specified as:
+      - A hex string (e.g. '#ff0000')
+      - An rgb/rgba string (e.g. 'rgb(255,0,0)')
+      - An hsl/hsla string (e.g. 'hsl(0,100%,50%)')
+      - An hsv/hsva string (e.g. 'hsv(0,100%,100%)')
+      - A named CSS color:
+            aliceblue, antiquewhite, aqua, aquamarine, azure,
+            beige, bisque, black, blanchedalmond, blue,
+            blueviolet, brown, burlywood, cadetblue,
+            chartreuse, chocolate, coral, cornflowerblue,
+            cornsilk, crimson, cyan, darkblue, darkcyan,
+            darkgoldenrod, darkgray, darkgrey, darkgreen,
+            darkkhaki, darkmagenta, darkolivegreen, darkorange,
+            darkorchid, darkred, darksalmon, darkseagreen,
+            darkslateblue, darkslategray, darkslategrey,
+            darkturquoise, darkviolet, deeppink, deepskyblue,
+            dimgray, dimgrey, dodgerblue, firebrick,
+            floralwhite, forestgreen, fuchsia, gainsboro,
+            ghostwhite, gold, goldenrod, gray, grey, green,
+            greenyellow, honeydew, hotpink, indianred, indigo,
+            ivory, khaki, lavender, lavenderblush, lawngreen,
+            lemonchiffon, lightblue, lightcoral, lightcyan,
+            lightgoldenrodyellow, lightgray, lightgrey,
+            lightgreen, lightpink, lightsalmon, lightseagreen,
+            lightskyblue, lightslategray, lightslategrey,
+            lightsteelblue, lightyellow, lime, limegreen,
+            linen, magenta, maroon, mediumaquamarine,
+            mediumblue, mediumorchid, mediumpurple,
+            mediumseagreen, mediumslateblue, mediumspringgreen,
+            mediumturquoise, mediumvioletred, midnightblue,
+            mintcream, mistyrose, moccasin, navajowhite, navy,
+            oldlace, olive, olivedrab, orange, orangered,
+            orchid, palegoldenrod, palegreen, paleturquoise,
+            palevioletred, papayawhip, peachpuff, peru, pink,
+            plum, powderblue, purple, red, rosybrown,
+            royalblue, rebeccapurple, saddlebrown, salmon,
+            sandybrown, seagreen, seashell, sienna, silver,
+            skyblue, slateblue, slategray, slategrey, snow,
+            springgreen, steelblue, tan, teal, thistle, tomato,
+            turquoise, violet, wheat, white, whitesmoke,
+            yellow, yellowgreen
+[2020-08-13 01:22:01.663437], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 105 'data.append(zero_wealth)') : 'NoneType' object has no attribute 'append'
+[2020-08-13 01:34:07.528178], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py Plot Asset Growth, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 122 'x = np.concatenate(perc_df.index, perc_df.index[::-1]),') : 'RangeIndex' object cannot be interpreted as an integer
+[2020-08-13 01:34:08.614211], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 82 'data.append(zero_wealth)') : 'NoneType' object has no attribute 'append'
+[2020-08-13 01:46:54.132839], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 73 'datas.extend(cls().plotIndividualWealth(perc_df_1, index1, color='lightcyan'))') : name 'perc_df_1' is not defined
+[2020-08-13 01:47:44.679470], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 76 'x = list(index1),') : name 'index1' is not defined
+[2020-08-13 01:51:58.511253], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py Plot Asset Growth, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 141 'line=dict(color=color.replace('light','dark'))') : 
+    Invalid value of type 'builtins.str' received for the 'color' property of scatter.line
+        Received value: 'darkpink'
+
+    The 'color' property is a color and may be specified as:
+      - A hex string (e.g. '#ff0000')
+      - An rgb/rgba string (e.g. 'rgb(255,0,0)')
+      - An hsl/hsla string (e.g. 'hsl(0,100%,50%)')
+      - An hsv/hsva string (e.g. 'hsv(0,100%,100%)')
+      - A named CSS color:
+            aliceblue, antiquewhite, aqua, aquamarine, azure,
+            beige, bisque, black, blanchedalmond, blue,
+            blueviolet, brown, burlywood, cadetblue,
+            chartreuse, chocolate, coral, cornflowerblue,
+            cornsilk, crimson, cyan, darkblue, darkcyan,
+            darkgoldenrod, darkgray, darkgrey, darkgreen,
+            darkkhaki, darkmagenta, darkolivegreen, darkorange,
+            darkorchid, darkred, darksalmon, darkseagreen,
+            darkslateblue, darkslategray, darkslategrey,
+            darkturquoise, darkviolet, deeppink, deepskyblue,
+            dimgray, dimgrey, dodgerblue, firebrick,
+            floralwhite, forestgreen, fuchsia, gainsboro,
+            ghostwhite, gold, goldenrod, gray, grey, green,
+            greenyellow, honeydew, hotpink, indianred, indigo,
+            ivory, khaki, lavender, lavenderblush, lawngreen,
+            lemonchiffon, lightblue, lightcoral, lightcyan,
+            lightgoldenrodyellow, lightgray, lightgrey,
+            lightgreen, lightpink, lightsalmon, lightseagreen,
+            lightskyblue, lightslategray, lightslategrey,
+            lightsteelblue, lightyellow, lime, limegreen,
+            linen, magenta, maroon, mediumaquamarine,
+            mediumblue, mediumorchid, mediumpurple,
+            mediumseagreen, mediumslateblue, mediumspringgreen,
+            mediumturquoise, mediumvioletred, midnightblue,
+            mintcream, mistyrose, moccasin, navajowhite, navy,
+            oldlace, olive, olivedrab, orange, orangered,
+            orchid, palegoldenrod, palegreen, paleturquoise,
+            palevioletred, papayawhip, peachpuff, peru, pink,
+            plum, powderblue, purple, red, rosybrown,
+            royalblue, rebeccapurple, saddlebrown, salmon,
+            sandybrown, seagreen, seashell, sienna, silver,
+            skyblue, slateblue, slategray, slategrey, snow,
+            springgreen, steelblue, tan, teal, thistle, tomato,
+            turquoise, violet, wheat, white, whitesmoke,
+            yellow, yellowgreen
+[2020-08-13 01:51:59.601194], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 74 'datas.extend(cls().plotIndividualWealth(perc_df, index, color=color))') : 'NoneType' object is not iterable
+[2020-08-13 01:52:52.806810], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py Plot Asset Growth, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 127 'line=dict(color=color)') : 
+    Invalid value of type 'builtins.str' received for the 'fillcolor' property of scatter
+        Received value: 'lightred'
+
+    The 'fillcolor' property is a color and may be specified as:
+      - A hex string (e.g. '#ff0000')
+      - An rgb/rgba string (e.g. 'rgb(255,0,0)')
+      - An hsl/hsla string (e.g. 'hsl(0,100%,50%)')
+      - An hsv/hsva string (e.g. 'hsv(0,100%,100%)')
+      - A named CSS color:
+            aliceblue, antiquewhite, aqua, aquamarine, azure,
+            beige, bisque, black, blanchedalmond, blue,
+            blueviolet, brown, burlywood, cadetblue,
+            chartreuse, chocolate, coral, cornflowerblue,
+            cornsilk, crimson, cyan, darkblue, darkcyan,
+            darkgoldenrod, darkgray, darkgrey, darkgreen,
+            darkkhaki, darkmagenta, darkolivegreen, darkorange,
+            darkorchid, darkred, darksalmon, darkseagreen,
+            darkslateblue, darkslategray, darkslategrey,
+            darkturquoise, darkviolet, deeppink, deepskyblue,
+            dimgray, dimgrey, dodgerblue, firebrick,
+            floralwhite, forestgreen, fuchsia, gainsboro,
+            ghostwhite, gold, goldenrod, gray, grey, green,
+            greenyellow, honeydew, hotpink, indianred, indigo,
+            ivory, khaki, lavender, lavenderblush, lawngreen,
+            lemonchiffon, lightblue, lightcoral, lightcyan,
+            lightgoldenrodyellow, lightgray, lightgrey,
+            lightgreen, lightpink, lightsalmon, lightseagreen,
+            lightskyblue, lightslategray, lightslategrey,
+            lightsteelblue, lightyellow, lime, limegreen,
+            linen, magenta, maroon, mediumaquamarine,
+            mediumblue, mediumorchid, mediumpurple,
+            mediumseagreen, mediumslateblue, mediumspringgreen,
+            mediumturquoise, mediumvioletred, midnightblue,
+            mintcream, mistyrose, moccasin, navajowhite, navy,
+            oldlace, olive, olivedrab, orange, orangered,
+            orchid, palegoldenrod, palegreen, paleturquoise,
+            palevioletred, papayawhip, peachpuff, peru, pink,
+            plum, powderblue, purple, red, rosybrown,
+            royalblue, rebeccapurple, saddlebrown, salmon,
+            sandybrown, seagreen, seashell, sienna, silver,
+            skyblue, slateblue, slategray, slategrey, snow,
+            springgreen, steelblue, tan, teal, thistle, tomato,
+            turquoise, violet, wheat, white, whitesmoke,
+            yellow, yellowgreen
+[2020-08-13 01:52:53.901899], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 74 'datas.extend(cls().plotIndividualWealth(perc_df, index, color=color))') : 'NoneType' object is not iterable
+[2020-08-13 02:05:59.679189], ERROR Message : In F:\realtime_trading\site_project\Retirement Bot\Config.py plotWealths, Error :  In (F:\realtime_trading\site_project\Retirement Bot\PlotTool.py, Line 74 'datas.extend(cls().plotIndividualWealth(perc_df, index, color=color))') : Message is too long
+[2020-08-13 12:14:16.177572], ERROR Message : In /Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py sample_result, Error :  In (/Users/kevin/常用/realtime_trading/site_project/Retirement Bot/MessageReply.py, Line 310 'fig_path, 'rb'), captions='以上是此機器人的範例')') : expected str, bytes or os.PathLike object, not tuple
+[2020-08-13 12:31:46.492491], ERROR Message : In /Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py start, Error :  In (/Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py, Line 91 'add_user(user_list, chat_id, parent)') : name 'user_list' is not defined
+[2020-08-13 12:34:31.405286], ERROR Message : In /Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py start, Error :  In (/Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py, Line 91 'usr_list = get_user_list(parent)') : name 'parent' is not defined
+[2020-08-13 12:35:19.440770], ERROR Message : In /Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py start, Error :  In (/Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py, Line 92 'add_user(user_list, chat_id, parent)') : name 'user_list' is not defined
+[2020-08-13 12:37:21.842187], ERROR Message : In /Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py start, Error :  In (/Users/kevin/常用/realtime_trading/site_project/Retirement Bot/Config.py, Line 96 'photo=open(os.path.join(parent, '希奇資本 LOGO.jpg'), 'rb'),') : name 'os' is not defined
