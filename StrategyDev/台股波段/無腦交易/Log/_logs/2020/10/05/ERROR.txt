@@ -1,0 +1,2 @@
+﻿[2020-10-05 11:28:29.437838], ERROR Message : In E:\Retirement Bot\Config.py setAge, Error :  In (E:\Retirement Bot\MessageReply.py, Line 191 'cur_age, retire_age, start_wealth, spend = [int(x) for x in ages.split(',')]') : not enough values to unpack (expected 4, got 1)
+[2020-10-05 11:52:32.775392], ERROR Message : In E:\Retirement Bot\Config.py CallbackProcess, Error :  In (E:\Retirement Bot\RetirementBot.py, Line 31 'calculate_result(bot, chat_id, setting)') : urllib3 HTTPError ('Connection aborted.', timeout('The write operation timed out'))

@@ -1,0 +1,5 @@
+EntryDate,ExitDate,EntryPrice,ExitPrice,EntryCommission,ExitCommission,EntryTax,ExitTax,TotalCost,HoldingPeriod,Net,Ret,MaxPriceBetweeenHolding,MaxRetBetweeenHolding,MinPriceBetweeenHolding,MinRetBetweeenHolding
+2021-12-29,2022-01-07,64.5,73.3,92,104,0,220,416,9,8384,0.13,74.9,0.1612,64.5,0.0
+2022-01-11,2022-03-01,67.8,62.0,97,88,0,186,371,49,-6171,-0.091,67.8,0.0,59.9,-0.1165
+2022-04-20,2022-05-17,67.1,75.5,96,108,0,226,430,27,7970,0.1188,75.6,0.1267,67.1,0.0
+2022-05-19,2022-06-10,73.2,70.4,104,100,0,211,415,22,-3215,-0.0439,73.2,0.0,67.6,-0.0765
