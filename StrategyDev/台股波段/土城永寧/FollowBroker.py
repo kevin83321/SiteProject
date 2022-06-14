@@ -9,6 +9,7 @@ import time
 import json
 
 from utils import getSchema
+from DoMail import send_mail
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -208,6 +209,15 @@ def main(date = datetime.today()):
         time.sleep(1)
     except Exception as e:
         print(date, e)
+
+    files = [os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverSell.csv"), os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverBuy.csv")]
+    files = [x for x in files if os.path.isfile(x)]
+    if files:
+        mail_title = '土城小跟班'
+        mail_msg = "如主旨\n\n"
+        mail_msg += "最喜歡跟在土城老哥後面撿錢了\n"
+        mail_msg += "此信件由 '無腦秘書' 寄送請勿回覆\n"
+        send_mail('kevin83321@gmail.com', 'yqawneecqdwaluwt', ['akyang0830@outlook.com'], mail_title, mail_msg, files, cc=['kevin83321@gmail.com'])
         
     
 if __name__ == '__main__':
