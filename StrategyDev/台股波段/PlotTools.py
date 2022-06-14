@@ -306,18 +306,28 @@ def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[], split_num=2
                 tmp_d = [x for x in tmp_d if x[-1] == 'Y']
             else:
                 tmp_d = [x for x in tmp_d if x[-2] <= 40]
-        seperate_num = int(len(tickers) / split_num)
+        tmp_d = sorted(tmp_d, key=lambda x : x[-2])
+        if not (len(list(tmp_d))) : return ''
+        seperate_num = int(len(list(tmp_d)) / split_num)
+        columns = ['代號','回測勝率','平均持倉時間(日)','高勝率低週期推薦'] * (seperate_num + 1)
+        print(seperate_num, len(list(tmp_d)))
         for i, (ticker, bt_p, hold_p, high_p) in enumerate(tmp_d):
             if i >= split_num:
-                data[i-25].extend([ticker, bt_p, hold_p, high_p])
+                data[i-split_num].extend([ticker, bt_p, hold_p, high_p])
             else:
                 data.append([ticker, bt_p, hold_p, high_p])
+        for i in range(len(data)):
+            # print(data[i], len(data[i]), len(columns))
+            if len(data[i]) != len(columns):
+                data[i].extend(['',]*(len(columns)-4))
+            # print(data[i])
+        # print(data)
 
 #         columns = ['回測勝率','平均持倉時間(日)','高勝率低持倉推薦']
-        columns = ['代號','回測勝率','平均持倉時間(日)','高勝率低週期推薦'] * (seperate_num + 1)
-        rows = tickers
+        
+        # rows = tickers
         the_table = ax.table(cellText=data,
-                                rowLabels=list(range(1, min(25, len(tickers)) + 1)),
+                                rowLabels=list(range(1, min(split_num, len(tickers)) + 1)),
                                 colLabels=columns,
                                 loc='center',
                                 fontsize=16,

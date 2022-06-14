@@ -45,10 +45,12 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                     temp_df[col] = temp_df[col].apply(changedType)
                 temp_df = temp_df.set_index("Date")
                 
-                # temp_df['Adj V'] = temp_df.Volume.apply(lambda x: int(x/1000))
+                temp_df['Adj V'] = temp_df.Volume.apply(lambda x: int(x/1000))
+                
                 
                 p_condition = temp_df.Close.iloc[-1] < temp_df.Close.iloc[-101:-1].min()
-                if p_condition and bt_sum_Table[bt_sum_Table.代號==ticker]['總交易次數'].values[0] >= 10 and bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0] > 50:
+                v_condition = temp_df['Adj V'].mean() > 50
+                if p_condition and v_condition and bt_sum_Table[bt_sum_Table.代號==ticker]['總交易次數'].values[0] >= 10 and bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0] > 50:
                     final_select.append(ticker)
                     if ticker in highProbTable.代號:
                         highProb.append((ticker, 'Y'))
@@ -70,6 +72,7 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
         fig_path = CreateRecommendFig(td, final_select, bt_Prob=bt_Prob, holding_p=holding_p, highProb=highProb, 
                         algo_num=1, description=description, entry_method=entry_method, take_profit_rate=10, 
                         stop_loss_rate=10, algo_name='HundrenBreakoutL')
+        # return
         if len(fig_path):
             sendPhoto(f"\n{description}最新選股推薦", fig_path, useTele=False)
         else:
