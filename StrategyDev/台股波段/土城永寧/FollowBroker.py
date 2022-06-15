@@ -133,9 +133,9 @@ def GetData(date = datetime.today()):
     
     # date = datetime(2021,7,21)
     dateStr = date.strftime("%Y%m%d")
-    output_path = os.path.join(parent, "Output", dateStr)
-    if not os.path.isdir(output_path):
-        os.makedirs(output_path)
+    # output_path = os.path.join(parent, "Output", dateStr)
+    # if not os.path.isdir(output_path):
+    #     os.makedirs(output_path)
     for broker, branchs in indeed_broker.items():
         for branch in branchs:
             print(broker, branch)
