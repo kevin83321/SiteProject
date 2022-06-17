@@ -8,6 +8,7 @@ from utils import (
     TICKLEFT, TICKRIGHT, Line2D,
     Rectangle, Affine2D, xrange, fig_path
 )
+from pprint import pprint
 from matplotlib.font_manager import fontManager, FontProperties
 # for f in fontManager.ttflist:
 #     print(f.name)
@@ -300,6 +301,7 @@ def PlotResult(dt:datetime.today(), tickers=[], bt_Prob=[], holding_p=[], highPr
 def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[], split_num=25):
     try:
         data = []
+        base_cols = ['代號','回測勝率','平均持倉時間(日)','高勝率低週期推薦']
         tmp_d = zip(tickers, bt_Prob, holding_p, highProb)
         if len(tickers)>=split_num*2:
             if len([x for x in highProb if x == 'Y']):
@@ -309,20 +311,29 @@ def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[], split_num=2
         tmp_d = sorted(tmp_d, key=lambda x : x[-2])
         if not (len(list(tmp_d))) : return ''
         seperate_num = int(len(list(tmp_d)) / split_num)
-        columns = ['代號','回測勝率','平均持倉時間(日)','高勝率低週期推薦'] * (seperate_num + 1)
+        # columns = base_cols * (seperate_num + 1)
         print(seperate_num, len(list(tmp_d)))
         for i, (ticker, bt_p, hold_p, high_p) in enumerate(tmp_d):
-            if i >= split_num:
-                data[i-split_num].extend([ticker, bt_p, hold_p, high_p])
-            else:
-                data.append([ticker, bt_p, hold_p, high_p])
+            try:
+                if i >= split_num:
+                    data[i-split_num].extend([ticker, bt_p, hold_p, high_p])
+                else:
+                    data.append([ticker, bt_p, hold_p, high_p])
+            except:
+                pass
+        # pprint(data)
+        max_width = max([len(x) for x in data])
+        # print(max_width)
+        columns = base_cols * int(max_width / len(base_cols))
         for i in range(len(data)):
             # print(data[i], len(data[i]), len(columns))
             if len(data[i]) != len(columns):
                 data[i].extend(['',]*(len(columns)-4))
             # print(data[i])
-        # print(data)
-
+        # pprint(data)
+        # print(len(data[0]))
+        # print(len(data[-1]))
+        # print(len(columns))
 #         columns = ['回測勝率','平均持倉時間(日)','高勝率低持倉推薦']
         
         # rows = tickers

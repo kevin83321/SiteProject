@@ -86,6 +86,13 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
     
 if __name__ == '__main__':
     # main(datetime(2022,6,8), min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
-    main(min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
+    import sys
+    date = datetime.today()
+    if len(sys.argv) > 1:
+        try:
+            date = datetime.strptime(sys.argv[1], "%Y%m%d")
+        except:
+            pass
+    main(date, min_price=0, max_price=9999, num_shares=1000, shares_ratio=1.5)
     
     
