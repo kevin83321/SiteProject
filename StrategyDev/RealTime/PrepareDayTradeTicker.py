@@ -73,6 +73,8 @@ def writeStrongTicker(dtStr, tickers, datapath = None):
     try:
         with open(os.path.join(StrongPath, f'{dtStr}_strongTicker.json'), 'w') as f:
             json.dump(tickers,f)
+        with open(os.path.join(os.path.dirname(StrongPath), "NewVersion", "StrongTickers", f'{dtStr}_strongTicker.json'), 'w') as f:
+            json.dump(tickers,f)
 
         # with open(os.path.join(StrongPath, f'{dtStr}_strongTicker.txt'), 'w') as f:
         #     json.dump(tickers,f)
