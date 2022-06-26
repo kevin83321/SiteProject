@@ -40,6 +40,7 @@ class Calculator:
         else:
             return df
 
+    @staticmethod
     def ATR(df, period):
         df["HL"] = df["High"] - df["Low"]
         df["HC"] = (df["High"] - df["Close"].shift(1)).apply(lambda x: abs(x))
@@ -164,6 +165,33 @@ class Calculator:
             # print(df)
         else:
             return mom
+
+    @staticmethod
+    def RSI(df, windows=[14]):
+        tmp_df = df.copy(deep=True)
+        for window in windows:
+            tmp_df['Diff'] = tmp_df.Close.diff()
+            for row in tmp_df.itertuples():
+                if row.Index < window : continue
+                if row.Index == window:
+                    diffs = tmp_df.loc[row.Index-window: row.Index, 'Diff']
+                    tmp_df.loc[row.Index,'UpDiffMean'] = diffs[diffs>0].mean()
+                    tmp_df.loc[row.Index,'DnDiffMean'] = diffs[diffs<0].mean()
+                else:
+                    last_rsi = tmp_df.loc[row.Index-1,'RSI']
+                    if row.Diff > 0:
+                        tmp_df.loc[row.Index,'UpDiffMean'] = (tmp_df.loc[row.Index-1,'UpDiffMean'] * (window - 1) + row.Diff) / window
+                        tmp_df.loc[row.Index,'DnDiffMean'] = (tmp_df.loc[row.Index-1,'DnDiffMean'] * (window - 1)) / window
+                    elif row.Diff <=0:
+                        tmp_df.loc[row.Index,'UpDiffMean'] = (tmp_df.loc[row.Index-1,'UpDiffMean'] * (window - 1)) / window
+                        tmp_df.loc[row.Index,'DnDiffMean'] = (tmp_df.loc[row.Index-1,'DnDiffMean'] * (window - 1) + row.Diff) / window
+                    else:
+                        tmp_df.loc[row.Index,'UpDiffMean'] = tmp_df.loc[row.Index-1,'UpDiffMean']
+                        tmp_df.loc[row.Index,'DnDiffMean'] = tmp_df.loc[row.Index-1,'DnDiffMean']
+                        
+                tmp_df.loc[row.Index,'RSI'] = tmp_df.loc[row.Index,'UpDiffMean'] / (tmp_df.loc[row.Index,'UpDiffMean'] + abs(tmp_df.loc[row.Index,'DnDiffMean'])) * 100
+            df[f'RSI{window}'] = round(tmp_df.RSI, 2)
+        return df
 
     @staticmethod
     def get_minimum_tick(cost):
