@@ -94,39 +94,40 @@ def GetBrokerTable(broker_id,branch_id, date=datetime.today(), table_type="E"):
 
 def ConbineData(over_Sell_data_Share, over_Buy_data_Share, over_Sell_data_Dollar, over_Buy_data_Dollar,
                today_up_limit_tickers=None, last_up_limit_tickers=None):
-    # Share Table Parse
-    over_Sell_df_Share = DataFrame(over_Sell_data_Share)
-    over_Sell_df_Share["Ticker"] = over_Sell_df_Share["代碼名稱"].apply(lambda x: x.split(' ')[0])
-    over_Sell_df_Share = over_Sell_df_Share.set_index(["代碼名稱", 'Ticker'])
-    over_Buy_df_Share = DataFrame(over_Buy_data_Share)
-    over_Buy_df_Share["Ticker"] = over_Buy_df_Share["代碼名稱"].apply(lambda x: x.split(' ')[0])
-    over_Buy_df_Share = over_Buy_df_Share.set_index(["代碼名稱", 'Ticker'])
     
-#     print(over_Sell_df_Share)
-#     print(over_Buy_df_Share)
-#     over_Buy_df_Share = UplimitFilter(over_Buy_df_Share, today_up_limit_tickers)
-#     over_Sell_df_Share = UplimitFilter(over_Sell_df_Share, last_up_limit_tickers)
-#     del over_Buy_df_Share['Ticker']
-#     del over_Sell_df_Share['Ticker']    
-    
-    # Dollar Table Parse
-    over_Sell_df_Dollar = DataFrame(over_Sell_data_Dollar)
-    over_Sell_df_Dollar["Ticker"] = over_Sell_df_Dollar["代碼名稱"].apply(lambda x: x.split(' ')[0])
-    over_Sell_df_Dollar = over_Sell_df_Dollar.set_index(["代碼名稱", 'Ticker'])
-    over_Buy_df_Dollar = DataFrame(over_Buy_data_Dollar)
-    over_Buy_df_Dollar["Ticker"] = over_Buy_df_Dollar["代碼名稱"].apply(lambda x: x.split(' ')[0])
-    over_Buy_df_Dollar = over_Buy_df_Dollar.set_index(["代碼名稱", 'Ticker'])
-    
-    
-#     over_Buy_df_Dollar = UplimitFilter(over_Buy_df_Dollar, today_up_limit_tickers)
-#     over_Sell_df_Dollar = UplimitFilter(over_Sell_df_Dollar, last_up_limit_tickers)
-#     del over_Buy_df_Dollar['Ticker']
-#     del over_Sell_df_Dollar['Ticker']
-    
-    over_buy_df = concat([over_Buy_df_Share, over_Buy_df_Dollar], axis=1)
-    over_Sell_df = concat([over_Sell_df_Share, over_Sell_df_Dollar], axis=1)
+    over_buy_df = CombineBuyData(over_Buy_data_Share, over_Buy_data_Dollar)
+    over_Sell_df = CombineSellData(over_Sell_data_Dollar, over_Sell_data_Share)
     return over_buy_df, over_Sell_df
 
+def CombineBuyData(over_Buy_data_Share, over_Buy_data_Dollar):
+    over_buy_df = DataFrame()
+    try:
+        over_Buy_df_Share = DataFrame(over_Buy_data_Share)
+        over_Buy_df_Share["Ticker"] = over_Buy_df_Share["代碼名稱"].apply(lambda x: x.split(' ')[0])
+        over_Buy_df_Share = over_Buy_df_Share.set_index(["代碼名稱", 'Ticker'])
+
+        over_Buy_df_Dollar = DataFrame(over_Buy_data_Dollar)
+        over_Buy_df_Dollar["Ticker"] = over_Buy_df_Dollar["代碼名稱"].apply(lambda x: x.split(' ')[0])
+        over_Buy_df_Dollar = over_Buy_df_Dollar.set_index(["代碼名稱", 'Ticker'])
+        over_buy_df = concat([over_Buy_df_Share, over_Buy_df_Dollar], axis=1)
+    except:
+        pass
+    return over_buy_df
+
+def CombineSellData(over_Sell_data_Dollar, over_Sell_data_Share):
+    over_Sell_df = DataFrame()
+    try:
+        over_Sell_df_Share = DataFrame(over_Sell_data_Share)
+        over_Sell_df_Share["Ticker"] = over_Sell_df_Share["代碼名稱"].apply(lambda x: x.split(' ')[0])
+        over_Sell_df_Share = over_Sell_df_Share.set_index(["代碼名稱", 'Ticker'])
+
+        over_Sell_df_Dollar = DataFrame(over_Sell_data_Dollar)
+        over_Sell_df_Dollar["Ticker"] = over_Sell_df_Dollar["代碼名稱"].apply(lambda x: x.split(' ')[0])
+        over_Sell_df_Dollar = over_Sell_df_Dollar.set_index(["代碼名稱", 'Ticker'])
+        over_Sell_df = concat([over_Sell_df_Share, over_Sell_df_Dollar], axis=1)
+    except:
+        pass
+    return over_Sell_df
 
 # date = datetime.today()
 def GetData(date = datetime.today()):
@@ -157,11 +158,11 @@ def GetData(date = datetime.today()):
             over_Buy_data_Dollar = ParseHtml(Dollar_tables[0], "B")
             over_buy_df = DataFrame()
             over_sell_df = DataFrame()
-            if all([over_Sell_data_Share, over_Buy_data_Share, over_Sell_data_Dollar, over_Buy_data_Dollar]):
+            # print(over_Sell_data_Share, '\n\n', over_Buy_data_Share, '\n\n', over_Sell_data_Dollar, '\n\n', over_Buy_data_Dollar)
+            
+            if any([over_Sell_data_Share, over_Buy_data_Share, over_Sell_data_Dollar, over_Buy_data_Dollar]):
                 over_buy_df, over_sell_df = ConbineData(over_Sell_data_Share, over_Buy_data_Share, 
                                                         over_Sell_data_Dollar, over_Buy_data_Dollar)
-#                 ,
-#                                                         today_up_limit_tickers, last_up_limit_tickers)
 
                 tmp_over_sell_df = over_sell_df.dropna()#[over_sell_df.index.isin(yes_over_buy_df.index)].dropna()
 
@@ -173,7 +174,12 @@ def GetData(date = datetime.today()):
 
 def main(date = datetime.today()):
     if date.isocalendar()[-1] > 5: return
+    files = [os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverSell.csv"), os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverBuy.csv")]
+    files = [x for x in files if os.path.isfile(x)]
+    if len(files) == 2: return
     ob_df, os_df = GetData(date)
+    # print(ob_df)
+    # print(os_df)
     try:
         ob_df = ob_df[ob_df['差額(張數)'].apply(lambda x: float(str(x).replace(',',''))) >= 100]
         ob_df['買入均價'] = ob_df['差額(金額)'].apply(lambda x: float(str(x).replace(',',''))) / ob_df['差額(張數)'].apply(lambda x: float(str(x).replace(',','')))
@@ -232,4 +238,4 @@ if __name__ == '__main__':
     with open(os.path.join(parent, 'jihsun_Broker_id_map.json'), 'r') as f:
         brokers= json.load(f)
     main()
-    # main(start_date = datetime.today(), end_date = datetime.today())
+    # main(date = datetime(2022,6,28))
