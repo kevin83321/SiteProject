@@ -33,6 +33,7 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
         bt_Prob = []
         holding_p = []
         for ticker in info_data.keys():#df.Ticker.unique():
+            if not ticker.isnumeric():continue
             try:
                 temp_df = pd.DataFrame(list(table.find({'Ticker':{'$eq':ticker},'Date':{'$gte':pre_3y.strftime('%Y-%m-%d'), '$lte':td.strftime('%Y-%m-%d')}})))#.set_index('Date')
                 if temp_df is None:
@@ -44,19 +45,24 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                 for col in 'Open,High,Low,Close,Volume'.split(','):
                     temp_df[col] = temp_df[col].apply(changedType)
                 temp_df = temp_df.set_index("Date")
-                temp_df = Calc.MA(temp_df, [20])
-                temp_df = Calc.EMA(temp_df, [12])
+                if temp_df.Volume.iloc[-1] / 1000 < 200: continue
+                # temp_df = Calc.MA(temp_df, [20, 240])
+                temp_df = Calc.EMA(temp_df, [20, 240])
                 
                 # temp_df['Adj V'] = temp_df.Volume.apply(lambda x: int(x/1000))
                 
                 # p_condition = temp_df.Close.iloc[-1] < temp_df.Close.iloc[-101:-1].min()
-                MACross =  temp_df.EMA12.iloc[-1] > temp_df.MA20.iloc[-1] and temp_df.EMA12.iloc[-2] <= temp_df.MA20.iloc[-2]
-                if MACross and bt_sum_Table[bt_sum_Table.代號==ticker]['總交易次數'].values[0] >= 10 and bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0] > 50:
+                MACross1 = temp_df.Close.iloc[-2] < temp_df.EMA20.iloc[-2] and temp_df.Close.iloc[-1] > temp_df.EMA20.iloc[-1]
+                MACondi = temp_df.EMA20.iloc[-1] > temp_df.EMA240.iloc[-1]
+                MACross2 = temp_df.Close.iloc[-2] < temp_df.EMA240.iloc[-2] and temp_df.Close.iloc[-1] > temp_df.EMA240.iloc[-1]
+                MACross =  (MACross1 and MACondi) or MACross2
+                if MACross:# and bt_sum_Table[bt_sum_Table.代號==ticker]['總交易次數'].values[0] >= 10 and bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0] > 50:
                     final_select.append(ticker)
-                    if ticker in highProbTable.代號:
-                        highProb.append((ticker, 'Y'))
-                    bt_Prob.append((ticker, bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0]))
-                    holding_p.append((ticker, bt_sum_Table[bt_sum_Table.代號==ticker]['平均持倉時間(日)'].values[0]))
+                    # print(ticker, temp_df.EMA20.iloc[-1], temp_df.EMA240.iloc[-1])
+                    # if ticker in highProbTable.代號:
+                    #     highProb.append((ticker, 'Y'))
+                    # bt_Prob.append((ticker, bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0]))
+                    # holding_p.append((ticker, bt_sum_Table[bt_sum_Table.代號==ticker]['平均持倉時間(日)'].values[0]))
                     # momentums.append((ticker, Calc.Momemtum(temp_df)))
             except KeyboardInterrupt:
                 import os
@@ -64,8 +70,8 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
             except:
                 print(f'Ticker : {ticker}\t Error :', GetException())
         
-        description = '無腦秘書2號'
-        entry_method = '選出後隔日開盤進場'
+        description = '無腦秘書2號，價格>EMA240太多，多等待，爆量未過前面大量勿追，價格由下而上穿越較佳，反彈請觀察'
+        entry_method = '選出後隔日開盤進場，進場守前低(低於當下價格的反轉處)'
         # expand_text = "波段交易，停利停損皆10%"
         saveRecommand(final_select, 'GoldCross')
         print(len(final_select), final_select)

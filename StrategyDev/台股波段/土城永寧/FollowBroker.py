@@ -238,4 +238,5 @@ if __name__ == '__main__':
     with open(os.path.join(parent, 'jihsun_Broker_id_map.json'), 'r') as f:
         brokers= json.load(f)
     main()
-    # main(date = datetime(2022,6,28))
+    os._exit(0)
+    # main(date = datetime(2022,6,29))
