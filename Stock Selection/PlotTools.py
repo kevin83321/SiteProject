@@ -6,8 +6,9 @@ from utils import (
     datetime, timedelta, date2num,
     mcolors, LineCollection, PolyCollection,
     TICKLEFT, TICKRIGHT, Line2D,
-    Rectangle, Affine2D, xrange
+    Rectangle, Affine2D, xrange, np
 )
+from matplotlib.ticker import FuncFormatter
 from matplotlib.font_manager import fontManager, FontProperties
 # for f in fontManager.ttflist:
 #     print(f.name)
@@ -78,6 +79,29 @@ def plotKBar(ax, df, BBAND=False):
         plotBBAND(ax, df.set_index('Date'))
     ax.legend(bbox_to_anchor=(1.1, 1.05))
     ax.set_ylabel('Price')
+
+def equidate_ax(fig, ax, dates, fmt="%Y-%m-%d", label="Date"):
+    """
+    Sets all relevant parameters for an equidistant date-x-axis.
+    Tick Locators are not affected (set automatically)
+
+    Args:
+        fig: pyplot.figure instance
+        ax: pyplot.axis instance (target axis)
+        dates: iterable of datetime.date or datetime.datetime instances
+        fmt: Display format of dates
+        label: x-axis label
+    Returns:
+        None
+
+    """    
+    N = len(dates)
+    def format_date(index, pos):
+        index = np.clip(int(index + 0.5), 0, N - 1)
+        return dates[index].strftime(fmt)
+    ax.xaxis.set_major_formatter(FuncFormatter(format_date))
+    ax.set_xlabel(label)
+    fig.autofmt_xdate()
     
 def plotMAs(ax, df):
     cols = [x for x in df.columns if 'MA' in x and 'EMA' not in x and 'MACD' not in x and 'Vol' not in x and  'V' not in x]

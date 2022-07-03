@@ -119,47 +119,49 @@ def main():
         df_twse.Low = df_twse.Low.replace('--', float('nan')).astype(float)
         df_twse.Open = df_twse.Open.replace('--', float('nan')).astype(float)
         max_oc = df_twse[['Close', 'Open']].max(axis=1)
-        df_twse = Calc.MA(df_twse, [5,10, 20])
-        df_twse = Calc.EMA(df_twse, [23, 67])
-        df_twse = Calc.BBAND(df_twse, 20, 2)
-        df_twse['slope_20'] = df_twse['MA20'].pct_change()
-        df_twse['slope_5'] = df_twse['MA5'].pct_change()
+        # df_twse = Calc.MA(df_twse, [5,10, 20])
+        df_twse = Calc.EMA(df_twse, [10, 20, 30, 240])
+        # df_twse = Calc.BBAND(df_twse, 20, 2)
+        # df_twse['slope_20'] = df_twse['MA20'].pct_change()
+        # df_twse['slope_5'] = df_twse['MA5'].pct_change()
         
         ## Short Sell Signal
         # print(max_oc.iloc[-3], max_oc.iloc[-1],  max_oc.iloc[-2])
-        SScondi1 = max(df_twse.Close.iloc[-3], df_twse.Close.iloc[-1]) < df_twse.Close.iloc[-2] # temp_df.slope5.pct_change().iloc[-1] < 0#
-        SScondi2 = (max_oc.iloc[-2] / max_oc.iloc[-10] - 1) >= .01
-        # SScondi3 = (df_twse.upband.iloc[-2] / df_twse.dnband.iloc[-2] - 1) >= .05
-        SScondi4 = df_twse.Close.iloc[-1] < df_twse.MA10.iloc[-1]
+        # SScondi1 = max(df_twse.Close.iloc[-3], df_twse.Close.iloc[-1]) < df_twse.Close.iloc[-2] # temp_df.slope5.pct_change().iloc[-1] < 0#
+        # SScondi2 = (max_oc.iloc[-2] / max_oc.iloc[-10] - 1) >= .01
+        # # SScondi3 = (df_twse.upband.iloc[-2] / df_twse.dnband.iloc[-2] - 1) >= .05
+        # SScondi4 = df_twse.Close.iloc[-1] < df_twse.MA10.iloc[-1]
         # print(SScondi1,(max_oc.iloc[-2] / max_oc.iloc[-10] - 1))
         mom = Calc.Momemtum(df_twse)
         final_select = ["TWSE"]
         momentums = [("TWSE", mom)]
         expand_text = ""
-        if all([SScondi1, SScondi2, SScondi4]): #, SScondi3
-            expand_text += "短空訊號 : 頭部位置(短波段(10日)漲幅 >= 1%)，近一日收黑K\n"
+        # if all([SScondi1, SScondi2, SScondi4]): #, SScondi3
+        #     expand_text += "短空訊號 : 頭部位置(短波段(10日)漲幅 >= 1%)，近一日收黑K\n"
 
-        SSCondi1 = df_twse.Close.iloc[-2] >= df_twse.EMA67.iloc[-2] and df_twse.Close.iloc[-1] <= df_twse.EMA67.iloc[-1]
-        SSCondi2 = (df_twse.Close.iloc[-1] / df_twse.Close.iloc[-5]) - 1 <= -0.05
-        if all([SSCondi1, SSCondi2]):
-            expand_text += "短空進長空訊號 : 腰部位置(波段(5日)跌幅 >= 5%)，近一日收黑K\n"
+        # SSCondi1 = df_twse.Close.iloc[-2] >= df_twse.EMA67.iloc[-2] and df_twse.Close.iloc[-1] <= df_twse.EMA67.iloc[-1]
+        # SSCondi2 = (df_twse.Close.iloc[-1] / df_twse.Close.iloc[-5]) - 1 <= -0.05
+        # if all([SSCondi1, SSCondi2]):
+        #     expand_text += "短空進長空訊號 : 腰部位置(波段(5日)跌幅 >= 5%)，近一日收黑K\n"
 
-        # Long Signal
-        Bcondi_1 = df_twse['slope_20'][-2] < 0 and df_twse['slope_5'][-2] < 0
-        Bcondi_2 = df_twse['Low'][-2] <= df_twse['dnband'][-2] <= df_twse['High'][-2] or (df_twse['Low'][-2] > df_twse['dnband'][-2] and df_twse['Low'][-2] / df_twse['dnband'][-2] - 1 <= 0.05)
-        Bcondi_3 = df_twse['Low'][-1] >= df_twse['dnband'][-1]
-        Bcondi_4 = df_twse['Close'].pct_change()[-1] > 0
-        if all([Bcondi_1, Bcondi_2, Bcondi_3, Bcondi_4]):
-            expand_text += "反彈訊號 : 布林底部反轉，可小試多單\n"
+        # # Long Signal
+        # Bcondi_1 = df_twse['slope_20'][-2] < 0 and df_twse['slope_5'][-2] < 0
+        # Bcondi_2 = df_twse['Low'][-2] <= df_twse['dnband'][-2] <= df_twse['High'][-2] or (df_twse['Low'][-2] > df_twse['dnband'][-2] and df_twse['Low'][-2] / df_twse['dnband'][-2] - 1 <= 0.05)
+        # Bcondi_3 = df_twse['Low'][-1] >= df_twse['dnband'][-1]
+        # Bcondi_4 = df_twse['Close'].pct_change()[-1] > 0
+        # if all([Bcondi_1, Bcondi_2, Bcondi_3, Bcondi_4]):
+        #     expand_text += "反彈訊號 : 布林底部反轉，可小試多單\n"
 
-        BBCondi1 = df_twse.Close.iloc[-2] <= df_twse.EMA67.iloc[-2] and df_twse.Close.iloc[-1] >= df_twse.EMA67.iloc[-1]
-        BBCondi2 = (df_twse.Close.iloc[-1] / df_twse.Close.iloc[-5]) - 1 >= 0.05
-        if all([BBCondi1, BBCondi2]):
-            expand_text += "短多進長多訊號 : 腰部位置(波段(5日)漲幅 >= 5%)，近一日收紅K\n"
+        # BBCondi1 = df_twse.Close.iloc[-2] <= df_twse.EMA67.iloc[-2] and df_twse.Close.iloc[-1] >= df_twse.EMA67.iloc[-1]
+        # BBCondi2 = (df_twse.Close.iloc[-1] / df_twse.Close.iloc[-5]) - 1 >= 0.05
+        # if all([BBCondi1, BBCondi2]):
+        #     expand_text += "短多進長多訊號 : 腰部位置(波段(5日)漲幅 >= 5%)，近一日收紅K\n"
 
-        if len(expand_text):
-            expand_text += "進場，一律注意停損，自設可接受範圍"
+        # if len(expand_text):
+        #     expand_text += "進場，一律注意停損，自設可接受範圍"
 
+        
+        # mainPlot("TWSE", df=df_twse.iloc[-250:])
         sendResultTable(td, final_select, momentums, '大', expand_text=expand_text)
         sendPhoto("大盤之支撐壓力", mainPlot("TWSE", df=df_twse.iloc[-250:]))
     except:
