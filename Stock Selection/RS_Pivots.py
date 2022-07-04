@@ -291,8 +291,8 @@ def mainPlot(ticker, td=datetime.today(), extra_name="", df = None):
         full_path = os.path.join(fig_path, filename)
         
         plt.savefig(full_path)
-        plt.show()#block=False)
-        # plt.close()
+        plt.show(block=False)
+        plt.close()
         return full_path
     except:
         print(GetException())
