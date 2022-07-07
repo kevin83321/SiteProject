@@ -85,7 +85,7 @@ def GetBrokerTable(broker_id,branch_id, date=datetime.today(), table_type="E"):
     url = f'http://jsjustweb.jihsun.com.tw/z/zg/zgb/zgb0.djhtm?a={broker_id}&b={branch_id}&c={table_type}&e={dateStr}&f={dateStr}'
 #     url_KShares = 'http://jsjustweb.jihsun.com.tw/z/zg/zgb/zgb0.djhtm?a=9200&b=9217&c=E&e=2021-7-21&f=2021-7-21'
 #     url_dollar = 'http://jsjustweb.jihsun.com.tw/z/zg/zgb/zgb0.djhtm?a=9200&b=9217&c=B&e=2021-7-14&f=2021-7-14'
-
+    print(url)
     js = requests.get(url, headers=headers)
 
     soup = bs(js.text, 'lxml')
@@ -164,10 +164,10 @@ def GetData(date = datetime.today()):
                 over_buy_df, over_sell_df = ConbineData(over_Sell_data_Share, over_Buy_data_Share, 
                                                         over_Sell_data_Dollar, over_Buy_data_Dollar)
 
-                tmp_over_sell_df = over_sell_df.dropna()#[over_sell_df.index.isin(yes_over_buy_df.index)].dropna()
+                # tmp_over_sell_df = over_sell_df.dropna()#[over_sell_df.index.isin(yes_over_buy_df.index)].dropna()
 
-                tmp_over_sell_df['賣出均價'] = tmp_over_sell_df['賣出金額'].apply(lambda x: abs(int(str(x).replace(",", "")))) / tmp_over_sell_df['賣出張數'].apply(lambda x: abs(int(str(x).replace(",", ""))))
-                over_sell_df = concat([over_sell_df, tmp_over_sell_df[['賣出均價']]], axis=1)
+                # tmp_over_sell_df['賣出均價'] = tmp_over_sell_df['賣出金額'].apply(lambda x: abs(int(str(x).replace(",", "")))) / tmp_over_sell_df['賣出張數'].apply(lambda x: abs(int(str(x).replace(",", ""))))
+                # over_sell_df = concat([over_sell_df, tmp_over_sell_df[['賣出均價']]], axis=1)
             else:
                 print(f'No Data {dateStr}')
     return over_buy_df.reset_index(), over_sell_df.reset_index()
@@ -176,7 +176,7 @@ def main(date = datetime.today()):
     if date.isocalendar()[-1] > 5: return
     files = [os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverSell.csv"), os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverBuy.csv")]
     files = [x for x in files if os.path.isfile(x)]
-    if len(files) == 2: return
+    if len(files): return
     ob_df, os_df = GetData(date)
     # print(ob_df)
     # print(os_df)
@@ -196,7 +196,7 @@ def main(date = datetime.today()):
         ob_df.to_csv(os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverBuy.csv"), encoding='utf-8-sig')
         time.sleep(1)
     except Exception as e:
-        print(date, e)
+        print(date, 'OverBuy', e)
 
     try:
         os_df = os_df[os_df['差額(張數)'].apply(lambda x: abs(float(str(x).replace(',','')))) >= 100].dropna()
@@ -214,7 +214,7 @@ def main(date = datetime.today()):
         os_df.to_csv(os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverSell.csv"), encoding='utf-8-sig')
         time.sleep(1)
     except Exception as e:
-        print(date, e)
+        print(date, 'OverSell', e)
 
     files = [os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverSell.csv"), os.path.join(output_path, f"{date.strftime('%Y%m%d')}_OverBuy.csv")]
     files = [x for x in files if os.path.isfile(x)]
