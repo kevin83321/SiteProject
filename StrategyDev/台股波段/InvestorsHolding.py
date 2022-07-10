@@ -1,9 +1,26 @@
 import requests
 from datetime import datetime
+from bs4 import BeautifulSoup as bs
 
-def getInvestorsHoldings(ticker='2330'):
+def getCMKey(ticker='2330'):
+    url = f'https://www.cmoney.tw/finance/ticker/f00026'
+    res = requests.get(url)
+    soup = bs(res.content, 'lxml')
+    keys_info = soup.find_all('a', {'class':"mobi-finance-subnavi-link"})
+    key_26 = ""
+    key_36 = ""
+    for k in keys_info:
+        if k.get("page") == 'f00026':
+            key_26 = k.get('cmkey')
+        if k.get("page") == 'f00036':
+            key_36 = k.get('cmkey')
+        # print(k.page)
+        # print(k.get("page"), type(k))
+    return key_26, key_36
 
-    url = f'https://www.cmoney.tw/finance/ashx/mainpage.ashx?action=GetInstitutionalInvestorsShareholding&stockId={ticker}&cmkey=8AC3KrCktONfgtX2/rN8Jg==&_=1657176944884' # 
+def getInvestorsHoldings(ticker='2330', cmkey="8AC3KrCktONfgtX2/rN8Jg=="):
+
+    url = f'https://www.cmoney.tw/finance/ashx/mainpage.ashx?action=GetInstitutionalInvestorsShareholding&stockId={ticker}&cmkey={cmkey}&_=1657176944884' # 
     headers = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
     #     "Accept-Encoding": "gzip, deflate, br",
@@ -24,13 +41,13 @@ def getInvestorsHoldings(ticker='2330'):
     pay_load = {
         "action": "GetInstitutionalInvestorsShareholding",
         "stockId": ticker,
-        "cmkey": "8AC3KrCktONfgtX2/rN8Jg=="
+        "cmkey": cmkey
     }
     return requests.get(url, headers=headers, data=pay_load)
 
-def getInfo(ticker='2330'):
+def getInfo(ticker='2330', cmkey="yDW3Gc6baoRY%2B7JKrCgMfQ=="):
 
-    url = f'https://www.cmoney.tw/finance/ashx/mainpage.ashx?action=GetStockBasicInfo&stockId={ticker}&cmkey=yDW3Gc6baoRY%2B7JKrCgMfQ==' # 
+    url = f'https://www.cmoney.tw/finance/ashx/mainpage.ashx?action=GetStockBasicInfo&stockId={ticker}&cmkey={cmkey}' # 
     headers = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
     #     "Accept-Encoding": "gzip, deflate, br",
@@ -51,30 +68,46 @@ def getInfo(ticker='2330'):
     pay_load = {
         "action": "GetInstitutionalInvestorsShareholding",
         "stockId": ticker,
-        "cmkey": "yDW3Gc6baoRY%2B7JKrCgMfQ=="
+        "cmkey": cmkey
     }
     return requests.get(url, headers=headers, data=pay_load)
 
 def getInvestorHolding(ticker, date = datetime.today()):
+    # print(ticker, date)
     output = {}
-    res_Investors = getInvestorsHoldings(ticker)
-    data_Investors = res_Investors.join()
-    if data_Investors[0]['Date'] != date.strftime("%Y%m%d"):
+    key_26, key_36 = getCMKey(ticker)
+    # print(key_26, key_36)
+    res_Investors = getInvestorsHoldings(ticker, key_36)
+    data_Investors = res_Investors.json()
+    # print(data_Investors)
+    idx = -1
+    for i in range(len(data_Investors)):
+        # print(data_Investors[i]['Date'], date.strftime("%Y%m%d"))
+        if data_Investors[i]['Date'] == date.strftime("%Y%m%d"):
+            idx = i
+            break
+    if idx < 0:
         return output
-    InvestmentTrustShareholdingRate = float(data_Investors['InvestmentTrustShareholdingRate']) # 投信持股比例
-    ForeignInvestorsShareholdingRate = float(data_Investors['ForeignInvestorsShareholdingRate']) # 外資持股比例
+    InvestmentTrustShareholdingRate = float(data_Investors[idx]['InvestmentTrustShareholdingRate']) # 投信持股張數
+    ForeignInvestorsShareholdingRate = float(data_Investors[idx]['ForeignInvestorsShareholdingRate']) # 外資持股張數
 
-    ForeignInvestorsBuySell = float(data_Investors['ForeignInvestorsBuySell']) # 外資買賣超
-    InvestmentTrustBuySell = float(data_Investors['InvestmentTrustBuySell']) # 投信買賣超
+    ForeignInvestorsBuySell = float(data_Investors[idx]['ForeignInvestorsBuySell']) # 外資買賣超
+    InvestmentTrustBuySell = float(data_Investors[idx]['InvestmentTrustBuySell']) # 投信買賣超
     
-    res_info = getInfo()
+    res_info = getInfo(ticker, key_26)
     data_info = res_info.json()
-    outstanding = float(data_info['PaidInCapital']) * 1e6 / 10
-
+    
+    outstanding = float(data_info[0]['PaidInCapital']) * 1e6 / 10
     output = {
+#         "外資持股比例":round(ForeignInvestorsShareholding * 1e3 / outstanding, 4),
         "外資持股比例":ForeignInvestorsShareholdingRate,
-        "外本比":ForeignInvestorsBuySell / outstanding,
+        "外本比":round(ForeignInvestorsBuySell * 1e3 / outstanding, 4),
+#         "投信持股比例":round(InvestmentTrustShareholding * 1e3 / outstanding, 4),
         "投信持股比例":InvestmentTrustShareholdingRate,
-        "投本比":InvestmentTrustBuySell / outstanding
+        "投本比":round(InvestmentTrustBuySell * 1e3 / outstanding, 4)
     }
     return output
+
+if __name__ == '__main__':
+    # getCMKey()
+    getInvestorHolding('6279')

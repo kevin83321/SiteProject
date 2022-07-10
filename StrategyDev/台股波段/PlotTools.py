@@ -240,7 +240,7 @@ def createPlot(td, df, ticker, MACD=False, TOWER=False, BBAND=False, extra_name=
     except:
         print(GetException())
 
-def CreateRecommendFig(td, tickers, bt_Prob=[], holding_p=[], highProb=[], 
+def CreateRecommendFig(td, tickers, bt_Prob=[], holding_p=[], highProb=[],InvestorOB=[], InvestorOBF=[], 
                         algo_num=1, description='', entry_method='', take_profit_rate=10, 
                         stop_loss_rate=10, algo_name=''):
     """
@@ -249,13 +249,18 @@ def CreateRecommendFig(td, tickers, bt_Prob=[], holding_p=[], highProb=[],
     tmp_h_prob = dict(highProb)
     tmp_bt_prob = dict(bt_Prob)
     tmp_holing_p = dict(holding_p)
+    tmp_OB = dict(InvestorOB)
+    tmp_OBF = dict(InvestorOBF)
+    tmp_ob = [tmp_OB.get(ticker, "N") for ticker in tickers] # high win probability
+    tmp_obf = [tmp_OBF.get(ticker, "N") for ticker in tickers] # high win probability
     h_prob = [tmp_h_prob.get(ticker, "N") for ticker in tickers] # high win probability
     bt_prob = [round(tmp_bt_prob.get(ticker, 0), 2) for ticker in tickers]  # backtest win probability
     h_p = [round(tmp_holing_p.get(ticker, 0),2) for ticker in tickers] # holding period
-    return PlotResult(td, tickers, bt_prob, h_p, h_prob, algo_num, description, entry_method, take_profit_rate, stop_loss_rate, algo_name)
+    return PlotResult(td, tickers, bt_prob, h_p, h_prob, tmp_ob, tmp_obf, algo_num, description, entry_method, take_profit_rate, stop_loss_rate, algo_name)
 
 
-def PlotResult(dt:datetime.today(), tickers=[], bt_Prob=[], holding_p=[], highProb=[], algo_num=1, 
+def PlotResult(dt:datetime.today(), tickers=[], bt_Prob=[], holding_p=[], highProb=[], 
+                InvestorOB=[], InvestorOBF=[], algo_num=1, 
                 description='', entry_method='', take_profit_rate=10, stop_loss_rate=10,
                 algo_name=''):
     try:
@@ -276,7 +281,7 @@ def PlotResult(dt:datetime.today(), tickers=[], bt_Prob=[], holding_p=[], highPr
 #         ax1.title.set_text(f'{dtStr} 選股建議')
 #         ax1.title.set_font_properties(ChineseFont)
         setuptitle(ax1)
-        PlotTable_v2(ax1, tickers, bt_Prob, holding_p, highProb)
+        PlotTable_v2(ax1, tickers, bt_Prob, holding_p, highProb, InvestorOB, InvestorOBF)
 
         # Plot Description
         ax3 = plt.subplot(gs[2:, :])
@@ -292,17 +297,19 @@ def PlotResult(dt:datetime.today(), tickers=[], bt_Prob=[], holding_p=[], highPr
         if not os.path.isdir(fig_path):
             os.makedirs(fig_path)
         plt.tight_layout()
+        
         plt.savefig(os.path.join(
             fig_path, f'{algo_name} Stock Suggestion.jpg'))
+        # plt.show()
         plt.show(block=False)
         plt.close()
         return os.path.join(fig_path, f'{algo_name} Stock Suggestion.jpg')
 
-def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[], split_num=25):
+def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[],InvestorOB=[], InvestorOBF=[], split_num=25):
     try:
         data = []
-        base_cols = ['代號','回測勝率','平均持倉時間(日)','高勝率低週期推薦']
-        tmp_d = zip(tickers, bt_Prob, holding_p, highProb)
+        base_cols = ['代號','回測勝率','平均持倉時間(日)','高勝率低週期推薦','投信買超','外資買超']
+        tmp_d = zip(tickers, bt_Prob, holding_p, highProb, InvestorOB, InvestorOBF)
         if len(tickers)>=split_num*2:
             if len([x for x in highProb if x == 'Y']):
                 tmp_d = [x for x in tmp_d if x[-1] == 'Y']
@@ -312,13 +319,13 @@ def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[], split_num=2
         if not (len(list(tmp_d))) : return ''
         seperate_num = int(len(list(tmp_d)) / split_num)
         # columns = base_cols * (seperate_num + 1)
-        print(seperate_num, len(list(tmp_d)))
-        for i, (ticker, bt_p, hold_p, high_p) in enumerate(tmp_d):
+        # print(seperate_num, len(list(tmp_d)))
+        for i, (ticker, bt_p, hold_p, high_p, ob_, ob_f) in enumerate(tmp_d):
             try:
                 if i >= split_num:
-                    data[i-split_num].extend([ticker, bt_p, hold_p, high_p])
+                    data[i-split_num].extend([ticker, bt_p, hold_p, high_p, ob_, ob_f])
                 else:
-                    data.append([ticker, bt_p, hold_p, high_p])
+                    data.append([ticker, bt_p, hold_p, high_p, ob_, ob_f])
             except:
                 pass
         # pprint(data)
@@ -328,7 +335,7 @@ def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[], split_num=2
         for i in range(len(data)):
             # print(data[i], len(data[i]), len(columns))
             if len(data[i]) != len(columns):
-                data[i].extend(['',]*(len(columns)-4))
+                data[i].extend(['',]*(len(columns)-len(base_cols)))
             # print(data[i])
         # pprint(data)
         # print(len(data[0]))

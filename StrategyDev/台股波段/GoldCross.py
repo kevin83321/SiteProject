@@ -8,6 +8,8 @@ from utils import (
     changedType, datetime, os, parent, createRecommandTable, 
     sendPhoto, sendMessage
 )
+import time
+from InvestorsHolding import getInvestorHolding
 
 highProbTable = pd.read_csv(os.path.join(parent, "無腦交易","Output\GoldCross","Summary_prob_holding_tradenum.csv"), encoding='utf-8-sig')
 bt_sum_Table = pd.read_csv(os.path.join(parent, "無腦交易","Output\GoldCross","Summary.csv"), encoding='utf-8-sig')
@@ -32,6 +34,8 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
         highProb = []
         bt_Prob = []
         holding_p = []
+        InvestorOB = []
+        InvestorOBF = []
         for ticker in info_data.keys():#df.Ticker.unique():
             if not ticker.isnumeric():continue
             try:
@@ -44,10 +48,11 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                     continue
                 for col in 'Open,High,Low,Close,Volume'.split(','):
                     temp_df[col] = temp_df[col].apply(changedType)
-                temp_df = temp_df.set_index("Date")
+                # temp_df = temp_df.set_index("Date")
                 if temp_df.Volume.iloc[-1] / 1000 < 200: continue
                 # temp_df = Calc.MA(temp_df, [20, 240])
                 temp_df = Calc.EMA(temp_df, [20, 240])
+                temp_df = Calc.RSI(temp_df, [14])
                 
                 # temp_df['Adj V'] = temp_df.Volume.apply(lambda x: int(x/1000))
                 
@@ -56,7 +61,24 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                 MACondi = temp_df.EMA20.iloc[-1] > temp_df.EMA240.iloc[-1]
                 MACross2 = temp_df.Close.iloc[-2] < temp_df.EMA240.iloc[-2] and temp_df.Close.iloc[-1] > temp_df.EMA240.iloc[-1]
                 MACross =  (MACross1 and MACondi) or MACross2
-                if MACross:# and bt_sum_Table[bt_sum_Table.代號==ticker]['總交易次數'].values[0] >= 10 and bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0] > 50:
+                rsi_condi = temp_df.RSI14.iloc[-1] >= 50
+                if MACross and rsi_condi:# and bt_sum_Table[bt_sum_Table.代號==ticker]['總交易次數'].values[0] >= 10 and bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0] > 50:
+                    try:
+                        holding = getInvestorHolding(ticker, td)
+                        # holding = getInvestorHolding(ticker, last)
+                        # print(holding)
+                        if holding['外資持股比例'] > 5 and holding['外本比'] > 0.002:
+                            InvestorOBF.append((ticker, 'Y'))
+                        else:
+                            InvestorOBF.append((ticker, 'N'))
+                        if holding['投信持股比例'] > 5 and holding['投本比'] > 0.002:
+                            InvestorOB.append((ticker, 'Y'))
+                        else:
+                            InvestorOB.append((ticker, 'N'))
+                    except:
+                        print(f'Ticker : {ticker} Check Investor\t Error :', GetException())
+                        InvestorOBF.append((ticker, 'N'))
+                        InvestorOB.append((ticker, 'N'))
                     final_select.append(ticker)
                     # print(ticker, temp_df.EMA20.iloc[-1], temp_df.EMA240.iloc[-1])
                     # if ticker in highProbTable.代號:
@@ -64,6 +86,7 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                     # bt_Prob.append((ticker, bt_sum_Table[bt_sum_Table.代號==ticker]['勝率%'].values[0]))
                     # holding_p.append((ticker, bt_sum_Table[bt_sum_Table.代號==ticker]['平均持倉時間(日)'].values[0]))
                     # momentums.append((ticker, Calc.Momemtum(temp_df)))
+                    time.sleep(5)
             except KeyboardInterrupt:
                 import os
                 os._exit(0)
@@ -77,8 +100,9 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
         print(len(final_select), final_select)
         # return
         fig_path = CreateRecommendFig(td, final_select, bt_Prob=bt_Prob, holding_p=holding_p, highProb=highProb, 
-                        algo_num=2, description=description, entry_method=entry_method, take_profit_rate=10, 
-                        stop_loss_rate=10, algo_name='GoldCross')
+                                        InvestorOB=InvestorOB, InvestorOBF=InvestorOBF,
+                                        algo_num=2, description=description, entry_method=entry_method, take_profit_rate=10, 
+                                        stop_loss_rate=10, algo_name='GoldCross')
         if len(fig_path):
             sendPhoto(f"\n{description}最新選股推薦", fig_path, useTele=False)
         else:
