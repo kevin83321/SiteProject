@@ -8,7 +8,7 @@ from utils import (
     changedType, datetime
 )
             
-def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, shares_ratio=0):
+def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, shares_ratio=0, num_dog=5):
     try:
         # setup date
         now = datetime.now()
@@ -113,7 +113,7 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
         # expand_text += "停利 : 日K完全向下離開10MA出場"
         # expand_text += "停損 : 日K完全向下離開60MA出場，或10%停損"
         saveRecommand(final_select, 'ShortTermTrade')
-        sendResultTable(td, final_select, momentums, 5, expand_text=expand_text, Industry=info_data)
+        sendResultTable(td, final_select, momentums, num_dog, expand_text=expand_text, Industry=info_data)
     except:
         # print(f'ticker : {ticker}\t Error : ',GetException())
         print(f'Error : ',GetException())

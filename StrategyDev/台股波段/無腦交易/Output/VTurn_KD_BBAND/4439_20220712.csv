@@ -1,0 +1,4 @@
+EntryDate,ExitDate,EntryPrice,ExitPrice,EntryCommission,ExitCommission,EntryTax,ExitTax,TotalCost,HoldingPeriod,Net,Ret,MaxPriceBetweeenHolding,MaxRetBetweeenHolding,MinPriceBetweeenHolding,MinRetBetweeenHolding,SignalBandwith
+2020-01-10,2020-02-10,177.0,166.0,252,237,0,498,987,31,-11987,-0.0677,177.0,0.0,168.5,-0.048,0.15989553725191508
+2020-09-30,2020-10-06,110.5,123.5,157,176,0,370,703,6,12297,0.1113,123.5,0.1176,110.5,0.0,0.2652207135160891
+2021-07-28,2021-08-03,155.0,147.0,221,209,0,441,871,6,-8871,-0.0572,155.0,0.0,145.5,-0.0613,0.16076940281236385

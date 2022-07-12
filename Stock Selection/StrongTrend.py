@@ -8,7 +8,7 @@ from utils import (
     changedType, createRecommandTable
 )
             
-def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
+def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1, num_dog=8):
     try:
         # setup date
         td, last = getDateBeforeTrade()
@@ -92,7 +92,7 @@ def main(min_price=15, max_price=100, num_shares=1000, shares_ratio=1):
         expand_text = "強勢股挑選 : 開布林，MA(5,20)趨勢向上，布林變動加大\n"
         expand_text += "進場 : 隔日K棒過布林上緣不進，收黑K且MA20(布林中線未續上，或過布林上緣\n"
         expand_text += "出場 : 損 : 10%, 離開MA5"
-        sendResultTable(td, final_select, momentums, '8', expand_text=expand_text, Industry=info_data)
+        sendResultTable(td, final_select, momentums, num_dog, expand_text=expand_text, Industry=info_data)
         
         # saveRecommand(select_by_EMA67_23, 'VolumeWithMACD_EMA67_23')
         # sendResultTable(td, select_by_EMA67_23, momentums, '1-1')

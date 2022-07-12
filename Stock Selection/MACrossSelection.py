@@ -35,7 +35,7 @@ def readDataFromSJ(td, tickers):
     else:
         return output
             
-def main(td=datetime.today(),min_price=30, max_price=200, num_shares=100, shares_ratio=1):
+def main(td=datetime.today(),min_price=30, max_price=200, num_shares=100, shares_ratio=1, num_dog=12):
     try:
         # setup date
         td, last = getDateBeforeTrade(td.replace(hour=18))
@@ -137,7 +137,7 @@ def main(td=datetime.today(),min_price=30, max_price=200, num_shares=100, shares
         # select_by_Volume5_67 = list(set(selected).intersection(select_by_Volume67))
         # print(selected)
         saveRecommand(selected, 'MACross')
-        sendResultTable(td, selected, momentums, '12', expend_text, info_data)
+        sendResultTable(td, selected, momentums, num_dog, expend_text, info_data)
     except:
         print(GetException())
         

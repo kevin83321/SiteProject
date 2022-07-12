@@ -1,0 +1,5 @@
+EntryDate,ExitDate,EntryPrice,ExitPrice,EntryCommission,ExitCommission,EntryTax,ExitTax,TotalCost,HoldingPeriod,Net,Ret,MaxPriceBetweeenHolding,MaxRetBetweeenHolding,MinPriceBetweeenHolding,MinRetBetweeenHolding,SignalBandwith
+2016-04-19,2016-04-27,8.5,8.47,20,20,0,25,65,8,-95,-0.0112,8.51,0.0012,8.38,-0.0141,0.04580013714572284
+2016-05-23,2016-07-11,8.49,8.2,20,20,0,25,65,49,-355,-0.0418,8.49,0.0,8.0,-0.0577,0.15238205678637295
+2018-08-29,2018-09-10,11.2,10.15,20,20,0,30,70,12,-1120,-0.1,11.2,0.0,10.3,-0.0804,0.07166959579329024
+2019-08-12,2019-08-27,8.43,8.29,20,20,0,25,65,15,-205,-0.0243,8.43,0.0,8.23,-0.0237,0.017929832601118356

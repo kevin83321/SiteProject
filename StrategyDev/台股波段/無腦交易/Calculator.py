@@ -65,7 +65,7 @@ class Calculator:
             return df
         
     @staticmethod
-    def BBAND(df, periods, k):
+    def BBAND(df, periods=20, k=2):
         try:
             if f'MA{periods}' not in df.columns:
                 df = Calculator.MA(df, [periods])
@@ -76,8 +76,28 @@ class Calculator:
         except:
             print(GetException())
         else:
-            return df        
-        
+            return df
+    
+    @staticmethod
+    def KD(df, num_day = 9, factor=3):
+        try:
+            tmp_df = df.copy(deep=True)
+            tmp_df['rollingL'] = tmp_df['Low'].rolling(num_day).min()
+            tmp_df['rollingH'] = tmp_df['High'].rolling(num_day).max()
+            tmp_df['RSV'] = (tmp_df['Close'] - tmp_df['rollingL']) / (tmp_df['rollingH'] - tmp_df['rollingL']) * 100
+
+            tmp_df['K'] = tmp_df['D'] = 50
+            for i in range(tmp_df.shape[0]):
+                if i >= 9:
+                    tmp_df.loc[i, 'K'] = tmp_df.loc[i-1,'K'] * (factor - 1) / factor + tmp_df.loc[i,'RSV'] * (1 / factor)
+                    tmp_df.loc[i, 'D'] = tmp_df.loc[i-1,'D'] * (factor - 1) / factor + tmp_df.loc[i,'K'] * (1 / factor)
+            df['K'] = tmp_df['K']
+            df['D'] = tmp_df['D']
+        except:
+            print(GetException())
+        else:
+            return df
+
     @staticmethod
     def calculateTOWER(df, lookback=3, version = 'Def'):
         df['TowerH'] = np.nan

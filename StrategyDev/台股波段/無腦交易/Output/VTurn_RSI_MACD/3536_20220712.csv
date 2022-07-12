@@ -1,0 +1,3 @@
+EntryDate,ExitDate,EntryPrice,ExitPrice,EntryCommission,ExitCommission,EntryTax,ExitTax,TotalCost,HoldingPeriod,Net,Ret,MaxPriceBetweeenHolding,MaxRetBetweeenHolding,MinPriceBetweeenHolding,MinRetBetweeenHolding,SignalBandwith
+2010-07-06,2010-07-08,8.35,8.0,20,20,0,24,64,2,-414,-0.0496,8.35,0.0,7.83,-0.0623,0.0996610168345533
+2010-10-26,2010-11-03,6.0,5.57,20,20,0,17,57,8,-487,-0.0812,6.0,0.0,5.57,-0.0717,0.12068792302888975

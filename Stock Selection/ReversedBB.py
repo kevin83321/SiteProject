@@ -10,7 +10,7 @@ from utils import (
     changedType
 )
             
-def main(min_price=0, max_price=50, num_shares=10000, shares_ratio=0):
+def main(min_price=0, max_price=50, num_shares=10000, shares_ratio=0, num_dog=7):
     try:
         # setup date
         td, last = getDateBeforeTrade()
@@ -101,7 +101,7 @@ def main(min_price=0, max_price=50, num_shares=10000, shares_ratio=0):
         expand_text += "停利 : 波段走勢啟動後，日K完全向下離開10MA出場"
         expand_text += "停損 : 向下跌破60MA"
         saveRecommand(final_select, 'ReversedBB')
-        sendResultTable(td, final_select, momentums, 7, expand_text=expand_text, Industry=info_data)
+        sendResultTable(td, final_select, momentums, num_dog, expand_text=expand_text, Industry=info_data)
     except:
         # print(f'ticker : {ticker}\t Error : ',GetException())
         print(f'Error : ',GetException())
