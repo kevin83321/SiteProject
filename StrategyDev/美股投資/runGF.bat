@@ -1,2 +1,3 @@
 F:
-python %0\..\GoldFollower.py
+cd %0\..
+python GoldFollower.py

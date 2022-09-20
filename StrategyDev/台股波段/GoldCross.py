@@ -36,6 +36,7 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
         holding_p = []
         InvestorOB = []
         InvestorOBF = []
+        moms = []
         for ticker in info_data.keys():#df.Ticker.unique():
             if not ticker.isnumeric():continue
             try:
@@ -79,6 +80,7 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                         print(f'Ticker : {ticker} Check Investor\t Error :', GetException())
                         InvestorOBF.append((ticker, 'N'))
                         InvestorOB.append((ticker, 'N'))
+                    moms.append((ticker, Calc.Momemtum(temp_df)))
                     final_select.append(ticker)
                     # print(ticker, temp_df.EMA20.iloc[-1], temp_df.EMA240.iloc[-1])
                     # if ticker in highProbTable.代號:
@@ -96,6 +98,11 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
         description = '無腦秘書2號，價格>EMA240太多，多等待，爆量未過前面大量勿追，價格由下而上穿越較佳，反彈請觀察'
         entry_method = '選出後隔日開盤進場，進場守前低(低於當下價格的反轉處)'
         # expand_text = "波段交易，停利停損皆10%"
+        if len(final_select) >= 50:
+            moms = sorted(moms, key=lambda x: x[1])[-50:]
+            final_select = [x[0] for x in moms]
+            InvestorOBF = [x for x in InvestorOBF if x[0] in final_select]
+            InvestorOB = [x for x in InvestorOB if x[0] in final_select]
         saveRecommand(final_select, 'GoldCross')
         print(len(final_select), final_select)
         # return
@@ -103,12 +110,10 @@ def main(td = datetime.today(), min_price=0, max_price=50, num_shares=10000, sha
                                         InvestorOB=InvestorOB, InvestorOBF=InvestorOBF,
                                         algo_num=2, description=description, entry_method=entry_method, take_profit_rate=10, 
                                         stop_loss_rate=10, algo_name='GoldCross')
-        if len(fig_path):
+        if len(fig_path) and final_select:
             sendPhoto(f"\n{description}最新選股推薦", fig_path, useTele=False)
         else:
             sendMessage(f"\n{description}今日無推薦標的", useTele=False)
-        # print(createRecommandTable(final_select, bt_Prob=bt_Prob, holding_p=holding_p, highProb=highProb))
-        # sendResultTable(td, final_select, bt_Prob=bt_Prob, holding_p=holding_p, highProb=highProb, algo_num=1, expand_text=expand_text, useTele=False)#, token='hDvo7h5atlmcshug48REUqOBv1nHzm1fb6YZ9I0ZNu9')
     except:
         # print(f'ticker : {ticker}\t Error : ',GetException())
         print(f'Error : ',GetException())

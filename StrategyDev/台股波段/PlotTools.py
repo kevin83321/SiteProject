@@ -314,7 +314,7 @@ def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[],InvestorOB=[
             if len([x for x in highProb if x == 'Y']):
                 tmp_d = [x for x in tmp_d if x[-1] == 'Y']
             else:
-                tmp_d = [x for x in tmp_d if x[-2] <= 40]
+                tmp_d = [x for x in tmp_d if float(x[2]) <= 40]
         tmp_d = sorted(tmp_d, key=lambda x : x[-2])
         if not (len(list(tmp_d))) : return ''
         seperate_num = int(len(list(tmp_d)) / split_num)

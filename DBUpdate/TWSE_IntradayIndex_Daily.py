@@ -1,5 +1,5 @@
 # -*- encoding: UTF-8 -*-
-# CopyRight© : XIQICapital 希奇資本
+# CopyRight© : Kevin Cheng 鄭圳宏
 # 爬取證交所有上市的ETF成分股
 # Author: Kevin Cheng 鄭圳宏
 # Create: 2020.11.19

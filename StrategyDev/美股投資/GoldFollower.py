@@ -104,7 +104,7 @@ def PlotKBar(df, col_p, col_v, col_avg):
 #     datebreaks = test_df[col_p][test_df[col_p].isnull()].index
 #     fig.update_xaxes(rangebreaks=[dict(values=datebreaks)])
     fig.update_layout(title_text="黃金價格與庫存量")
-    f_path = os.path.join(parent, f'{end_date.strftime("%Y%m%d_Gold_Price_Inventory.jpg")}')
+    f_path = os.path.join(output_path, f'{end_date.strftime("%Y%m%d_Gold_Price_Inventory.jpg")}')
     fig.write_image(file=f_path, format='jpg',engine='auto')
 #     fig.to_image(os.path.join(parent, f'{end_date.strftime("%Y%m%d_Gold_Price_Inventory.jpg")}'))
 #     plotly.offline.plot(fig, filename=os.path.join(parent, f'{end_date.strftime("%Y%m%d_Gold_Price_Inventory.jpg")}'),auto_open=False, image='png')
@@ -114,7 +114,7 @@ def PlotKBar(df, col_p, col_v, col_avg):
 def main():
     df = getData()
     file_path = PlotKBar(df.tail(120), *df.columns)
-    Line.sendPhoto("黃金價格與庫存量更新",file_path, token='Zk6VTsmW9iN0Kh01eYPcYH09JIuG354AGDAduebBLoZ')
+    Line.sendPhoto("\n黃金價格與庫存量更新",file_path, token='Zk6VTsmW9iN0Kh01eYPcYH09JIuG354AGDAduebBLoZ')
 
 if __name__ == '__main__':
     main()
