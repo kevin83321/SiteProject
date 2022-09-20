@@ -33,6 +33,8 @@ def calculateIV(df, date, h_df):
 def takeOIInfo(df_opt_daily, output, atm, cp_type="Call", closed2TTM=False):
     tmp_ = df_opt_daily[df_opt_daily.CP == cp_type].set_index("Strike").fillna(0)
     tmp_ = tmp_.reindex([x for x in list(tmp_.index) if x[-2:] != '50'])
+    tmp_.OI_last = tmp_.OI_last.astype(int)
+    tmp_.OI_Diff = tmp_.OI_Diff.astype(int)
     if cp_type == "Call":
         output[f"{eng2chi[cp_type]}隱波-價內"] = round(tmp_[tmp_.index <= str(atm)]["IV"][-2] * 100, 2)
         output[f"{eng2chi[cp_type]}隱波-價平"] = round(tmp_[tmp_.index <= str(atm)]["IV"][-1] * 100, 2)
@@ -41,7 +43,7 @@ def takeOIInfo(df_opt_daily, output, atm, cp_type="Call", closed2TTM=False):
         output[f"{eng2chi[cp_type]}隱波-價外"] = round(tmp_[tmp_.index <= str(atm)]["IV"][-2] * 100, 2)
         output[f"{eng2chi[cp_type]}隱波-價平"] = round(tmp_[tmp_.index <= str(atm)]["IV"][-1] * 100, 2)
         output[f"{eng2chi[cp_type]}隱波-價內"] = round(tmp_[tmp_.index >= str(atm)]["IV"][1] * 100, 2)
-    print(output)
+    # print(output)
 
     output[f"{eng2chi[cp_type]}"]["價平增減幅"] = {"履約價":str(atm), "口數":int(tmp_.loc[str(atm), "OI_Diff"])}
     # 價內
@@ -51,6 +53,7 @@ def takeOIInfo(df_opt_daily, output, atm, cp_type="Call", closed2TTM=False):
     except:
         output[f"{eng2chi[cp_type]}"]["價內最大增幅"] = {"履約價":float('nan'), "口數":tmp_itm['OI_Diff'][-1]}
     # 最大未平倉
+    
     tmp_max = tmp_.sort_values("OI_last")
     output[f"{eng2chi[cp_type]}"]["最大未平倉"] = {"履約價":tmp_max.index[-1], "口數":int(tmp_max['OI_last'][-1])}
     # 最大增減幅
