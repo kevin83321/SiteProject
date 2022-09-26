@@ -8,9 +8,9 @@ import time
 from Utils import *
 
 from BaseObj import CallOption, PutOption
-from OptionFunc import getThirdWendesday, calculate_atm_strike
+from OptionFunc import getThirdWendesday
 
-def crawlOptDailyMarketReport(date:datetime=datetime.today()):
+def crawlOptDailyMarketReport(date:datetime=datetime.today(), settle=False):
     
     url = 'https://www.taifex.com.tw/cht/3/optDailyMarketReport'
     pay_load = {
@@ -47,9 +47,11 @@ def crawlOptDailyMarketReport(date:datetime=datetime.today()):
         except:
             pass
     if not df.empty:
-        df = df['到期月份(週別),履約價,買賣權,最後成交價,*未沖銷契約量,最後最佳買價,最後最佳賣價'.split(',')]
-        df.columns = 'Maturity,Strike,CP,Close,OI,BestBid,BestAsk'.split(',')
-        ttm = [x for x in sorted(df.Maturity.unique()) if 'W' not in x][0]
+        ttm_  = getThirdWendesday(date)
+        df = df['到期月份(週別),履約價,買賣權,最後成交價,結算價,*未沖銷契約量,最後最佳買價,最後最佳賣價'.split(',')]
+        df.columns = 'Maturity,Strike,CP,Close,SettlePrice,OI,BestBid,BestAsk'.split(',')
+        print(ttm_.date(), date.date(), settle, ttm_.date()==date.date() or settle)
+        ttm = [x for x in sorted(df.Maturity.unique()) if 'W' not in x][int(ttm_.date()==date.date() or settle)]
         df = df[df.Maturity==ttm]
     return df
 
@@ -60,11 +62,16 @@ def getOptDailyMarketReport(date = datetime.today()):
     pre_df = None # 前一日
     i = -1
     while 1:
+        
         tmp_date = date + timedelta(i)
+        # print(tmp_date, last_date)
         if tmp_date.isocalendar()[-1] > 5:
             i -= 1
             continue
-        tmp = crawlOptDailyMarketReport(tmp_date)
+        ttm_  = getThirdWendesday(tmp_date)
+        tmp = crawlOptDailyMarketReport(tmp_date, 
+                                        settle=(ttm_.date()==last_date.date() if last_date else 0))
+        # print(tmp)
         if last_df is None:
             if not tmp.empty:
                 last_df = tmp
@@ -78,10 +85,13 @@ def getOptDailyMarketReport(date = datetime.today()):
                 break
         time.sleep(3)
         i -= 1
-        
-    last_df.columns = list(last_df.columns)[:-4] + ['Close_last', 'OI_last', 'BestBid_last', 'BestAsk_last']
-    pre_df.columns = list(pre_df.columns)[:-4] + ['Close_pre', 'OI_pre', 'BestBid_pre', 'BestAsk_pre']
+    
+    last_df[list(last_df.columns)[:-5]] = last_df[list(last_df.columns)[:-5]].astype(str)
+    pre_df[list(pre_df.columns)[:-5]] = pre_df[list(pre_df.columns)[:-5]].astype(str)
+    last_df.columns = list(last_df.columns)[:-5] + ['Close_last', "Settle_last", 'OI_last', 'BestBid_last', 'BestAsk_last']
+    pre_df.columns = list(pre_df.columns)[:-5] + ['Close_pre', "Settle_pre", 'OI_pre', 'BestBid_pre', 'BestAsk_pre']
     df = pd.concat([last_df.set_index('Maturity,Strike,CP'.split(',')), pre_df.set_index('Maturity,Strike,CP'.split(','))], axis=1)
+    print(df)
     df['OI_Diff'] = df['OI_last'].astype(float) - df['OI_pre'].astype(float)
     return df, last_date
 
@@ -208,8 +218,8 @@ def readFutureData(table, last_date):
     df_h_f = pd.DataFrame(h_f_data)
     del df_h_f['_id']
     df_h_f = df_h_f[df_h_f.TradingSession=='Regular']
-
-    near_ttm = sorted([x for x in df_h_f.Maturity.unique() if '/' not in x])[0]
+    ttm_  = getThirdWendesday(last_date)
+    near_ttm = sorted([x for x in df_h_f.Maturity.unique() if '/' not in x])[int(ttm_.date()==last_date.date())]
     return df_h_f[df_h_f.Maturity==near_ttm]
 
 def saveDailyInfo(last_date, output):

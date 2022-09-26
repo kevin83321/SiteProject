@@ -1,6 +1,6 @@
 from DataIO import *
 from Utils import *
-from OptionFunc import getNextTTM, checkClosed2TTM
+from OptionFunc import getNextTTM, checkClosed2TTM, calculate_atm_strike
 from PlotTools import CreateTable
 
 from Messenger.LineMessenger import LineMessenger as Line
@@ -11,18 +11,19 @@ def SendLineNotify(update_date, file_path, underlying_info=''):
 
 def calculateIV(df, date, h_df):
     df = df.copy(deep=True).reset_index()
-
-    # exist_d = 3
     rf = 1e-2
     ttm = getNextTTM(date)
     exist_d = len([x for x in pd.date_range(date, ttm) if x.isocalendar()[-1] <= 5])
     underlying = h_df.Close.iloc[-1]
     df['IV'] = 0
     for row in df.itertuples():
-    #     print(row)
         bid = row.BestBid_last if row.BestBid_last != '-' else '0.1'
         ask = row.BestAsk_last if row.BestAsk_last != '-' else '0.1'
         premium = float(row.Close_last) if row.Close_last != '-' else (float(bid) + float(ask)) / 2
+        if np.isnan(premium):
+            premium = row.Settle_last
+        if np.isnan(premium):
+            premium = row.Settle_pre
         if row.CP == 'Call':
             opt = CallOption(underlying, int(row.Strike), TimeToMaturity=exist_d, RiskFreeRate=rf, Premium=premium)#, UnderType="FUT")
         else:
@@ -32,7 +33,11 @@ def calculateIV(df, date, h_df):
 
 def takeOIInfo(df_opt_daily, output, atm, cp_type="Call", closed2TTM=False):
     tmp_ = df_opt_daily[df_opt_daily.CP == cp_type].set_index("Strike").fillna(0)
-    tmp_ = tmp_.reindex([x for x in list(tmp_.index) if x[-2:] != '50'])
+    # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    #     print(df_opt_daily)
+    # print(tmp_)
+    # print(len(set(tmp_.index)), len(list(tmp_.index)))
+    tmp_ = tmp_.reindex([x for x in list(set(tmp_.index)) if x[-2:] != '50'])
     tmp_.OI_last = tmp_.OI_last.astype(int)
     tmp_.OI_Diff = tmp_.OI_Diff.astype(int)
     if cp_type == "Call":
@@ -86,11 +91,16 @@ def main(date = datetime.today()):
     # Summary
     # =======================
     underlying = int(h_df.Close.iloc[-1])
+    fut_close = 0
+    try:
+        fut_close = df_h_f["Close"][0]
+    except:
+        fut_close = df_h_f["Close"].values[0]
     output = {
         "日期":last_date.strftime("%Y-%m-%d"),
         "現貨收盤價":underlying,
-        "期貨收盤價":df_h_f["Close"][0],
-        "期貨現貨價差":round(df_h_f["Close"][0]-int(underlying), 2),
+        "期貨收盤價":fut_close,
+        "期貨現貨價差":round(fut_close-int(underlying), 2),
         "P/C Ratio":round(float(df_pc_ratio.loc[0, '買賣權未平倉量比率%']) / 100, 4),
         '買權隱波-價內':0,
         '買權隱波-價平':0,

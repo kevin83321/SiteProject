@@ -16,7 +16,7 @@ opt_ticker_map = {
 
 def getNextTTM(td:datetime) -> datetime:
     thirdWed = getThirdWendesday(td)
-    if td.date() > thirdWed.date():
+    if td.date() >= thirdWed.date():
         tmp = td + timedelta(31)
         tmp = tmp.replace(day=1)
         thirdWed = getThirdWendesday(tmp)

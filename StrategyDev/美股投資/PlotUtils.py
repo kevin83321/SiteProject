@@ -97,7 +97,7 @@ def CreateTable(ticker, call_df, put_df, update_date):
     mergecells(table, [(2,0), (2,1)])
     mergecells(table, [(2,3), (2,4)])
     
-    f_path = os.path.join(output_, f'{ticker} Option OI Diff {str(call_df.ttm.unique()[0])[2:4]}.jpeg')
+    f_path = os.path.join(output_, f'{ticker} Option OI Diff {str(call_df.ttm.unique()[0])[2:4]}.png')
     if os.path.isfile(f_path):
         os.remove(f_path)
     plt.savefig(f_path)

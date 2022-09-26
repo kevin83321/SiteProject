@@ -26,6 +26,8 @@ class OptionType(Enum):
 class BaseOption(metaclass=ABCMeta):
     
     optionType: OptionType = None
+    t_divisor = 250
+    rf_divisor = 365
         
     def __init__(self, Underlying:float, Strike:float, Volatility:float=0.5, 
                  TimeToMaturity:[float, str, datetime]=1, RiskFreeRate:float=0.01, 
@@ -47,8 +49,8 @@ class BaseOption(metaclass=ABCMeta):
         self.S = Underlying
         self.K = Strike
         self.Sigma = Volatility
-        self.Tau = TimeToMaturity / 250
-        self.RF = log(1+RiskFreeRate/365)
+        self.Tau = TimeToMaturity / self.t_divisor
+        self.RF = log(1 + RiskFreeRate / self.rf_divisor)
         self.Premium = Premium
         self.Q = Dividend
         self.TradingDate = TradingDate
@@ -93,7 +95,8 @@ class BaseOption(metaclass=ABCMeta):
         for i in range(1, MAX_ITERATIONS+1):
             price = self.TheoryPrice(self.S, self.K, sigma, self.Tau, self.RF)
             vega = self.Vega(self.S, self.K, sigma, self.Tau, self.RF, self.Q)
-            diff = self.Premium - round(price, 1)  # our root
+            # print(self.Premium, round(price, 1), float(self.Premium) - round(price, 1))
+            diff = float(self.Premium) - round(price, 1)  # our root
             if isnan(price) or isnan(sigma):
                 return float('nan')
             if (abs(diff) < PRECISION):
@@ -149,8 +152,8 @@ class CallOption(BaseOption):
     def __init__(self, Underlying:float, Strike:float, Volatility:float=0.5, 
                  TimeToMaturity:[float, str, datetime]=1, RiskFreeRate:float=0.01, 
                  Premium:float=None, Dividend:float=0.0, TradingDate:[str, datetime]=None,
-                 UnderType:str="SPOT"):
-        super(CallOption, self).__init__(Underlying, Strike, Volatility, TimeToMaturity, RiskFreeRate, Premium, Dividend, TradingDate, UnderType)
+                 UnderType:str="SPOT", Ticker:str=None):
+        super(CallOption, self).__init__(Underlying, Strike, Volatility, TimeToMaturity, RiskFreeRate, Premium, Dividend, TradingDate, UnderType, Ticker)
         
     def Delta(self):
         return exp(-self.Q * self.Tau) * NormCDF(self.d1)
@@ -169,13 +172,22 @@ class CallOption(BaseOption):
             d1 = self.D1(S, K, Sigma, Tau, RF)
             d2 = self.D2(S, K, Sigma, Tau, RF)
             return S * NormCDF(d1) - K * exp(-RF * Tau) * NormCDF(d2)
+        if not hasattr(self, "d1"):
+            self.d1 = self.D1()
+        if not hasattr(self, "d2"):
+            self.d2 = self.D2()
         return self.S * NormCDF(self.d1) - self.K * exp(-self.RF * self.Tau) * NormCDF(self.d2)
+            
     
     def TheoryPriceFUTURE(self, S:[float, int]=None, K:[float, int]=None, Sigma:float=None, Tau:float=None, RF:float=None):
         if all([S, K, Sigma, Tau, RF]):
             d1 = self.D1(S, K, Sigma, Tau, RF)
             d2 = self.D2(S, K, Sigma, Tau, RF)
             return exp(-RF * Tau) * (S * NormCDF(d1) - K * NormCDF(d2))
+        if not hasattr(self, "d1"):
+            self.d1 = self.D1()
+        if not hasattr(self, "d2"):
+            self.d2 = self.D2()
         return exp(-self.RF * self.Tau) * (self.S * NormCDF(self.d1) - self.K * NormCDF(self.d2))
     
     def IntrinsicValue(self):
@@ -188,8 +200,8 @@ class PutOption(BaseOption):
     def __init__(self, Underlying:float, Strike:float, Volatility:float=0.5, 
                  TimeToMaturity:[float, str, datetime]=1, RiskFreeRate:float=0.01, 
                  Premium:float=None, Dividend:float=0.0, TradingDate:[str, datetime]=None,
-                 UnderType:str="SPOT"):
-        super(PutOption, self).__init__(Underlying, Strike, Volatility, TimeToMaturity, RiskFreeRate, Premium, Dividend, TradingDate, UnderType)
+                 UnderType:str="SPOT", Ticker:str=None):
+        super(PutOption, self).__init__(Underlying, Strike, Volatility, TimeToMaturity, RiskFreeRate, Premium, Dividend, TradingDate, UnderType, Ticker)
         
     def Delta(self):
         return -exp(-self.Q * self.Tau) * NormCDF(-self.d1)

@@ -120,7 +120,7 @@ def CreateTable(output):
     mergecells(table, [(0,7), (0,9)]) # 三大法人
     mergecells(table, [(5,7), (5,9)]) # 十大
     
-    f_path = os.path.join(output_, f'{output["日期"]} TXO Daily Info .jpeg')
+    f_path = os.path.join(output_, f'{output["日期"]} TXO Daily Info .png')
     if os.path.isfile(f_path):
         os.remove(f_path)
     plt.savefig(f_path)
