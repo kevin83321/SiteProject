@@ -10,7 +10,7 @@ from Utils import *
 from BaseObj import CallOption, PutOption
 from OptionFunc import getThirdWendesday
 
-def crawlOptDailyMarketReport(date:datetime=datetime.today(), settle=False):
+def crawlOptDailyMarketReport(date:datetime=datetime.today(), settle=False, update=False):
     
     url = 'https://www.taifex.com.tw/cht/3/optDailyMarketReport'
     pay_load = {
@@ -28,7 +28,7 @@ def crawlOptDailyMarketReport(date:datetime=datetime.today(), settle=False):
     df = pd.DataFrame()
     f_path = os.path.join(output_path, '每日成交資訊', f'Opt_{date.strftime("%Y%m%d")}.txt')
     checkPath(os.path.dirname(f_path))
-    if os.path.isfile(f_path):
+    if os.path.isfile(f_path) and not update:
         df = pd.read_csv(f_path, encoding='utf-8-sig',dtype=str)
     else:
         try:
@@ -55,7 +55,7 @@ def crawlOptDailyMarketReport(date:datetime=datetime.today(), settle=False):
         df = df[df.Maturity==ttm]
     return df
 
-def getOptDailyMarketReport(date = datetime.today()):
+def getOptDailyMarketReport(date = datetime.today(), update=False):
     date += timedelta(1)
     last_date = None
     last_df = None # 今日
@@ -70,7 +70,7 @@ def getOptDailyMarketReport(date = datetime.today()):
             continue
         ttm_  = getThirdWendesday(tmp_date)
         tmp = crawlOptDailyMarketReport(tmp_date, 
-                                        settle=(ttm_.date()==last_date.date() if last_date else 0))
+                                        settle=(ttm_.date()==last_date.date() if last_date else 0), update=update)
         # print(tmp)
         if last_df is None:
             if not tmp.empty:

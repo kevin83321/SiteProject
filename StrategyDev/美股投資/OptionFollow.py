@@ -176,7 +176,7 @@ def GetOptionOI(ticker="QQQ", update=True):
     update_put['diff'] = update_put['open_interest'] - last_put['open_interest']
     # print(update_call.ttm.unique(),update_call.head(), '\n')
     near1_path = CreateTable(ticker, update_call, update_put, update_date)
-    if ticker in 'QQQ,TSM,SPY,GLD,BABA,VIX,TSLA,XLF':
+    if ticker in 'QQQ,DJX,TSM,SPY,GLD,BABA,VIX,TSLA,XLF':
         SendLineNotify(ticker, update_date, near1_path, CreateInfo(data['data']))
     # print(near1_path, '\n')
 
@@ -198,10 +198,7 @@ def CreateInfo(data):
 def SendLineNotify(ticker, update_date, file_path, underlying_info=''):
     msg = f"\n{ticker}選擇權近月資料整理更新【{update_date.strftime('%Y-%m-%d')}】" + '\n'
     msg += underlying_info
-    # msg = "Test : " + file_path
     Line.sendPhoto(msg, file_path, token='Zk6VTsmW9iN0Kh01eYPcYH09JIuG354AGDAduebBLoZ')
-    # msg = "Test : " + file_path
-    # Line.sendMessage(msg, token= 'Zk6VTsmW9iN0Kh01eYPcYH09JIuG354AGDAduebBLoZ')
 
 def main(update=True):
     for ticker in 'QQQ,TQQQ,ARKK,SMH'.split(','): # used to follow NASDAQ
@@ -209,14 +206,21 @@ def main(update=True):
             GetOptionOI(ticker, update)
         except Exception as e:
             print(ticker, "Failed", e)
-    #     break
-    # return
 
     for ticker in 'SPY,IWM'.split(','): # used to follow SPY
         try:
             GetOptionOI(ticker, update)
         except Exception as e:
             print(ticker, "Failed", e)
+
+    for ticker in 'DJX'.split(','): # used to follow DJX
+        try:
+            GetOptionOI(ticker, update)
+        except Exception as e:
+            print(ticker, "Failed", e)
+    
+    #     break
+    # return
         
     for ticker in 'TSLA,BITO,COIN'.split(','): # used to follow TLSA
         try:

@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-09-30	4729	RS	760.49098

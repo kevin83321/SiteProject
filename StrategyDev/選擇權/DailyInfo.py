@@ -32,12 +32,13 @@ def calculateIV(df, date, h_df):
     return df
 
 def takeOIInfo(df_opt_daily, output, atm, cp_type="Call", closed2TTM=False):
+    # idx_price = str(int(idx_price))
     tmp_ = df_opt_daily[df_opt_daily.CP == cp_type].set_index("Strike").fillna(0)
     # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
     #     print(df_opt_daily)
     # print(tmp_)
     # print(len(set(tmp_.index)), len(list(tmp_.index)))
-    tmp_ = tmp_.reindex([x for x in list(set(tmp_.index)) if x[-2:] != '50'])
+    tmp_ = tmp_.reindex([x for x in list(set(tmp_.index)) if x[-2:] != '50']).sort_index()
     tmp_.OI_last = tmp_.OI_last.astype(int)
     tmp_.OI_Diff = tmp_.OI_Diff.astype(int)
     if cp_type == "Call":
@@ -72,7 +73,7 @@ def main(date = datetime.today()):
     # ================
     # TAIFEX Data
     # ================
-    df_opt_daily, last_date = getOptDailyMarketReport(date)
+    df_opt_daily, last_date = getOptDailyMarketReport(date)#, update=True)
     df_pc_ratio = crawlPCRatio(last_date)
     df_insti = crawlInstitutionTraded(last_date)
     df_large_traded = crawlLargeTraded(last_date)

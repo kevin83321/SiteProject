@@ -1,0 +1,4 @@
+EntryDate,ExitDate,EntryPrice,ExitPrice,EntryCommission,ExitCommission,EntryTax,ExitTax,TotalCost,HoldingPeriod,Net,Ret,MaxPriceBetweeenHolding,MaxRetBetweeenHolding,MinPriceBetweeenHolding,MinRetBetweeenHolding
+2013-02-18,2013-03-06,60.0,54.0,85,77,180,0,342,16,5658,0.0943,60.0,0.0,53.5,-0.1083
+2014-02-12,2014-03-21,71.5,78.65,102,112,0,236,450,37,6700,0.0937,79.5,0.1119,71.5,0.0
+2015-05-19,2015-10-06,76.5,68.85,109,98,230,0,437,140,7213,0.0943,76.5,0.0,66.9,-0.1255
