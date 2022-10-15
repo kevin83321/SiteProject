@@ -299,11 +299,11 @@ def PlotResult(dt:datetime.today(), tickers=[], bt_Prob=[], holding_p=[], highPr
         plt.tight_layout()
         
         plt.savefig(os.path.join(
-            fig_path, f'{algo_name} Stock Suggestion.jpg'))
+            fig_path, f'{algo_name} Stock Suggestion.png'))
         # plt.show()
         plt.show(block=False)
         plt.close()
-        return os.path.join(fig_path, f'{algo_name} Stock Suggestion.jpg')
+        return os.path.join(fig_path, f'{algo_name} Stock Suggestion.png')
 
 def PlotTable_v2(ax, tickers, bt_Prob=[], holding_p=[], highProb=[],InvestorOB=[], InvestorOBF=[], split_num=25):
     try:

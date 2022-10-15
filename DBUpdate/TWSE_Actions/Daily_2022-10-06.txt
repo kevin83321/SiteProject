@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-10-06	8906	XD	0.1

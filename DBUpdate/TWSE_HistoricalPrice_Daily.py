@@ -199,18 +199,25 @@ def update_one(table, x):
 
 def main(startFrom = None, update=False):
     try:
+        # print('create mongo connection')
         client = Mongo()
         schema = client['admin']
-        db_name = 'TWSE.HistoricalPrice' # 可自行更換資料庫(table)名稱
+        # db_name = 'TWSE.HistoricalPrice' # 可自行更換資料庫(table)名稱
+        db_name = 'TWSE.historicalPrice' # 可自行更換資料庫(table)名稱
+        # print('get collections')
         collections = schema.list_collection_names()
+        # print(collections, db_name in collections)
         if db_name in collections: # 資料庫存在
             table = schema[db_name]
-            nums = table.count_documents({})
+            # tabel.count_documents
+            nums = table.count()#_documents({})
             if not nums: # 資料庫沒有資料，所以進行完整的建立, 取資料公告的第一天
                 table.create_index([('Date', 1), ('Ticker', 1)], unique=True)
                 start_date = datetime(2004,2,11) # 此日期為證交所公告最早的日期 # 2004-2-11
             else: # 資料庫有資料，取上次更新的最後一天做為起始日期
+                # print('get Exists Dates')
                 start_date = datetime.strptime(sorted(list(table.distinct('Date')))[-1], '%Y-%m-%d') + timedelta(1)
+                # print('start date:', start_date)
         else: # 資料庫不存在, 所以進行完整的建立, 取資料公告的第一天
             table = schema[db_name]
             table.create_index([('Date', 1), ('Ticker', 1)], unique=True)
@@ -222,7 +229,7 @@ def main(startFrom = None, update=False):
         dates = date_range(start_date, end_date)
         if startFrom:
             dates = date_range(startFrom, end_date)
-        # print(start_date, end_date)
+        print(start_date, end_date)
         for date in dates:
             print(date)
             tse_local = Crawl_TWSE(date, table, update)

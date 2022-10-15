@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from bs4 import BeautifulSoup as bs
+from utils import GetException
 
 def getCMKey(ticker='2330'):
     url = f'https://www.cmoney.tw/finance/ticker/f00026'
@@ -74,39 +75,53 @@ def getInfo(ticker='2330', cmkey="yDW3Gc6baoRY%2B7JKrCgMfQ=="):
 
 def getInvestorHolding(ticker, date = datetime.today()):
     # print(ticker, date)
-    output = {}
-    key_26, key_36 = getCMKey(ticker)
-    # print(key_26, key_36)
-    res_Investors = getInvestorsHoldings(ticker, key_36)
-    data_Investors = res_Investors.json()
-    # print(data_Investors)
-    idx = -1
-    for i in range(len(data_Investors)):
-        # print(data_Investors[i]['Date'], date.strftime("%Y%m%d"))
-        if data_Investors[i]['Date'] == date.strftime("%Y%m%d"):
-            idx = i
-            break
-    if idx < 0:
-        return output
-    InvestmentTrustShareholdingRate = float(data_Investors[idx]['InvestmentTrustShareholdingRate']) # 投信持股張數
-    ForeignInvestorsShareholdingRate = float(data_Investors[idx]['ForeignInvestorsShareholdingRate']) # 外資持股張數
+    try:
+        output = {
+    #         "外資持股比例":round(ForeignInvestorsShareholding * 1e3 / outstanding, 4),
+            "外資持股比例":0,
+            "外本比":0,
+    #         "投信持股比例":round(InvestmentTrustShareholding * 1e3 / outstanding, 4),
+            "投信持股比例":0,
+            "投本比":0
+        }
+        key_26, key_36 = getCMKey(ticker)
+        # print(key_26, key_36)
+        res_Investors = getInvestorsHoldings(ticker, key_36)
+        data_Investors = res_Investors.json()
+        if "Error" in data_Investors.keys():
+            return output
+        # print(data_Investors)
+        idx = -1
+        print(data_Investors)
+        for i in range(len(data_Investors)):
+            # print(data_Investors[i]['Date'], date.strftime("%Y%m%d"))
+            if data_Investors[i]['Date'] == date.strftime("%Y%m%d"):
+                idx = i
+                break
+        if idx < 0:
+            return output
+        InvestmentTrustShareholdingRate = float(data_Investors[idx]['InvestmentTrustShareholdingRate']) # 投信持股張數
+        ForeignInvestorsShareholdingRate = float(data_Investors[idx]['ForeignInvestorsShareholdingRate']) # 外資持股張數
 
-    ForeignInvestorsBuySell = float(data_Investors[idx]['ForeignInvestorsBuySell']) # 外資買賣超
-    InvestmentTrustBuySell = float(data_Investors[idx]['InvestmentTrustBuySell']) # 投信買賣超
-    
-    res_info = getInfo(ticker, key_26)
-    data_info = res_info.json()
-    
-    outstanding = float(data_info[0]['PaidInCapital']) * 1e6 / 10
-    output = {
-#         "外資持股比例":round(ForeignInvestorsShareholding * 1e3 / outstanding, 4),
-        "外資持股比例":ForeignInvestorsShareholdingRate,
-        "外本比":round(ForeignInvestorsBuySell * 1e3 / outstanding, 4),
-#         "投信持股比例":round(InvestmentTrustShareholding * 1e3 / outstanding, 4),
-        "投信持股比例":InvestmentTrustShareholdingRate,
-        "投本比":round(InvestmentTrustBuySell * 1e3 / outstanding, 4)
-    }
-    return output
+        ForeignInvestorsBuySell = float(data_Investors[idx]['ForeignInvestorsBuySell']) # 外資買賣超
+        InvestmentTrustBuySell = float(data_Investors[idx]['InvestmentTrustBuySell']) # 投信買賣超
+        
+        res_info = getInfo(ticker, key_26)
+        data_info = res_info.json()
+        
+        outstanding = float(data_info[0]['PaidInCapital']) * 1e6 / 10
+        output.update({
+    #         "外資持股比例":round(ForeignInvestorsShareholding * 1e3 / outstanding, 4),
+            "外資持股比例":ForeignInvestorsShareholdingRate,
+            "外本比":round(ForeignInvestorsBuySell * 1e3 / outstanding, 4),
+    #         "投信持股比例":round(InvestmentTrustShareholding * 1e3 / outstanding, 4),
+            "投信持股比例":InvestmentTrustShareholdingRate,
+            "投本比":round(InvestmentTrustBuySell * 1e3 / outstanding, 4)
+        })
+    except:
+        print("getInvestorHolding, Error:", GetException())
+    finally:
+        return output
 
 if __name__ == '__main__':
     # getCMKey()
