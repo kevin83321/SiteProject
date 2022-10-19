@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2022-10-18	5522	XD	2
+2022-10-18	6156	XD	0.51606483
