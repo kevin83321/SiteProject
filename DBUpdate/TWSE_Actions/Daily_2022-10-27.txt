@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-10-27	9945	XR	500

@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-10-25	6186	XD	3.0

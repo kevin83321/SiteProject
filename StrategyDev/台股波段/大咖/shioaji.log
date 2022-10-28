@@ -1,0 +1,2 @@
+[E 2022-10-21 21:56:06,440 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\utils.py:44:raise_resp_error] {'status': {'status_code': 400}, 'response': {'token': '', 'accounts': [], 'detail': 'Incorrect userid or password', 'ip_address': '114.37.214.130', 'client_name': '', 'contract_download': False, 'web_token': ''}}
+[E 2022-10-21 21:56:37,967 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\utils.py:46:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '登入密碼錯誤3次，請進行密碼重置'}}

@@ -1,0 +1,1 @@
+python "F:\SiteProject\DBUpdate\ForeignAndOther.py"
