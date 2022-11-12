@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-11-11	1783	XR	100
