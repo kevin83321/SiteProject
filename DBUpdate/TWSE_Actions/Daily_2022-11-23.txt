@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-11-23	01007T	XD	0.237067

@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-11-15	4552	XD	1
