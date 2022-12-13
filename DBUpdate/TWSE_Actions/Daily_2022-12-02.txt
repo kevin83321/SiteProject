@@ -1,0 +1,3 @@
+Date	Ticker	Action	Value
+2022-12-02	1341	XD	3.131017
+2022-12-02	5314	RS	245.0

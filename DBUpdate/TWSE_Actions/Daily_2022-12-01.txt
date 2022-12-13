@@ -1,0 +1,2 @@
+Date	Ticker	Action	Value
+2022-12-01	8942	XD	2.0
