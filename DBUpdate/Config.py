@@ -10,7 +10,8 @@ __updated__ = '2021-06-09 00:31:54'
 def getConnectionConfig():
     user = 'kevin83321'
     password = 'j7629864'
-    ip = '192.168.2.173'
+    ip = '192.168.68.113'
+    # ip = '192.168.0.13'
     # ip = '192.168.0.10'
     port = 49153 # 32768
     return [user, password, ip, port]

@@ -178,6 +178,7 @@ def Futures_Data_Daily(lastDate):
     print(start_date, end_date, td)
     while start_date <= td and end_date <= td:
         url = f"""https://www.taifex.com.tw/enl/eng3/futDataDown?down_type=1&queryStartDate={start_date.strftime('%Y/%m/%d')}&queryEndDate={end_date.strftime('%Y/%m/%d')}&commodity_id=all"""
+        # url = f"""https://www.taifex.com.tw/enl/eng3/futDataDown?down_type=1&queryStartDate={start_date.strftime('%Y/%m/%d')}&queryEndDate={end_date.strftime('%Y/%m/%d')}&commodity_id=all"""
         r = requests.get(url)
         data_parsed = [d.split(',') for d in r.content.decode().split('\r\n')]
         full_data = []
@@ -188,8 +189,10 @@ def Futures_Data_Daily(lastDate):
             datas.extend(full_data)
         start_date = end_date
         end_date = start_date + timedelta(days=30)
+        break
     
     df =  pd.DataFrame(datas).replace('-', np.nan).dropna(how='all', axis=0)
+    # print(df)
     df.Date = df.Date.apply(parseDatetime)
     for col in list(df.columns):
         if col not in 'Date,Contract,Maturity,PctChange,TradingSession,TradingHalt'.split(','):
@@ -206,6 +209,7 @@ def Options_Data_Daily(lastDate, opt_table=None):
     datas = []
     while start_date <= td and end_date <= td:
         url = f"""https://www.taifex.com.tw/enl/eng3/optDataDown?down_type=1&queryStartDate={start_date.strftime('%Y/%m/%d')}&queryEndDate={end_date.strftime('%Y/%m/%d')}&commodity_id=all"""
+        # url = f"""https://www.taifex.com.tw/enl/eng3/optDataDown?down_type=1&queryStartDate={start_date.strftime('%Y/%m/%d')}&queryEndDate={start_date.strftime('%Y/%m/%d')}&commodity_id=all"""
         r = requests.get(url)
         df = pd.DataFrame()
         try:
@@ -223,6 +227,7 @@ def Options_Data_Daily(lastDate, opt_table=None):
         time.sleep(1)
         if opt_table and datas:
             df = pd.DataFrame(datas).replace('-',np.nan).dropna(how='all', axis=0)
+            # print(df)
             if not df.empty:
                 for col in list(df.columns):
                     if col not in 'Date,Contract,StrikePrice,CallPut,Maturity,PctChange,TradingSession,TradingHalt'.split(','):
@@ -239,6 +244,7 @@ def Options_Data_Daily(lastDate, opt_table=None):
                     os._exit(0)
                 parallel_update(opt_table, createTickerOpt, df)
                 datas = []
+        break
                 
     if datas:
     # print(len(datas))
@@ -461,7 +467,7 @@ if __name__ == '__main__':
                         df = Options_multiFiles(Name)
             parallel_update(opt_table, createTickerOpt, df)
             time.sleep(1)
-        
+    # fut_lastDate = opt_lastDate = "2021-02-01"
     fut_lastDate = sorted([parseDatetime(x) for x in fut_table.distinct('Date') if x is not None])[-1]
     df = Futures_Data_Daily(fut_lastDate)
     parallel_update(fut_table, createBrokerID, df)
