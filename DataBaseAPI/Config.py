@@ -11,7 +11,7 @@ def getConnectionConfig():
     password = 'j7629864'
     #ip = '192.168.2.191'
     ip = '192.168.2.173'
-    port = 49153
+    port = 32768
     return [user, password, ip, port]
 
 class HelpMsg:
