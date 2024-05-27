@@ -10,6 +10,29 @@ from Utils import *
 from BaseObj import CallOption, PutOption
 from OptionFunc import getThirdWendesday
 
+header = {
+    "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Accept-Encoding":"gzip, deflate, br, zstd",
+    "Accept-Language":"zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Cache-Control":"max-age=0",
+    "Connection":"keep-alive",
+    "Content-Length":"68",
+    "Content-Type":"application/x-www-form-urlencoded",
+    # "Cookie":"JSESSIONID=C4D1541BF0969B75C7CB8FB639BF1C10; BIGipServerPOOL_WWW_TCP_80=!lnBSAgCXOM4aRJjNhh0qxO7/K4H+BFfOxGHsD/v9ajgXIen2zfpArnKHf/8qwx5DU9g8+mtKWILw6A==; ROUTEID=.tomcat4; BIGipServerPOOL_iRule_WWW_Group=!n4UBMh+EP2i8DYMb+YFKn7AEGThNSp3t4QI7me/9Lr8jU+Ft0HDKiELjCPOOe3nBdymOKJ269Nt0pA==; _gid=GA1.3.1441977970.1714401250; _gat=1; _ga=GA1.3.1879042850.1714401250; _ga_R2R6W36GZV=GS1.1.1714401249.1.1.1714401295.0.0.0",
+    "Host":"www.taifex.com.tw",
+    "Origin":"https://www.taifex.com.tw",
+    "Referer":"https://www.taifex.com.tw/cht/3/pcRatio",
+    "Sec-Ch-Ua":'"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+    "Sec-Ch-Ua-Mobile":"?0",
+    "Sec-Ch-Ua-Platform":'"Windows"',
+    "Sec-Fetch-Dest":"document",
+    "Sec-Fetch-Mode":"navigate",
+    "Sec-Fetch-Site":"same-origin",
+    "Sec-Fetch-User":"?1",
+    "Upgrade-Insecure-Requests":"1",
+    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+}
+
 def crawlOptDailyMarketReport(date:datetime=datetime.today(), settle=False, update=False):
     
     url = 'https://www.taifex.com.tw/cht/3/optDailyMarketReport'
@@ -102,9 +125,9 @@ def crawlPCRatio(date:datetime = datetime.today()):
         "queryStartDate": date.strftime("%Y/%m/%d"), # "2022/08/18",
         "queryEndDate": date.strftime("%Y/%m/%d"), # "2022/09/17"
     }
-    res = requests.post(url, data=pay_load)
+    res = requests.post(url, data=pay_load, headers=header)
     soup = bs(res.content, 'lxml')
-    table = soup.find_all('table', {'class':"table_a"})[0]
+    table = soup.find_all('table', {'class':"table_f table-sticky table-fixed w-730"})[0] # table_a
     cols = [th.text.strip() for th in table.find_all('th')]
     out = []
     for tr in table.find_all('tr'):

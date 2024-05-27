@@ -8,3 +8,7 @@ FundamentalCrawler/balace_sheet/
 *.json
 *.jpg
 *.csv
+
+FigOutput/
+.ipynb_checkpoints/
+__pycache__/

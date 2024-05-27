@@ -93,7 +93,7 @@ def plot_all(ax, levels, df, ticker, expand_text=""):
         plotKBar(ax, df)#.set_index("Date"))
         # date_tickers = df.Date.values
         df['DateStr'] = df.Date
-        df.Date = df.Date.apply(transforDate)
+        # df.Date = df.Date.apply(transforDate)
         for i in range(len(levels)):
             next_level = None
             level = levels[i]
@@ -111,7 +111,17 @@ def plot_all(ax, levels, df, ticker, expand_text=""):
                 xmin = df['Date'][level[0]]
             else:
                 xmin = df[df.DateStr == level[0]].Date
-            plt.hlines(level[1], xmin = xmin, xmax = xmax, colors='blue', linestyle='--')
+            # print(f"level[1] : {level[1]} \n xmin:{xmin} \n xmax:{xmax}")
+            plt.hlines(y=float(level[1]), 
+                    #   xmin = xmin.values[0] if not isinstance(xmin, str) else xmin, 
+                    #   xmax = xmax.values[0] if not isinstance(xmax, str) else xmax, 
+                      xmin = df.Date.tolist().index(xmin.values[0] if not isinstance(xmin, str) else xmin), 
+                      xmax = df.Date.tolist().index(xmax.values[0] if not isinstance(xmax, str) else xmax), 
+                    #   xmin = transforDate(xmin.values[0]) if not isinstance(xmin, str) else transforDate(xmin), 
+                    #   xmax = transforDate(xmax.values[0]) if not isinstance(xmax, str) else transforDate(xmax), 
+                      colors='yellow', linestyle='--')
+            plt.text(df.Date.tolist().index(xmin.values[0] if not isinstance(xmin, str) else xmin),
+                     float(level[1]), s=str(level[1]), color='yellow')
         # plt.title(f"Support and resistance ({expand_text}) of {ticker} in the past one year.")
         # plt.show()
     except:
@@ -143,10 +153,9 @@ def mainPlot(ticker, td=datetime.today(), extra_name=""):
         plot_all(ax1, levels, df.reset_index(), ticker)
         
         # Plot Volume Bars
-        ax2 = plt.subplot(gs[1, :])
+        ax2 = plt.subplot(gs[1, :], sharex=ax1)
         setuplayout(ax2)
         plotVolume(ax2, df)
-
         
         # date_format = mpl_dates.DateFormatter('%d %b %Y')
         # ax2.xaxis.set_major_formatter(date_format) 

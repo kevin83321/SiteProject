@@ -8,20 +8,49 @@ from .utils import ( # sendPhoto
     TICKLEFT, TICKRIGHT, Line2D,
     Rectangle, Affine2D, ChineseFont
 )
+import matplotlib.dates as mpl_dates
+plt.style.use('dark_background')
 
 global date_tickers
 
-def plotVolume(ax, df):
+# def plotVolume(ax, df):
+#     col = 'Adj_Volume' if 'Adj_Volume' in df.columns else 'Volume'
+#     df[col].plot(kind='bar', ax=ax)
+#     vol_ma_cols = [col for col in df.columns if 'Vol' in col and 'MA' in col]
+#     if vol_ma_cols:
+#         df[vol_ma_cols].plot(ax=ax, width=0.8)
+#     ax.legend(bbox_to_anchor=(1.1, 1.05))
+#     ax = splitTicksLabels(ax)
+#     plt.setp( ax.xaxis.get_majorticklabels(), rotation=45 )
+#     ax.set_ylabel('Volume')
+#     return ax
+
+def plotVolume(ax, df, xAxisCol='Date'):
+    from copy import deepcopy
+    df = deepcopy(df).reset_index()
     col = 'Adj_Volume' if 'Adj_Volume' in df.columns else 'Volume'
-    df[col].plot(kind='bar', ax=ax)
+    # 調整量顯示顏色
+    colors = df.apply(lambda x: VolumeColor(x), axis=1).to_list()
+    # df[xAxisCol] = df[xAxisCol].apply(transforDate)
+    df = df.set_index(xAxisCol)
+    df[col].plot(kind='bar', ax=ax, color=colors)
     vol_ma_cols = [col for col in df.columns if 'Vol' in col and 'MA' in col]
     if vol_ma_cols:
-        df[vol_ma_cols].plot(ax=ax, width=0.8)
+        df[vol_ma_cols].plot(ax=ax)
     ax.legend(bbox_to_anchor=(1.1, 1.05))
+    # ax.xaxis.set_major_formatter(mpl_dates.DateFormatter('%d %b %Y'))
     ax = splitTicksLabels(ax)
     plt.setp( ax.xaxis.get_majorticklabels(), rotation=45 )
     ax.set_ylabel('Volume')
+    # ax.get_xaxis().set_visible(False)
     return ax
+
+def VolumeColor(x, defaultColor='grey'):
+    if x.Close > x.Open:
+        return 'red'
+    if x.Close < x.Open:
+        return 'green'
+    return defaultColor
 
 def format_date(x, pos):
     global date_tickers
@@ -31,16 +60,17 @@ def format_date(x, pos):
 
 def setuptitle(ax):
     setuplayout(ax)
-    # ax.get_yaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
     ax.get_xaxis().set_visible(False)
-    # ax.set_ylabel('')
+    ax.set_ylabel('')
     ax.set_xlabel('')
     
 def setuplayout(ax):
-    ax.spines['top'].set_visible(False)  # .set_linewidth(2.0)
-    ax.spines['bottom'].set_visible(False)  # .set_linewidth(2.0)
-    ax.spines['right'].set_visible(False)
-    ax.spines['left'].set_visible(False)
+    # ax.spines[['top', 'right', 'bottom', 'left']].set_visible(True)
+    ax.spines['top'].set_visible(True)  # .set_linewidth(2.0)
+    ax.spines['bottom'].set_visible(True)  # .set_linewidth(2.0)
+    ax.spines['right'].set_visible(True)
+    ax.spines['left'].set_visible(True)
     
 def plotMACD(ax, df):
     if 'OSC' not in list(df.columns):
@@ -64,22 +94,42 @@ def splitTicksLabels(ax, per_num=15):
         label.set_visible(False)
     return ax
 
-def plotKBar(ax, df, BBAND=False):
+def plotKBar(ax, df, BBAND=False, showFullyXlabel=False, xAxisCol='Date'):
     from copy import deepcopy
     df = deepcopy(df).reset_index()
-    date_tickers = df.Date.values
-    df.Date = df.Date.apply(transforDate)
-    temp_df = df['Date,Open,High,Low,Close,Volume'.split(',')]
-    mpf.candlestick_ohlc(ax, [tuple(x.values()) for x in temp_df.T.to_dict().values()], 
-                         colorup='r', colordown='g', width=0.8)
-    
-    from matplotlib import ticker
-    ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_date))
+    # df[xAxisCol] = df[xAxisCol].apply(transforDate)
+    try:
+        temp_df = df[f'{xAxisCol},Open,High,Low,Close,Volume'.split(',')]
+    except:
+        temp_df = df[f'{xAxisCol},Open,High,Low,Close'.split(',')]
+    # 調整日期
+    if not showFullyXlabel:
+        ax.set_xticks(range(0, temp_df.shape[0], 50))
+        ax.set_xticklabels(temp_df[xAxisCol].to_list()[::50])
+    else:
+        ax.set_xticks(range(0, temp_df.shape[0]))
+        ax.set_xticklabels(temp_df[xAxisCol].to_list())
+    # print(temp_df[xAxisCol].to_list())
+#     print(temp_df.shape[0])
+    temp_df = temp_df.set_index(xAxisCol)
+    mpf.candlestick2_ochl(ax, temp_df['Open'], temp_df['Close'], temp_df['High'],
+                      temp_df['Low'], width=.8, colorup='#FF0000', colordown='#00EE55')#, alpha=0.75)
+    # MAColors = {
+    #     'MA5':'green',
+    #     'MA20':'blue',
+    # }
+    # 繪製MA, EMA等指標
+    # plotMAs(ax, df, MAColors)#.set_index('Date'))
     plotMAs(ax, df.set_index('Date'))
+    # plotEMAs(ax, df)#.set_index("Date"))
     if BBAND:
         plotBBAND(ax, df.set_index('Date'))
     ax.legend(bbox_to_anchor=(1.1, 1.05))
+    
+    # ax.xaxis.set_major_formatter(mpl_dates.DateFormatter('%d %b %Y'))
     ax.set_ylabel('Price')
+    ax.get_yaxis().set_visible(True)
+    ax.get_xaxis().set_visible(False)
     
 def plotMAs(ax, df):
     cols = [x for x in df.columns if 'MA' in x and 'EMA' not in x and 'MACD' not in x and 'Vol' not in x]
@@ -217,7 +267,7 @@ def createPlot(td, df, ticker, MACD=False, TOWER=False, BBAND=False, extra_name=
         plotKBar(ax1, temp_df, BBAND=BBAND)
         
         # Plot Volume Bars
-        ax2 = plt.subplot(gs[1, :])
+        ax2 = plt.subplot(gs[1, :], sharex=ax1)
         setuplayout(ax2)
         plotVolume(ax2, temp_df)
 
