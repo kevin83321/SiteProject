@@ -35,7 +35,7 @@ from matplotlib.pylab import date2num # 导入日期到数值一一对应的转�
 from matplotlib.font_manager import fontManager, FontProperties
 ChineseFont = FontProperties([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial ' in f.name][0])
 
-__updated__ = '2021-12-28 20:55:46'
+__updated__ = '2024-06-11 01:57:38'
 
 td = datetime.today()
 parent = os.path.dirname(os.path.abspath(__file__))
@@ -132,7 +132,7 @@ def sendResultTable(td, tickers, momentum=None, algo_num=1, expand_text='', Indu
         text = f'{tdStr} \n'
         text += f'透過狗狗{algo_num}號\n'
         text += '計算出下一交易日可以關注的標的\n\n'
-        text += table.get_string()
+        text += f"```{table}```"
         text += '\n\n' + expand_text
         sendMessage(text)
     except:
