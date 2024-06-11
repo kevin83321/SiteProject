@@ -5,3 +5,4 @@
 [E 2022-04-14 14:34:43,519 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\shioaji.py:167:login] Expecting value: line 1 column 1 (char 0)
 [E 2022-04-14 14:36:20,031 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\shioaji.py:167:login] Expecting value: line 1 column 1 (char 0)
 [E 2022-04-15 13:20:41,092 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\utils.py:43:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': '操作異常，請1分鐘後再重新登入'}}
+[E 2024-06-12 02:27:38,411 C:\Users\kevin\AppData\Local\Programs\Python\Python37\lib\site-packages\shioaji\utils.py:46:raise_resp_error] {'status': {'status_code': 503}, 'response': {'detail': 'Please update the version of shioaji to at least 0.5.0.dev2 by using the command `pip install -U shioaji`.'}}

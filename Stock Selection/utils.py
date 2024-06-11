@@ -35,7 +35,7 @@ from matplotlib.pylab import date2num # 导入日期到数值一一对应的转�
 from matplotlib.font_manager import fontManager, FontProperties
 ChineseFont = FontProperties([f.name for f in fontManager.ttflist if 'JhengHei' in f.name or 'Heiti' in f.name or 'Arial ' in f.name][0])
 
-__updated__ = '2024-06-11 01:57:38'
+__updated__ = '2024-06-12 02:42:06'
 
 td = datetime.today()
 parent = os.path.dirname(os.path.abspath(__file__))
@@ -128,12 +128,12 @@ def createRecommandTable(tickers, momentum:list=None, Industry:dict=None):
 def sendResultTable(td, tickers, momentum=None, algo_num=1, expand_text='', Industry:dict=None):
     try:
         table = createRecommandTable(tickers, momentum, Industry)
-        tdStr = td.strftime('%Y-%m-%d')
+        tdStr = td.strftime('%Y/%m/%d')
         text = f'{tdStr} \n'
         text += f'透過狗狗{algo_num}號\n'
         text += '計算出下一交易日可以關注的標的\n\n'
-        text += f"```{table}```"
-        text += '\n\n' + expand_text
+        text += f"```\n{table}```"
+        text += f"\n```\n{expand_text}```"
         sendMessage(text)
     except:
         print(GetException())
