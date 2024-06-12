@@ -1,6 +1,7 @@
 from pandas import DataFrame, to_datetime
+from numpy import mean
 from datetime import datetime, timedelta
-from utils import getSchema, changedType
+from utils import getSchema, changedType, os
 
 def StockInterDay(start_date:[str,datetime]=datetime(2021,4,14), 
                   end_date:[str,datetime]=datetime(2021,4,14),
@@ -19,6 +20,29 @@ def StockInterDay(start_date:[str,datetime]=datetime(2021,4,14),
         df.Date = to_datetime(df.Date)
         for col in 'Open,High,Low,Close,Volume'.split(','):
             df[col] = df[col].apply(changedType)
+        return df
+    return data
+
+def IndexInterDay(start_date:[str,datetime]=datetime(2021,4,14), 
+                  end_date:[str,datetime]=datetime(2021,4,14),
+                  tickers:[str,list]='發行量加權股價指數'):
+    if isinstance(start_date, datetime):
+        start_date = start_date.strftime("%Y-%m-%d")
+    if isinstance(end_date, datetime):
+        end_date = end_date.strftime("%Y-%m-%d")
+    if isinstance(tickers, str):
+        tickers = tickers.split(',')
+    schema = getSchema('TWSE')
+    table = schema['HistoricalPrice.Index.Interday']
+    data = list(table.find({'Date':{'$gte':start_date, '$lte':end_date}, "IndexName" :{"$in":tickers}}))
+    if data:
+        df = DataFrame(data)
+        df.Date = to_datetime(df.Date)
+        for col in 'Open,High,Low,Close,Volume'.split(','):
+            try:
+                df[col] = df[col].apply(changedType)
+            except:
+                pass
         return df
     return data
 
@@ -86,4 +110,39 @@ def Backtest(strategy:callable, ticker:str, dt:datetime=datetime.today(), bt_per
         if not df: return []
     if df.empty: return []
     return strategy(df, **params)
+
+def GetSummary(results:dict, output_path:str) -> list:
+    summary_ = []
+    bt_day = datetime.today()
+    bt_day_str = bt_day.strftime("%Y%m%d")
+    for ticker, result in results.items():
+        total_cost = 0
+    #     total_pnl = 0
+        total_net = 0
+        trade_num = len(result)
+        win_num = 0
+        loss_num = 0
+        hold_period = []
+        rets = []
+        for res in result:
+            total_net += res['Net']
+            total_cost += res['TotalCost']
+            win_num += int(res['Net'] > 0)
+            loss_num += int(res['Net'] < 0)
+            hold_period.append(res['HoldingPeriod'])
+            rets.append(res['Ret'])
+        summary_.append({
+            '代號':ticker,
+            '總成本':total_cost,
+            '總損益(淨)':total_net,
+            '獲利次數':win_num,
+            '損失次數':loss_num,
+            '總交易次數':trade_num,
+            '勝率%':round(win_num / trade_num*100,2) if trade_num else 0,
+            '平均報酬':mean(rets),
+            '平均持倉時間(日)':mean(hold_period)
+        })
+        if result:
+            DataFrame(result).to_csv(os.path.join(output_path, f'{ticker}_{bt_day_str}.csv'), index=False)
+    return summary_
     
